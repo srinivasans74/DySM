@@ -1,0 +1,117 @@
+Total TPCs: 41, Total SMs: 82, SMs/TPC: 2
+
+=== Testing for desired SMs: 2 (enabling 1 TPCs) ===
+Using mask: 0xfffffffffffffffe
+Unique SMs used: 2
+Total kernel execution time: 57.352192 ms
+
+=== Testing for desired SMs: 4 (enabling 2 TPCs) ===
+Using mask: 0xfffffffffffffffc
+Unique SMs used: 4
+Total kernel execution time: 28.979200 ms
+
+=== Testing for desired SMs: 5 (enabling 2 TPCs) ===
+Using mask: 0xfffffffffffffffc
+Unique SMs used: 4
+Total kernel execution time: 28.982271 ms
+
+=== Testing for desired SMs: 8 (enabling 4 TPCs) ===
+Using mask: 0xfffffffffffffff0
+Unique SMs used: 8
+Total kernel execution time: 14.738432 ms
+
+=== Testing for desired SMs: 10 (enabling 5 TPCs) ===
+Using mask: 0xffffffffffffffe0
+Unique SMs used: 10
+Total kernel execution time: 11.964416 ms
+
+=== Testing for desired SMs: 15 (enabling 7 TPCs) ===
+Using mask: 0xffffffffffffff80
+Unique SMs used: 14
+Total kernel execution time: 8.800256 ms
+
+=== Testing for desired SMs: 16 (enabling 8 TPCs) ===
+Using mask: 0xffffffffffffff00
+Unique SMs used: 16
+Total kernel execution time: 7.808960 ms
+
+=== Testing for desired SMs: 20 (enabling 10 TPCs) ===
+Using mask: 0xfffffffffffffc00
+Unique SMs used: 20
+Total kernel execution time: 6.448128 ms
+
+=== Testing for desired SMs: 25 (enabling 12 TPCs) ===
+Using mask: 0xfffffffffffff000
+Unique SMs used: 24
+Total kernel execution time: 5.669888 ms
+
+=== Testing for desired SMs: 30 (enabling 15 TPCs) ===
+Using mask: 0xffffffffffff8000
+Unique SMs used: 30
+Total kernel execution time: 5.138432 ms
+
+=== Testing for desired SMs: 32 (enabling 16 TPCs) ===
+Using mask: 0xffffffffffff0000
+Unique SMs used: 32
+Total kernel execution time: 4.957184 ms
+
+=== Testing for desired SMs: 35 (enabling 17 TPCs) ===
+Using mask: 0xfffffffffffe0000
+Unique SMs used: 34
+Total kernel execution time: 4.771840 ms
+
+=== Testing for desired SMs: 40 (enabling 20 TPCs) ===
+Using mask: 0xfffffffffff00000
+Unique SMs used: 40
+Total kernel execution time: 4.363264 ms
+
+=== Testing for desired SMs: 45 (enabling 22 TPCs) ===
+Using mask: 0xffffffffffc00000
+Unique SMs used: 44
+Total kernel execution time: 4.061184 ms
+
+=== Testing for desired SMs: 50 (enabling 25 TPCs) ===
+Using mask: 0xfffffffffe000000
+Unique SMs used: 50
+Total kernel execution time: 3.984384 ms
+
+=== Testing for desired SMs: 55 (enabling 27 TPCs) ===
+Using mask: 0xfffffffff8000000
+Unique SMs used: 54
+Total kernel execution time: 3.982336 ms
+
+=== Testing for desired SMs: 60 (enabling 30 TPCs) ===
+Using mask: 0xffffffffc0000000
+Unique SMs used: 60
+Total kernel execution time: 3.982336 ms
+
+=== Testing for desired SMs: 64 (enabling 32 TPCs) ===
+Using mask: 0xffffffff00000000
+Unique SMs used: 64
+Total kernel execution time: 3.984384 ms
+
+=== Testing for desired SMs: 65 (enabling 32 TPCs) ===
+Using mask: 0xffffffff00000000
+Unique SMs used: 64
+Total kernel execution time: 3.984384 ms
+
+=== Testing for desired SMs: 70 (enabling 35 TPCs) ===
+Using mask: 0xfffffff800000000
+Unique SMs used: 70
+Total kernel execution time: 3.983360 ms
+
+=== Testing for desired SMs: 75 (enabling 37 TPCs) ===
+Using mask: 0xffffffe000000000
+Unique SMs used: 74
+Total kernel execution time: 3.980288 ms
+
+=== Testing for desired SMs: 80 (enabling 40 TPCs) ===
+Using mask: 0xffffff0000000000
+Unique SMs used: 80
+Total kernel execution time: 3.981312 ms
+
+=== Testing for desired SMs: 82 (enabling 41 TPCs) ===
+Using mask: 0xfffffe0000000000
+Unique SMs used: 82
+Total kernel execution time: 3.981312 ms
+

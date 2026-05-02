@@ -1,0 +1,22 @@
+{
+  "gpu": "NVIDIA GeForce RTX 3090",
+  "sm_count": 82,
+  "num_tpcs": 41,
+  "tensor_dims": {"I": 1024, "J": 512, "K": 512},
+  "rank_R": 32,
+  "period_ms": 30,
+  "iterations": 10,
+  "mask_bit1_means": "DISABLE",
+  "valid_tpc_bits": "0x000001ffffffffff",
+  "sweep": [
+    {"overlap_step": 0, "task1_range": [0, 7], "task2_range": [8, 15], "overlap_tpcs": 0, "task1_enabled_mask": "0x00000000000000ff", "task2_enabled_mask": "0x000000000000ff00", "task1_applied_disable_mask": "0xffffffffffffff00", "task2_applied_disable_mask": "0xffffffffffff00ff", "task1_avg_rt_ms": 38.555632, "task2_avg_rt_ms": 38.357310},
+    {"overlap_step": 1, "task1_range": [0, 7], "task2_range": [7, 14], "overlap_tpcs": 1, "task1_enabled_mask": "0x00000000000000ff", "task2_enabled_mask": "0x0000000000007f80", "task1_applied_disable_mask": "0xffffffffffffff00", "task2_applied_disable_mask": "0xffffffffffff807f", "task1_avg_rt_ms": 40.297090, "task2_avg_rt_ms": 41.623166},
+    {"overlap_step": 2, "task1_range": [0, 7], "task2_range": [6, 13], "overlap_tpcs": 2, "task1_enabled_mask": "0x00000000000000ff", "task2_enabled_mask": "0x0000000000003fc0", "task1_applied_disable_mask": "0xffffffffffffff00", "task2_applied_disable_mask": "0xffffffffffffc03f", "task1_avg_rt_ms": 44.268542, "task2_avg_rt_ms": 42.243670},
+    {"overlap_step": 3, "task1_range": [0, 7], "task2_range": [5, 12], "overlap_tpcs": 3, "task1_enabled_mask": "0x00000000000000ff", "task2_enabled_mask": "0x0000000000001fe0", "task1_applied_disable_mask": "0xffffffffffffff00", "task2_applied_disable_mask": "0xffffffffffffe01f", "task1_avg_rt_ms": 45.781663, "task2_avg_rt_ms": 47.810554},
+    {"overlap_step": 4, "task1_range": [0, 7], "task2_range": [4, 11], "overlap_tpcs": 4, "task1_enabled_mask": "0x00000000000000ff", "task2_enabled_mask": "0x0000000000000ff0", "task1_applied_disable_mask": "0xffffffffffffff00", "task2_applied_disable_mask": "0xfffffffffffff00f", "task1_avg_rt_ms": 50.487315, "task2_avg_rt_ms": 48.038040},
+    {"overlap_step": 5, "task1_range": [0, 7], "task2_range": [3, 10], "overlap_tpcs": 5, "task1_enabled_mask": "0x00000000000000ff", "task2_enabled_mask": "0x00000000000007f8", "task1_applied_disable_mask": "0xffffffffffffff00", "task2_applied_disable_mask": "0xfffffffffffff807", "task1_avg_rt_ms": 51.291164, "task2_avg_rt_ms": 53.780753},
+    {"overlap_step": 6, "task1_range": [0, 7], "task2_range": [2, 9], "overlap_tpcs": 6, "task1_enabled_mask": "0x00000000000000ff", "task2_enabled_mask": "0x00000000000003fc", "task1_applied_disable_mask": "0xffffffffffffff00", "task2_applied_disable_mask": "0xfffffffffffffc03", "task1_avg_rt_ms": 55.217485, "task2_avg_rt_ms": 58.095457},
+    {"overlap_step": 7, "task1_range": [0, 7], "task2_range": [1, 8], "overlap_tpcs": 7, "task1_enabled_mask": "0x00000000000000ff", "task2_enabled_mask": "0x00000000000001fe", "task1_applied_disable_mask": "0xffffffffffffff00", "task2_applied_disable_mask": "0xfffffffffffffe01", "task1_avg_rt_ms": 59.931421, "task2_avg_rt_ms": 62.835995},
+    {"overlap_step": 8, "task1_range": [0, 7], "task2_range": [0, 7], "overlap_tpcs": 8, "task1_enabled_mask": "0x00000000000000ff", "task2_enabled_mask": "0x00000000000000ff", "task1_applied_disable_mask": "0xffffffffffffff00", "task2_applied_disable_mask": "0xffffffffffffff00", "task1_avg_rt_ms": 65.924078, "task2_avg_rt_ms": 69.226811}
+  ]
+}

@@ -1,0 +1,142 @@
+Total TPCs on GPU: 41
+Total SMs on GPU: 82
+SMs per TPC: 2
+
+=== Testing for desired SMs: 2 (enabling 1 TPCs) ===
+Using mask: 0xfffffffffffffffe
+Unique SMs used: 2
+Test passed: All blocks executed on SMs in range 0 to 1.
+Kernel execution time: 41.473022 ms
+
+=== Testing for desired SMs: 4 (enabling 2 TPCs) ===
+Using mask: 0xfffffffffffffffc
+Unique SMs used: 4
+Test passed: All blocks executed on SMs in range 0 to 3.
+Kernel execution time: 20.894720 ms
+
+=== Testing for desired SMs: 5 (enabling 2 TPCs) ===
+Using mask: 0xfffffffffffffffc
+Unique SMs used: 4
+Test passed: All blocks executed on SMs in range 0 to 4.
+Kernel execution time: 20.895744 ms
+
+=== Testing for desired SMs: 8 (enabling 4 TPCs) ===
+Using mask: 0xfffffffffffffff0
+Unique SMs used: 8
+Test passed: All blocks executed on SMs in range 0 to 7.
+Kernel execution time: 10.670080 ms
+
+=== Testing for desired SMs: 10 (enabling 5 TPCs) ===
+Using mask: 0xffffffffffffffe0
+Unique SMs used: 10
+Test passed: All blocks executed on SMs in range 0 to 9.
+Kernel execution time: 8.804320 ms
+
+=== Testing for desired SMs: 15 (enabling 7 TPCs) ===
+Using mask: 0xffffffffffffff80
+Unique SMs used: 14
+Test passed: All blocks executed on SMs in range 0 to 14.
+Kernel execution time: 6.862848 ms
+
+=== Testing for desired SMs: 16 (enabling 8 TPCs) ===
+Using mask: 0xffffffffffffff00
+Unique SMs used: 16
+Test passed: All blocks executed on SMs in range 0 to 15.
+Kernel execution time: 6.366208 ms
+
+=== Testing for desired SMs: 20 (enabling 10 TPCs) ===
+Using mask: 0xfffffffffffffc00
+Unique SMs used: 20
+Test passed: All blocks executed on SMs in range 0 to 19.
+Kernel execution time: 5.803008 ms
+
+=== Testing for desired SMs: 25 (enabling 12 TPCs) ===
+Using mask: 0xfffffffffffff000
+Unique SMs used: 24
+Test passed: All blocks executed on SMs in range 0 to 24.
+Kernel execution time: 5.541888 ms
+
+=== Testing for desired SMs: 30 (enabling 15 TPCs) ===
+Using mask: 0xffffffffffff8000
+Unique SMs used: 30
+Test passed: All blocks executed on SMs in range 0 to 29.
+Kernel execution time: 5.417984 ms
+
+=== Testing for desired SMs: 32 (enabling 16 TPCs) ===
+Using mask: 0xffffffffffff0000
+Unique SMs used: 32
+Test passed: All blocks executed on SMs in range 0 to 31.
+Kernel execution time: 5.409792 ms
+
+=== Testing for desired SMs: 35 (enabling 17 TPCs) ===
+Using mask: 0xfffffffffffe0000
+Unique SMs used: 34
+Test passed: All blocks executed on SMs in range 0 to 34.
+Kernel execution time: 5.425152 ms
+
+=== Testing for desired SMs: 40 (enabling 20 TPCs) ===
+Using mask: 0xfffffffffff00000
+Unique SMs used: 40
+Test passed: All blocks executed on SMs in range 0 to 39.
+Kernel execution time: 5.482496 ms
+
+=== Testing for desired SMs: 45 (enabling 22 TPCs) ===
+Using mask: 0xffffffffffc00000
+Unique SMs used: 44
+Test passed: All blocks executed on SMs in range 0 to 44.
+Kernel execution time: 5.510144 ms
+
+=== Testing for desired SMs: 50 (enabling 25 TPCs) ===
+Using mask: 0xfffffffffe000000
+Unique SMs used: 50
+Test passed: All blocks executed on SMs in range 0 to 49.
+Kernel execution time: 5.597184 ms
+
+=== Testing for desired SMs: 55 (enabling 27 TPCs) ===
+Using mask: 0xfffffffff8000000
+Unique SMs used: 54
+Test passed: All blocks executed on SMs in range 0 to 54.
+Kernel execution time: 5.620736 ms
+
+=== Testing for desired SMs: 60 (enabling 30 TPCs) ===
+Using mask: 0xffffffffc0000000
+Unique SMs used: 60
+Test passed: All blocks executed on SMs in range 0 to 59.
+Kernel execution time: 5.714944 ms
+
+=== Testing for desired SMs: 64 (enabling 32 TPCs) ===
+Using mask: 0xffffffff00000000
+Unique SMs used: 64
+Test passed: All blocks executed on SMs in range 0 to 63.
+Kernel execution time: 5.746688 ms
+
+=== Testing for desired SMs: 65 (enabling 32 TPCs) ===
+Using mask: 0xffffffff00000000
+Unique SMs used: 64
+Test passed: All blocks executed on SMs in range 0 to 64.
+Kernel execution time: 5.762048 ms
+
+=== Testing for desired SMs: 70 (enabling 35 TPCs) ===
+Using mask: 0xfffffff800000000
+Unique SMs used: 70
+Test passed: All blocks executed on SMs in range 0 to 69.
+Kernel execution time: 5.773312 ms
+
+=== Testing for desired SMs: 75 (enabling 37 TPCs) ===
+Using mask: 0xffffffe000000000
+Unique SMs used: 74
+Test passed: All blocks executed on SMs in range 0 to 74.
+Kernel execution time: 5.873664 ms
+
+=== Testing for desired SMs: 80 (enabling 40 TPCs) ===
+Using mask: 0xffffff0000000000
+Unique SMs used: 80
+Test passed: All blocks executed on SMs in range 0 to 79.
+Kernel execution time: 5.871616 ms
+
+=== Testing for desired SMs: 82 (enabling 41 TPCs) ===
+Using mask: 0xfffffe0000000000
+Unique SMs used: 82
+Test passed: All blocks executed on SMs in range 0 to 81.
+Kernel execution time: 5.893120 ms
+

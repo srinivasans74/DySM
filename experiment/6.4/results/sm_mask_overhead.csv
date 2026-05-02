@@ -1,0 +1,11 @@
+flip,mask_type,disable_mask,unique_sms,set_only_avg_us,run_sync_avg_us
+0,large,0xffffffffc0000000,60,0.1451,35.6601
+1,small,0xfffffffffffffc00,20,0.1314,58.1946
+2,large,0xffffffffc0000000,60,0.1254,35.3279
+3,small,0xfffffffffffffc00,20,0.1259,57.1786
+4,large,0xffffffffc0000000,60,0.1202,35.4921
+5,small,0xfffffffffffffc00,20,0.1232,58.0625
+6,large,0xffffffffc0000000,60,0.1206,35.0914
+7,small,0xfffffffffffffc00,20,0.1219,57.2861
+8,large,0xffffffffc0000000,60,0.1211,35.3078
+9,small,0xfffffffffffffc00,20,0.1194,56.7290
