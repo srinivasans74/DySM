@@ -45,7 +45,7 @@ This will generate and save `fig1.pdf`.
 
 ## Figure 3-6
 
-The `Experiments/` folder contains all benchmark workloads with the FC-GPU controller embedded. To run these:
+The `experiment/` folder contains all benchmark workloads with the FC-GPU controller embedded. To run these:
 1. Navigate to the directory:
     ```bash
     cd experiment

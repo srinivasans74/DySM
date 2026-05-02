@@ -31,7 +31,7 @@ All generated figures are stored in the Figures/ directory.
 
 Figure mapping to the paper:
 
-6_1.pdf corresponds to Figure 3 in the paper
-6_2.pdf corresponds to Figure 4 in the paper
-6_3.pdf corresponds to Figure 5 in the paper
-6_4.pdf corresponds to Figure 6 in the paper
+* 6_1.pdf corresponds to Figure 3 in the paper
+* 6_2.pdf corresponds to Figure 4 in the paper
+* 6_3.pdf corresponds to Figure 5 in the paper
+* 6_4.pdf corresponds to Figure 6 in the paper
