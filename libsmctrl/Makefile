@@ -1,5 +1,6 @@
 # Set this if CUDA is installed in a different location
-CUDA ?= /usr/local/cuda-11.6/
+#CUDA ?= /usr/local/cuda-11.6/
+CUDA ?= $(shell dirname $$(dirname $$(which nvcc)))
 # Note that CXX and CC are predefined as g++ and cc (respectively) by Make
 NVCC ?= $(CUDA)/bin/nvcc
 # Everything has to have -lcuda, as it's needed for libsmctrl
