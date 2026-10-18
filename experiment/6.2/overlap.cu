@@ -312,11 +312,12 @@ int main()
 
     // RTX3090: 82 SMs -> ~41 TPCs (2 SM per TPC).
     const int NUM_TPCS = prop.multiProcessorCount / 2;
-    if (NUM_TPCS <= 0 || NUM_TPCS > 63) {
-        std::cerr << "Unexpected NUM_TPCS=" << NUM_TPCS << " (must be 1..63)\n";
+    if (NUM_TPCS < 16) {
+        std::cerr << "Unexpected NUM_TPCS=" << NUM_TPCS << " (requires at least 16)\n";
         return 1;
     }
-    g_valid_tpc_bits = (1ULL << NUM_TPCS) - 1ULL;
+    // This experiment uses only TPCs 0..15. The 64-bit API disables all higher TPCs.
+    g_valid_tpc_bits = (NUM_TPCS >= 64) ? ~0ULL : ((1ULL << NUM_TPCS) - 1ULL);
 
     // Workload size (tune)
     const int I = 1024, J = 512, K = 512;

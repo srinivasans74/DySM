@@ -1,23 +1,19 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-kill_processes() {
-    echo "Stopping any running processes..."
-    local pids
-    pids="$(ps aux | grep -E './t1|./t2|./server|scheduler' | grep -v grep | awk '{print $2}' || true)"
-    if [[ -n "${pids}" ]]; then
-        echo "${pids}" | xargs kill -9 2>/dev/null || true
-    fi
-}
-kill_processes
+# Do not kill unrelated experiments by matching process names.
 
 # -------------------------
 # Paths / defaults
 # -------------------------
 #BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$BASE_DIR"
+export GPU_SMS="${GPU_SMS:-170}"
+export MPLBACKEND=Agg
 ROOT_DIR="$(cd "${BASE_DIR}/../.." && pwd)"
 SCHEDULER_DIR="${ROOT_DIR}/Scheduler"
+export LD_LIBRARY_PATH="${ROOT_DIR}/libsmctrl:${LD_LIBRARY_PATH:-}"
 APPLICATION_DIR="${ROOT_DIR}/application"
 
 SCHEDULER_BIN="${SCHEDULER_DIR}/scheduler"
@@ -77,26 +73,6 @@ move_artifacts() {
         shopt -u nullglob
     fi
 
-    local roots=( "$BASE_DIR" "$SCHEDULER_DIR" )
-
-    for root in "${roots[@]}"; do
-        [[ -d "$root" ]] || continue
-
-        find "$root" \
-          \( -path "$RUNS_DIR" -o -path "$RUNS_DIR/*" -o -path "$LOG_DIR" -o -path "$LOG_DIR/*" \) -prune -o \
-          -type f \( -iname "*.png" -o -iname "*.pdf" -o -iname "*.svg" \) \
-          -print0 \
-        | while IFS= read -r -d '' f; do
-              bn="$(basename "$f")"
-              if [[ -e "$dest/$bn" ]]; then
-                  rel="${f#$root/}"
-                  safe_rel="${rel//\//_}"
-                  mv "$f" "$dest/${safe_rel}" 2>/dev/null || true
-              else
-                  mv "$f" "$dest/" 2>/dev/null || true
-              fi
-          done
-    done
 }
 
 run_scheduler_once() {
@@ -109,25 +85,8 @@ run_scheduler_once() {
     (
         cd "${ROOT_DIR}"
         env LD_LIBRARY_PATH="${SCHEDULER_DIR}:${LD_LIBRARY_PATH:-}" \
-            "${SCHEDULER_BIN}" "${trace_path}" "${DURATION}" "${LOG_DIR}" "${sol}"
+            "${SCHEDULER_BIN}" "${trace_path}" "${DURATION}" "${LOG_DIR}/" "${sol}"
     )
-}
-
-plot_if_success() {
-    local sol="$1"
-    local trace_path="$2"
-    local status="$3"
-
-    if [[ "${status}" -eq 0 ]]; then
-        if [[ -f "${LOG_DIR}/wallclocktime" ]]; then
-            echo "[INFO] Plotting results for solution ${sol}..."
-            python3 "${BASE_DIR}/figures.py" "${sol}" "${trace_path}" || true
-        else
-            echo "[WARN] Scheduler succeeded but wallclocktime missing. Skipping plots."
-        fi
-    else
-        echo "[ERROR] Experiment failed for solution ${sol} with status=${status}. Skipping plots."
-    fi
 }
 
 # -------------------------
@@ -221,14 +180,13 @@ for sp in "${SETPOINTS[@]}"; do
                 status=$?
                 set -e
 
-                plot_if_success "${sol}" "${TRACE_FULL_PATH}" "${status}"
-
                 sol_out_dir="${out_dir}/sol_${sol}"
                 echo "[INFO] Archiving artifacts into: ${sol_out_dir}"
                 move_artifacts "${sol_out_dir}"
 
                 if [[ $status -ne 0 ]]; then
-                    echo "[WARN] Solution ${sol} failed with status=${status}; continuing."
+                    echo "[ERROR] Solution ${sol} failed with status=${status}"
+                    exit "$status"
                 fi
 
                 sleep 2
@@ -249,12 +207,11 @@ for sp in "${SETPOINTS[@]}"; do
             status=$?
             set -e
 
-            plot_if_success "${SOLUTION}" "${TRACE_FULL_PATH}" "${status}"
-
             if [[ $status -eq 0 ]]; then
                 echo "[INFO] Experiment completed successfully."
             else
                 echo "[ERROR] Experiment failed with status=${status}."
+                exit "$status"
             fi
 
             echo "[INFO] Archiving artifacts into: ${out_dir}"

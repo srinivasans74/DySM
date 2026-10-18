@@ -5,7 +5,6 @@
 #include <stdexcept>
 #include <iostream>
 #include <cuda_runtime.h>
-#include <algorithm>
 parameters::parameters(int n, bool adapt)
 {
     if (n <= 0)
@@ -26,7 +25,7 @@ parameters::parameters(int n, bool adapt)
     responsetimes = new datatype[tasks];
     executiontimes = new datatype[tasks];
     task_mutexes = new std::mutex[tasks];
-    masks = new uint64_t[tasks];
+    masks = new uint128_t[tasks];
     start_time = steady_clock::now();
     preemption = new datatype[tasks];
     controller_hold.assign(tasks, false);
@@ -82,7 +81,6 @@ parameters::parameters(int n, bool adapt)
         std::cout << "[parameters] Detected GPU: " << prop.name
                   << " (" << maxsms << " SMs)\n";
     }
-    maxsms = std::min(maxsms, 80); // Effective SM budget shared by P and MPC.
     std::cout << "[parameters] Effective SM budget: " << maxsms << "\n";
     minsms = 1;
 

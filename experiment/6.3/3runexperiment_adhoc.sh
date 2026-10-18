@@ -7,27 +7,22 @@
 
 set -euo pipefail
 
-kill_processes() {
-    echo "Stopping any running processes..."
-    local pids
-    pids="$(ps aux | grep -E './t1|./t2|./server' | grep -v grep | awk '{print $2}' || true)"
-    if [[ -n "${pids}" ]]; then
-        echo "${pids}" | xargs kill -9 2>/dev/null || true
-    fi
-}
-kill_processes
+# Do not kill unrelated experiments by matching process names.
 
 # -------------------------
 # Paths / defaults
 # -------------------------
 BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$BASE_DIR"
+export GPU_SMS="${GPU_SMS:-170}"
+export MPLBACKEND=Agg
 ROOT_DIR="$(cd "${BASE_DIR}/../.." && pwd)"
 SCHEDULER_DIR="${ROOT_DIR}/Scheduler"
+export LD_LIBRARY_PATH="${ROOT_DIR}/libsmctrl:${LD_LIBRARY_PATH:-}"
 APPLICATION_DIR="${ROOT_DIR}/application"
 SCHEDULER_BIN="${SCHEDULER_DIR}/scheduler"
 GAIN_SCRIPT="${SCHEDULER_DIR}/gain.py"
 GAIN_HEADER="${SCHEDULER_DIR}/gain_matrix.h"
-
 
 DURATION="${1:-150}"
 DEFAULT_LOGDIR="${2:-logs}"
@@ -63,30 +58,6 @@ move_artifacts() {
         shopt -u nullglob
     fi
 
-    # 2) Collect figures into dest (BASE_DIR + SCHEDULER_DIR), but never from RUNS_DIR
-    # Add/remove prunes as needed.
-    local roots=( "$BASE_DIR" "$SCHEDULER_DIR" )
-
-    for root in "${roots[@]}"; do
-        [[ -d "$root" ]] || continue
-
-        find "$root" \
-          \( -path "$RUNS_DIR" -o -path "$RUNS_DIR/*" \) -prune -o \
-          -type f \( -iname "*.png" -o -iname "*.pdf" -o -iname "*.svg" \) \
-          -print0 \
-        | while IFS= read -r -d '' f; do
-              # avoid clobbering if multiple files share name
-              bn="$(basename "$f")"
-              if [[ -e "$dest/$bn" ]]; then
-                  # prefix with relative path hash-ish to keep unique
-                  rel="${f#$root/}"
-                  safe_rel="${rel//\//_}"
-                  mv "$f" "$dest/${safe_rel}" 2>/dev/null || true
-              else
-                  mv "$f" "$dest/" 2>/dev/null || true
-              fi
-          done
-    done
 }
 
 # -------------------------
@@ -178,16 +149,13 @@ for sp in "${SETPOINTS[@]}"; do
 
                 set +e
                 env LD_LIBRARY_PATH="${SCHEDULER_DIR}:${LD_LIBRARY_PATH:-}" \
-                    "${SCHEDULER_BIN}" "${TRACE_FULL_PATH}" "${DURATION}" "${BASE_DIR}/${DEFAULT_LOGDIR}" "${sol}"
+                    "${SCHEDULER_BIN}" "${TRACE_FULL_PATH}" "${DURATION}" "${BASE_DIR}/${DEFAULT_LOGDIR}/" "${sol}"
                 status=$?
                 set -e
 
-                echo "[INFO] Plotting results for solution ${sol}..."
-                # PASS FULL TRACE PATH (not just filename)
-                python3 "${BASE_DIR}/figures.py" "${sol}" "${TRACE_FULL_PATH}" || true
-
                 if [[ $status -ne 0 ]]; then
-                    echo "[WARN] Solution ${sol} failed with status=${status} (continuing)."
+                    echo "[ERROR] Solution ${sol} failed with status=${status}"
+                    exit "$status"
                 fi
                 sleep 2
             done
@@ -203,18 +171,15 @@ for sp in "${SETPOINTS[@]}"; do
 
             set +e
             env LD_LIBRARY_PATH="${SCHEDULER_DIR}:${LD_LIBRARY_PATH:-}" \
-                "${SCHEDULER_BIN}" "${TRACE_FULL_PATH}" "${DURATION}" "${BASE_DIR}/${DEFAULT_LOGDIR}" "${SOLUTION}"
+                "${SCHEDULER_BIN}" "${TRACE_FULL_PATH}" "${DURATION}" "${BASE_DIR}/${DEFAULT_LOGDIR}/" "${SOLUTION}"
             status=$?
             set -e
-
-            echo "[INFO] Plotting results..."
-            # PASS FULL TRACE PATH (your requested form)
-            python3 "${BASE_DIR}/figures.py" "${SOLUTION}" "${TRACE_FULL_PATH}" || true
 
             if [[ $status -eq 0 ]]; then
                 echo "[INFO] Experiment completed successfully."
             else
                 echo "[ERROR] Experiment failed (status=$status)."
+                exit "$status"
             fi
         fi
 

@@ -1,0 +1,33 @@
+GPU: NVIDIA GeForce RTX 5090
+SMs reported: 170
+Assuming 2 SM/TPC => MAX_TPC=85
+
+=== Phase 1: Apply SMALL stream mask and measure active SMs ===
+SMALL disable_mask=0xffffffffffe00000 | unique_sms=42
+  SM IDs: 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41
+  mask_set_cpu_time(us)=2.99
+
+=== Phase 2: Change to LARGE stream mask at runtime ===
+LARGE disable_mask=0x8000000000000000 | unique_sms=126
+  SM IDs: 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125
+  mask_set_cpu_time(us)=0.18
+
+=== Phase 3: Flip masks repeatedly (same stream) ===
+flip  0 | disable_mask=0x8000000000000000 | unique_sms=126 | set_only_avg(us)=0.04 | (run+sync)_avg(us)=32.19
+flip  1 | disable_mask=0xffffffffffe00000 | unique_sms=42 | set_only_avg(us)=0.03 | (run+sync)_avg(us)=44.29
+flip  2 | disable_mask=0x8000000000000000 | unique_sms=126 | set_only_avg(us)=0.03 | (run+sync)_avg(us)=32.10
+flip  3 | disable_mask=0xffffffffffe00000 | unique_sms=42 | set_only_avg(us)=0.04 | (run+sync)_avg(us)=45.37
+flip  4 | disable_mask=0x8000000000000000 | unique_sms=126 | set_only_avg(us)=0.03 | (run+sync)_avg(us)=32.13
+flip  5 | disable_mask=0xffffffffffe00000 | unique_sms=42 | set_only_avg(us)=0.03 | (run+sync)_avg(us)=44.14
+flip  6 | disable_mask=0x8000000000000000 | unique_sms=126 | set_only_avg(us)=0.03 | (run+sync)_avg(us)=31.94
+flip  7 | disable_mask=0xffffffffffe00000 | unique_sms=42 | set_only_avg(us)=0.03 | (run+sync)_avg(us)=45.47
+flip  8 | disable_mask=0x8000000000000000 | unique_sms=126 | set_only_avg(us)=0.03 | (run+sync)_avg(us)=32.16
+flip  9 | disable_mask=0xffffffffffe00000 | unique_sms=42 | set_only_avg(us)=0.03 | (run+sync)_avg(us)=45.18
+
+Set-mask-only overhead summary over 10 flips (each averaged over 10 runs):
+  mean(us)=0.03  std(us)=0.00
+
+(run+sync) summary over 10 flips (each averaged over 10 runs):
+  mean(us)=38.50  std(us)=6.40
+
+Saved results to logs/sm_mask_overhead.csv

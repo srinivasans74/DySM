@@ -19,3 +19,12 @@ Make the script executable and run:
 ```bash
 chmod +x run.sh
 ./run.sh
+```
+
+### Local execution notes
+
+Local RTX 5090 notes: activate `../../../.venv/bin/activate` and run `./run.sh`.
+The CUDA source and plotting script are byte-for-byte upstream versions.
+CSV output is `results/sm_mask_overhead.csv`; figures remain in `Figures/`.
+Only the runner's CUDA architecture and environment paths are adapted.
+The existing measured CSV was moved back from `logs/` to `results/`.

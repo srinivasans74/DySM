@@ -1,38 +1,53 @@
 # DySM
 
-## ECRTS_25 P / MPC branch (RTX 5090)
+## Current ECRTS_25 snapshot — RTX 5090
 
-This branch carries the current ECRTS_25 runtime and experiment sources. It keeps
-`dysm_mpc()` as the MPC controller, uses an effective 80-SM budget, and includes
-the CUDA 13.2 stream-mask offset. The checked-in gains and model are generated
-for `mm` + `stencil` with a 0.70 RRT setpoint.
+This branch retains the existing P and MPC controllers and uses the detected
+170 SMs / 85 TPCs on the RTX 5090, with the existing 128-bit stream-mask API and
+CUDA 13.2 support. The historical branch name `ecrts25-mpc-80sm` is retained;
+the current runtime is not capped at 80 SMs. Two tasks start at 84/86 SMs.
 
-With CUDA 13.2 installed at `/usr/local/cuda`, build from source at the repository
-root (the repository also contains older build artifacts):
+The committed gain header is the latest generated configuration: three tasks
+(`projection`, `hist`, `stencil`) from experiment 6.3, with a 170-SM model budget.
+Regenerate gains and rebuild whenever the task configuration changes. The MPC
+candidate step is 1 SM and its action-cost coefficient is currently zero.
+Mode 3 is P, 4 Adhoc, 5 STGM, 6 SMshare, and 7 MPC.
+
+Activate your Python environment and install `numpy scipy matplotlib pandas`.
+With CUDA 13.2 at `/usr/local/cuda`, build the library and scheduler from source:
 
 ```bash
-python3 -m venv .venv
-.venv/bin/pip install numpy scipy
-GPU_SMS=80 .venv/bin/python Scheduler/gain.py \
-  experiment/traces/trace_mm_stencil.csv Scheduler/gain_matrix.h
 make -C libsmctrl -B libsmctrl.so CUDA=/usr/local/cuda
+GPU_SMS=170 python3 Scheduler/gain.py \
+  experiment/6.3/3traces/trace_projection_hist_stencil.csv Scheduler/gain_matrix.h
 make -C Scheduler -B -j4
+export LD_LIBRARY_PATH="$PWD/libsmctrl:/usr/local/cuda/lib64:${LD_LIBRARY_PATH:-}"
 ```
 
-Run each controller to completion with separate output directories:
+Run each conference experiment from its own directory; see
+[`experiment/README.md`](experiment/README.md). The 6.1 batch selector is `all`.
+6.1 and 6.3 regenerate the shared gain header, so run them sequentially.
+Build products are excluded; measurement logs and generated figures are included.
 
-```bash
-cd experiment
-unset MASK_OFF
-../Scheduler/scheduler traces/trace_mm_stencil.csv 150 logs_P/ 3
-../Scheduler/scheduler traces/trace_mm_stencil.csv 150 logs_MPC/ 7
-```
+### Experiment status as of 2026-10-18
 
-Mode `7` selects MPC when calling `scheduler` directly. The legacy
-`run_experiment.sh` still uses `7` for its batch mode. Logs are saved at normal
-completion; Ctrl+C does not save a partial run. Regenerate the header and rebuild
-when changing the task CSV. The runtime budget is capped at 80 SM; setting
-`GPU_SMS` changes the model generator only. Model calibration is unchanged.
+- 6.1: all four 180-second runs and the aggregate figure are recorded. Result
+  validation remains open: STGM's relative profile path fails from this entry,
+  leaving initial allocations, and P's generated 2-task gain clips to all 10s.
+  These behaviors are preserved, not presented as validated baseline results.
+- 6.2: complete overlap sweep and figure are recorded.
+- 6.3: Adhoc's five and P's four 150-second runs completed; both figures are
+  included. Detailed interpretation/review of the results remains pending.
+- 6.4: complete mask-overhead measurements and figure are recorded.
+- 6.5–6.7: reserved for the journal-extension experiments; not implemented here.
+- 6.8: existing ML entry, its local modules and input image are organized here.
+  The requested two-task experiment has not been implemented or validated.
+
+The conference runners preserve upstream task settings, separate P/Adhoc
+scripts, build commands and plotting calculations, with only documented
+execution fixes and hardware support. Legacy files outside the numbered
+experiment directories were removed. No P/MPC algorithm changes are introduced
+by this publishing step.
 
 ## Abstract
 

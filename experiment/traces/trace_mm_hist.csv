@@ -1,3 +1,0 @@
-sl_no,workload,task_rate,setpoint,tunable/nontunable,range (%)
-1,mm,47.525,0.70,nontunable,0
-2,hist,16.208,0.70,nontunable,0

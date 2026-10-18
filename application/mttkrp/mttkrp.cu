@@ -113,7 +113,7 @@ void MTTKRP::taskInit()
     std::cout << "[MTTKRP] Init Task " << task_id << "\n";
 
     CUDA_CHECK(cudaStreamCreate(&stream));
-    libsmctrl_set_stream_mask(stream, p->masks[task_id]);
+    libsmctrl_set_stream_mask_ext(stream, p->getMask(task_id));
 
     const size_t x_elems = (size_t)I * (size_t)J * (size_t)K;
     const size_t a_elems = (size_t)J * (size_t)R;
@@ -213,7 +213,7 @@ void MTTKRP::runContinuous()
         std::this_thread::sleep_until(next_release);
         auto actual_release = steady_clock::now();
 
-        libsmctrl_set_stream_mask(stream, p->masks[task_id]);
+        libsmctrl_set_stream_mask_ext(stream, p->getMask(task_id));
         kernelOnceMeasure(actual_release);
 
         double ps = p->period[task_id];

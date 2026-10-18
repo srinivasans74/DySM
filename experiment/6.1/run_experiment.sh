@@ -1,17 +1,13 @@
 #!/usr/bin/env bash
 set -euo pipefail
-kill_processes() {
-    echo "Stopping any running processes..."
-    local pids
-    pids="$(ps aux | grep -E './t1|./t2|./server' | grep -v grep | awk '{print $2}' || true)"
-    if [[ -n "${pids}" ]]; then
-        echo "${pids}" | xargs kill -9 2>/dev/null || true
-    fi
-}
-kill_processes
+# Do not kill unrelated experiments by matching process names.
 BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$BASE_DIR"
+export GPU_SMS="${GPU_SMS:-170}"
+export MPLBACKEND=Agg
 ROOT_DIR="$(cd "${BASE_DIR}/../.." && pwd)"
 SCHEDULER_DIR="${ROOT_DIR}/Scheduler"
+export LD_LIBRARY_PATH="${ROOT_DIR}/libsmctrl:${LD_LIBRARY_PATH:-}"
 SCHEDULER_BIN="${SCHEDULER_DIR}/scheduler"
 GAIN_SCRIPT="${SCHEDULER_DIR}/gain.py"
 GAIN_HEADER="${SCHEDULER_DIR}/gain_matrix.h"
@@ -21,7 +17,7 @@ DEFAULT_LOGDIR="logs"
 DURATION="${1:-180}"
 CSV_FILE="${2:-$DEFAULT_CSV}"
 OUTPUT_DIR="${3:-$DEFAULT_LOGDIR}"
-SOLUTION="${4:-7}"
+SOLUTION="${4:-all}"
 
 CSV_PATH="${BASE_DIR}/${CSV_FILE}"
 LOG_DIR="${BASE_DIR}/${OUTPUT_DIR}"
@@ -108,7 +104,6 @@ snapshot_artifacts() {
     echo "[OK] Snapshot saved to: $dest"
 }
 
-
 clear_live_logs() {
     shopt -s dotglob nullglob
     for item in "${LOG_DIR}/"*; do
@@ -139,9 +134,9 @@ cleanup_live_logs_after_snapshot() {
 # ------------------------------------------------------------
 # STEP 4: Run
 # ------------------------------------------------------------
-if [[ "$SOLUTION" -eq 7 ]]; then
+if [[ "$SOLUTION" == all ]]; then
     echo "============================================================"
-    echo "[INFO] SOLUTION=6 Running solutions 3, 4, and 5 sequentially..."
+    echo "[INFO] Running solutions 3, 4, 5, and 6 sequentially..."
     echo "============================================================"
 
     for sol in 3 4 5 6; do
@@ -154,20 +149,18 @@ if [[ "$SOLUTION" -eq 7 ]]; then
 
         set +e
         env LD_LIBRARY_PATH="${SCHEDULER_DIR}:${LD_LIBRARY_PATH:-}" \
-            "$SCHEDULER_BIN" "$CSV_PATH" "$DURATION" "$LOG_DIR" "$sol"
+            "$SCHEDULER_BIN" "$CSV_PATH" "$DURATION" "$LOG_DIR/" "$sol"
         status=$?
         set -e
 
         sleep 2
 
-        echo "[INFO] Plotting results for solution ${sol}..."
-        python3 "${BASE_DIR}/figuresplot.py" "$sol" "$CSV_FILE" || true
-
         snapshot_artifacts "$sol"
         cleanup_live_logs_after_snapshot
 
         if [[ $status -ne 0 ]]; then
-            echo "[WARN] Solution ${sol} failed with status=${status} (continuing)."
+            echo "[ERROR] Solution ${sol} failed with status=${status}"
+            exit "$status"
         fi
     done
 
@@ -187,4 +180,4 @@ echo " Output Dir  : $LOG_DIR"
 echo " Scheduler   : $SCHEDULER_BIN"
 echo " Solution    : $SOLUTION"
 echo "---------------------------------------------"
-python3 plotting.py
+"$SCHEDULER_BIN" "$CSV_PATH" "$DURATION" "$LOG_DIR/" "$SOLUTION"

@@ -1,37 +1,37 @@
-# Experiments Overview
+# Conference experiments 6.1–6.4
 
-This repository contains all experiments corresponding to Section 6 (Evaluation) of the paper. Each subsection has its own directory, and each directory contains:
+Upstream: https://github.com/srinivasans74/DySM/tree/fee7b4b718f92710ff43fae0353cef481a64de5d/experiment
 
-* Required scripts
-* Configuration files
-* A shell script to run the experiment
+Use the upstream experiment definitions and separate runners. Local changes are
+limited to RTX 5090 execution and identified script errors; see each README's
+local execution notes. Existing P/MPC controller code and application kernels
+are retained. Activate `../.venv/bin/activate` from the ECRTS_25 project root.
 
-To run each experiment, navigate to the corresponding directory and execute the script as shown below.
+| Directory | Entry | Data | Figures |
+|---|---|---|---|
+| 6.1 | `./run_experiment.sh` | `logs/sol_3`–`logs/sol_6` (batch) | `Figures/` |
+| 6.2 | `./run.sh` | `logs/` | `Figures/` |
+| 6.3 | `./experiments.sh` | `3runs/`, `3runs_adhoc/` (staging: `logs/`) | `Figures/` |
+| 6.4 | `./run.sh` | `results/` | `Figures/` |
 
-6.1 – Baselines under Runtime Workload Variations
-cd 6.1/
-./run_experiment.sh
+6.1 defaults to 180 seconds per controller; 6.3 defaults to 150 seconds per
+setpoint. 6.3 preserves upstream P's four and Adhoc's five setpoints; the original
+figure compares the four common values. 6.1's batch selector is `all`, reserving
+scheduler mode 7 for MPC. Keep the default `logs` path for upstream 6.1 plotting.
 
-6.2 – Different Set Points
-cd 6.2/
-./run.sh
+6.1/6.3 regenerate the shared gain header and rebuild the scheduler. Regenerate
+for your chosen task CSV before returning to other P/MPC experiments.
 
-6.3
-cd 6.3/
-./experiments.sh
+Complete 6.2/6.4 measurements are retained. Full-length 6.1 (four controllers,
+180 seconds each) and 6.3 (five Adhoc and four P runs, 150 seconds each) have now
+completed and generated their figures. Runner/plot completion does not establish
+controller correctness: 6.1's STGM profile-loading fallback and all-10 P gain
+remain unresolved, and detailed review of 6.3 is pending.
 
-6.4
-cd 6.4/
-./run.sh
+## Directory organization
 
-# To run all experiments automatically
-./run_allexperiments.sh
-
-All generated figures are stored in the Figures/ directory.
-
-Figure mapping to the paper:
-
-* 6_1.pdf corresponds to Figure 3 in the paper
-* 6_2.pdf corresponds to Figure 4 in the paper
-* 6_3.pdf corresponds to Figure 5 in the paper
-* 6_4.pdf corresponds to Figure 6 in the paper
+The experiment root contains only `6.1`–`6.8` and this index. Legacy root-level
+runners, traces, logs, notebooks and executables were removed; their cleanup
+backup was subsequently deleted at the user's request. Existing 6.1–6.4 results and scripts are retained. 6.5–6.7 remain
+reserved directories; 6.8 contains the existing ML entry and its dependencies,
+without changes to its experiment parameters or a claim of completed reproduction.

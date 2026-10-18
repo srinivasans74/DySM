@@ -337,7 +337,7 @@ void Hotspot::taskInit()
     CUDA_CHECK(cudaStreamCreate(&stream));
 
     // Apply configured SM/TPC mask for this stream
-    libsmctrl_set_stream_mask(stream, p->masks[task_id]);
+    libsmctrl_set_stream_mask_ext(stream, p->getMask(task_id));
 
     // Host input load
     load_inputs();
@@ -387,7 +387,7 @@ void Hotspot::kernelOnceMeasure(const timespec& release_ts, const timespec& laun
     float pre_ms = static_cast<float>(pre_ns * 1e-6f);
 
     // Reapply mask if a controller updates it dynamically
-    libsmctrl_set_stream_mask(stream, p->masks[task_id]);
+    libsmctrl_set_stream_mask_ext(stream, p->getMask(task_id));
 
     CUDA_CHECK(cudaEventRecord(st, stream));
 

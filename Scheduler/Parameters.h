@@ -6,10 +6,21 @@
 #include <vector>
 #include <mutex>
 #include <chrono>
+#include <sstream>
+#include <iomanip>
+#include "libsmctrl.h"
 using namespace std::chrono;
 
 
 typedef double datatype;
+
+inline std::string mask_hex(uint128_t mask)
+{
+    std::ostringstream out;
+    out << std::hex << static_cast<uint64_t>(mask >> 64)
+        << std::setw(16) << std::setfill('0') << static_cast<uint64_t>(mask);
+    return out.str();
+}
 
 class parameters {
 public:
@@ -34,7 +45,7 @@ public:
     datatype* preemption;
     datatype* executiontimes;
     std::mutex* task_mutexes;  // one per task
-    uint64_t* masks;
+    uint128_t* masks;
     char*path;
     int finsolution;
     steady_clock::time_point start_time;
@@ -73,6 +84,10 @@ public:
     void setTaskConfig(int idx, const std::string& wl, double rate, double sp, bool tun);
     void show() const;
     inline int getTasks() const { return tasks; }
+    inline uint128_t getMask(int task_id) {
+        std::lock_guard<std::mutex> lock(task_mutexes[task_id]);
+        return masks[task_id];
+    }
     void dumpWallClock(const std::string& output_dir) const;
     void dumpLogsToJSON(const std::string& output_dir) const;
     void dumpinterLogs(const std::string& output_dir) const;

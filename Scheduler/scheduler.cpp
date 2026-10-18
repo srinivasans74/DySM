@@ -40,7 +40,7 @@ static inline int sm_to_tpc(int sm)
     return (sm + 1) / 2;   // integer ceil(sm/2)
 }
 
-uint64_t assignmask(int sm_req, int total_sms)
+uint128_t assignmask(int sm_req, int total_sms)
 {
     const int TOTAL_SMS  = total_sms;
     const int TOTAL_TPCS = sm_to_tpc(TOTAL_SMS);
@@ -50,11 +50,11 @@ uint64_t assignmask(int sm_req, int total_sms)
     sm_req = std::clamp(sm_req, 1, TOTAL_SMS);
     int tpc_req = sm_to_tpc(sm_req);
     tpc_req = std::clamp(tpc_req, 1, TOTAL_TPCS);
-    uint64_t enabled = (tpc_req >= 64)
-                         ? ~0ULL
-                         : ((1ULL << tpc_req) - 1ULL);
+    uint128_t enabled = (tpc_req >= 128)
+                         ? ~uint128_t(0)
+                         : ((uint128_t(1) << tpc_req) - 1ULL);
 
-    uint64_t disable = ~enabled; // Disable all unassigned TPCs.
+    uint128_t disable = ~enabled; // Disable all unassigned TPCs.
 
     return disable;
 }
@@ -184,10 +184,12 @@ int main(int argc, char* argv[]) {
     std::cout<<"solution = "<<solution<<std::endl;
 
 
+    const int total_tpcs = p->maxsms / 2;
     for (int i = 0; i < num_tasks; ++i) {
-    p->sms[i]   = p->maxsms / num_tasks;
-    p->masks[i] = assignmask(p->sms[i], p->maxsms);
-        }
+        p->sms[i] = 2 * (total_tpcs / num_tasks +
+                        (i >= num_tasks - total_tpcs % num_tasks));
+    }
+    assign_overlap(p);
     
      for (int i = 0; i < num_tasks; ++i) {
         const std::string workload = task_list[i].workload;
@@ -264,11 +266,7 @@ int main(int argc, char* argv[]) {
     
     std::cout<<"HPCA 2012 \t" <<std::endl;
     outer_loop_duration = inner_loop_duration;
-    for (int i = 0; i < num_tasks; ++i) 
-        {
-        p->sms[i]   = p->maxsms / num_tasks;
-        p->masks[i] = assignmask(p->sms[i], p->maxsms);
-        }
+    // Keep the initial whole-TPC allocation.
         outer_thread = std::thread(stgm, p);
 
     }

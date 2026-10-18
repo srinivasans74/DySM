@@ -1,0 +1,19 @@
+[MTTKRP Two-Stream TPC Overlap Sweep]
+GPU: NVIDIA GeForce RTX 5090
+SMs: 170
+Mask convention: bit=1 DISABLES TPC (per-stream)
+
+Base: Task1=[0..7], Task2=[8..15]
+Sweeping overlap by sliding Task2 left with fixed width 8
+
+ov= 0 | Task1=[ 0, 7] | Task2=[ 8,15] | overlap= 0 | Task1 avg RT=29.250 ms | Task2 avg RT=29.252 ms
+ov= 1 | Task1=[ 0, 7] | Task2=[ 7,14] | overlap= 1 | Task1 avg RT=32.520 ms | Task2 avg RT=32.183 ms
+ov= 2 | Task1=[ 0, 7] | Task2=[ 6,13] | overlap= 2 | Task1 avg RT=31.880 ms | Task2 avg RT=33.391 ms
+ov= 3 | Task1=[ 0, 7] | Task2=[ 5,12] | overlap= 3 | Task1 avg RT=32.883 ms | Task2 avg RT=34.810 ms
+ov= 4 | Task1=[ 0, 7] | Task2=[ 4,11] | overlap= 4 | Task1 avg RT=34.591 ms | Task2 avg RT=36.542 ms
+ov= 5 | Task1=[ 0, 7] | Task2=[ 3,10] | overlap= 5 | Task1 avg RT=37.806 ms | Task2 avg RT=39.576 ms
+ov= 6 | Task1=[ 0, 7] | Task2=[ 2, 9] | overlap= 6 | Task1 avg RT=39.130 ms | Task2 avg RT=41.393 ms
+ov= 7 | Task1=[ 0, 7] | Task2=[ 1, 8] | overlap= 7 | Task1 avg RT=42.619 ms | Task2 avg RT=44.975 ms
+ov= 8 | Task1=[ 0, 7] | Task2=[ 0, 7] | overlap= 8 | Task1 avg RT=46.248 ms | Task2 avg RT=48.612 ms
+
+Saved sweep JSON: logs/mttkrp_overlap_sweep_fixedwidth.json

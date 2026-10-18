@@ -22,6 +22,7 @@ struct Task {
 
 // ===== Functions =====
 void initialize(parameters* p);
+void assign_overlap(parameters* p);
 //void FC_GPU(parameters* p);
 void smscaling(parameters* p);
 void monitor(parameters* p);

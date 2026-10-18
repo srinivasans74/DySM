@@ -126,7 +126,7 @@ void Projection::taskInit()
     std::cout << "[Projection] Init Task " << task_id << "\n";
 
     CUDA_CHECK(cudaStreamCreate(&stream));
-    libsmctrl_set_stream_mask(stream, p->masks[task_id]);
+    libsmctrl_set_stream_mask_ext(stream, p->getMask(task_id));
 
     // malloc instead of cudaHostAlloc
     h_input  = (float*)malloc(sizeof(float) * 3 * num_points);
@@ -181,7 +181,7 @@ void Projection::kernelOnceMeasure(
     volatile auto primes = computePrimes(num_points);
     (void)primes;
 
-    libsmctrl_set_stream_mask(stream, p->masks[task_id]);
+    libsmctrl_set_stream_mask_ext(stream, p->getMask(task_id));
 
     int threads = 256;
     int blocks  = (num_points + threads - 1) / threads;

@@ -5,3 +5,15 @@ libsmctrl/nvdebug/
 
 Scheduler/json/
 
+
+# Local build products (sources and experiment measurements are versioned).
+*.o
+*.so
+*.a
+*.pyc
+__pycache__/
+.venv/
+/Scheduler/scheduler
+/Scheduler/.build_hash
+/experiment/6.2/overlap
+/experiment/6.4/sm_mask_overhead

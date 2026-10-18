@@ -211,7 +211,7 @@ void Stencil3D::taskInit()
     CUDA_CHECK(cudaSetDeviceFlags(cudaDeviceMapHost));
     CUDA_CHECK(cudaStreamCreate(&stream));
 
-    libsmctrl_set_stream_mask(stream, p->masks[task_id]);
+    libsmctrl_set_stream_mask_ext(stream, p->getMask(task_id));
 
     size_t vol = (size_t)NX_ * NY_ * NZ_;
     size_t bytes = vol * sizeof(float);
@@ -258,7 +258,7 @@ void Stencil3D::kernelOnceMeasure(const timespec& release_ts, const timespec& la
     if (pre_ns < 0) pre_ns = 0;
     float pre_ms = static_cast<float>(pre_ns * 1e-6f);
 
-    libsmctrl_set_stream_mask(stream, p->masks[task_id]);
+    libsmctrl_set_stream_mask_ext(stream, p->getMask(task_id));
 
     CUDA_CHECK(cudaEventRecord(st, stream));
     stencil3d_kernel<<<gridDim, blockDim, 0, stream>>>(d_psi, d_npsi, d_sigX, d_sigY, d_sigZ, NX_, NY_, NZ_);

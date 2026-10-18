@@ -189,7 +189,7 @@ void StereoDisparity::taskInit()
     std::cout << "[StereoDisparity] Init Task " << task_id << " (" << W << "x" << H << ")\n";
 
     CUDA_CHECK(cudaStreamCreate(&stream));
-    libsmctrl_set_stream_mask(stream, p->masks[task_id]);
+    libsmctrl_set_stream_mask_ext(stream, p->getMask(task_id));
 
     const size_t elems = (size_t)W * (size_t)H;
     const size_t bytes = elems * sizeof(unsigned int);
@@ -264,7 +264,7 @@ void StereoDisparity::kernelOnceMeasure(const steady_clock::time_point& actual_r
     auto finish_tp = steady_clock::now();
     float rt_ms = std::chrono::duration<float, std::milli>(finish_tp - actual_release_tp).count();
 
-    libsmctrl_set_stream_mask(stream, p->masks[task_id]);
+    libsmctrl_set_stream_mask_ext(stream, p->getMask(task_id));
 
     CUDA_CHECK(cudaEventRecord(ev_start, stream));
     stereoDisparityKernel<<<grid, block, 0, stream>>>(

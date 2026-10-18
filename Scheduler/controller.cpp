@@ -162,33 +162,34 @@ void assign_overlap(parameters* p)
 
     if (N <= 0 || TOTAL_SMS <= 0 || TOTAL_TPCS <= 0) return;
 
-    const uint64_t all_bits =
-        (TOTAL_TPCS >= 64) ? ~0ULL : ((1ULL << TOTAL_TPCS) - 1ULL);
+    const uint128_t all_bits =
+        (TOTAL_TPCS >= 128) ? ~uint128_t(0) : ((uint128_t(1) << TOTAL_TPCS) - 1);
 
-    auto popcount64 = [](uint64_t x) -> int {
+    auto popcount128 = [](uint128_t x) -> int {
 #if defined(__GNUG__) || defined(__clang__)
-        return __builtin_popcountll(x);
+        return __builtin_popcountll(static_cast<uint64_t>(x))
+             + __builtin_popcountll(static_cast<uint64_t>(x >> 64));
 #else
         int c = 0; while (x) { x &= (x - 1); ++c; } return c;
 #endif
     };
 
-    auto build_ring_mask = [&](int start, int len) -> uint64_t {
-        uint64_t m = 0ULL;
+    auto build_ring_mask = [&](int start, int len) -> uint128_t {
+        uint128_t m = 0ULL;
         if (len <= 0) return 0ULL;
         len   = std::min(len, TOTAL_TPCS);
         start = ((start % TOTAL_TPCS) + TOTAL_TPCS) % TOTAL_TPCS;
         for (int k = 0; k < len; ++k) {
             int idx = (start + k) % TOTAL_TPCS;
-            m |= (1ULL << idx);
+            m |= (uint128_t(1) << idx);
         }
         return m;
     };
 
-    auto find_free_run = [&](uint64_t free_mask, int len) -> int {
+    auto find_free_run = [&](uint128_t free_mask, int len) -> int {
         if (len <= 0) return -1;
         len = std::min(len, TOTAL_TPCS);
-        if (popcount64(free_mask) < len) return -1;
+        if (popcount128(free_mask) < len) return -1;
 
         for (int start = 0; start < TOTAL_TPCS; ++start) {
             bool ok = true;
@@ -201,11 +202,11 @@ void assign_overlap(parameters* p)
         return -1;
     };
 
-    auto pick_any_free = [&](uint64_t free_mask, int need) -> uint64_t {
-        uint64_t sel = 0ULL;
+    auto pick_any_free = [&](uint128_t free_mask, int need) -> uint128_t {
+        uint128_t sel = 0ULL;
         for (int i = 0; i < TOTAL_TPCS && need > 0; ++i) {
             if ((free_mask >> i) & 1ULL) {
-                sel |= (1ULL << i);
+                sel |= (uint128_t(1) << i);
                 --need;
             }
         }
@@ -266,23 +267,23 @@ void assign_overlap(parameters* p)
               });
 
     // enabled mask for each task
-    std::vector<uint64_t> enabled_masks(N, 0ULL);
+    std::vector<uint128_t> enabled_masks(N, 0ULL);
 
     // per-TPC sharing count
     std::vector<int> tpc_share(TOTAL_TPCS, 0);
 
     // free TPCs = those with share==0
-    auto compute_free_mask = [&]() -> uint64_t {
-        uint64_t m = 0ULL;
+    auto compute_free_mask = [&]() -> uint128_t {
+        uint128_t m = 0ULL;
         for (int t = 0; t < TOTAL_TPCS; ++t) {
-            if (tpc_share[t] == 0) m |= (1ULL << t);
+            if (tpc_share[t] == 0) m |= (uint128_t(1) << t);
         }
         return m & all_bits;
     };
 
     // helper: add a TPC bit to a task, updating share count
     auto add_tpc = [&](int task_idx, int tpc_idx) {
-        enabled_masks[task_idx] |= (1ULL << tpc_idx);
+        enabled_masks[task_idx] |= (uint128_t(1) << tpc_idx);
         tpc_share[tpc_idx] += 1;
     };
 
@@ -298,11 +299,11 @@ void assign_overlap(parameters* p)
         int i    = r.idx;
         int need = r.tpc_req;
 
-        uint64_t free_mask = compute_free_mask();
+        uint128_t free_mask = compute_free_mask();
 
         // try a contiguous run first
         int start = find_free_run(free_mask, need);
-        uint64_t enabled = 0ULL;
+        uint128_t enabled = 0ULL;
 
         if (start >= 0) {
             enabled = build_ring_mask(start, need) & free_mask;
@@ -323,7 +324,7 @@ void assign_overlap(parameters* p)
     for (const auto& r : reqs) {
         int i      = r.idx;
         int need   = r.tpc_req;
-        int got    = popcount64(enabled_masks[i]);
+        int got    = popcount128(enabled_masks[i]);
         int shortf = need - got;
         if (shortf <= 0) continue;
 
@@ -364,11 +365,12 @@ void assign_overlap(parameters* p)
     // 5) Write disable masks
     // ----------------------------
     for (int i = 0; i < N; ++i) {
-        uint64_t enabled = enabled_masks[i] & all_bits;
+        std::lock_guard<std::mutex> lock(p->task_mutexes[i]);
+        uint128_t enabled = enabled_masks[i] & all_bits;
         p->masks[i] = ~enabled; // Disable TPCs outside the effective budget too.
 
         // Keep p->sms consistent with actual enabled count (optional but recommended)
-        int tpcs_enabled = popcount64(enabled);
+        int tpcs_enabled = popcount128(enabled);
         p->sms[i] = tpcs_enabled * SMS_PER_TPC;
     }
 }
@@ -834,17 +836,28 @@ void dysm_mpc(parameters* p)
         };
         // Same finite action set: hold, +1 SM, -1 SM, or exchange one SM.
         consider(command_sms);
-        for (int i = 0; i < N; ++i) {
-            auto v = command_sms; ++v[i]; consider(v);
-        }
-        for (int i = 0; i < N; ++i) {
-            auto v = command_sms; --v[i]; consider(v);
-        }
-        for (int i = 0; i < N; ++i)
-            for (int j = 0; j < N; ++j) {
-                if (i == j) continue;
-                auto v = command_sms; ++v[i]; --v[j]; consider(v);
+        for (int step : {1}) {
+            for (int i = 0; i < N; ++i) {
+                auto v = command_sms;
+                v[i] += step;
+                consider(v);
             }
+            for (int i = 0; i < N; ++i) {
+                auto v = command_sms;
+                v[i] -= step;
+                consider(v);
+            }
+            for (int i = 0; i < N; ++i) {
+                for (int j = 0; j < N; ++j) {
+                    if (i == j) continue;
+                    auto v = command_sms;
+                    v[i] += step;
+                    v[j] -= step;
+                    consider(v);
+                }
+            }
+        }
+
         if (candidates.empty()) {
             auto safe_hold = command_sms;
             for (int i = 0; i < N; ++i) {
@@ -888,7 +901,7 @@ void dysm_mpc(parameters* p)
                 move_tpc += std::abs(v[i] - command_sms[i]) / 2.0;
             }
             // Original H=1 weights, including the terminal tracking term.
-            const double cost = 8.0 * tracking + 120.0 * deadline + 0.004 * move_tpc
+            const double cost = 8.0 * tracking + 120.0 * deadline + 0.000 * move_tpc
                               + 0.90 * 2.0 * (8.0 * tracking);
             if (cost + 1e-12 < best_cost) {
                 best_cost = cost;
@@ -923,7 +936,7 @@ void dysm_mpc(parameters* p)
                       << " | Current SMs=" << current_sms[i]
                       << " | News SMs=" << target_sms[i]
                       << " | Current Mask=0x" << std::hex
-                      << static_cast<unsigned long long>(p->masks[i]) << std::dec << "\n";
+                      << mask_hex(p->masks[i]) << std::dec << "\n";
 
             auto& samples = outerloop_tasklist[i];
             samples.execution_time_measurement.clear();
@@ -1058,7 +1071,7 @@ void smscaling(parameters* p)
                       << " | News SMs=" << p->sms[i]+p->outerdelta[i]
                       << " | Current Mask=0x"
                       << std::hex << std::setw(16) << std::setfill('0')
-                      << static_cast<unsigned long long>(p->masks[i])
+                      << mask_hex(p->getMask(i))
                       << std::dec << std::setfill(' ') << "\n";
 
             // --- Sanity check: decode disable mask → enabled TPCs → SMs ---

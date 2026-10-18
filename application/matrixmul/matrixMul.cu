@@ -91,7 +91,7 @@ void MatrixMul::taskInit()
     std::cout << "[MatrixMul] Init Task " << task_id << "\n";
 
     CUDA_CHECK(cudaStreamCreate(&stream));
-    libsmctrl_set_stream_mask(stream, p->masks[task_id]);
+    libsmctrl_set_stream_mask_ext(stream, p->getMask(task_id));
 
     const size_t elems = (size_t)N * (size_t)N;
     const size_t bytes = elems * sizeof(float);
@@ -167,7 +167,7 @@ void MatrixMul::runContinuous()
     while (gpu_running.load(std::memory_order_relaxed)) {
         std::this_thread::sleep_until(next_release);
         auto actual_release = steady_clock::now();
-        libsmctrl_set_stream_mask(stream, p->masks[task_id]);
+        libsmctrl_set_stream_mask_ext(stream, p->getMask(task_id));
         kernelOnceMeasure(actual_release);
         double ps = p->period[task_id];
         long long period_us = (long long)llround(ps * 1e6);

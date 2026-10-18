@@ -100,7 +100,7 @@ private:
 // -------------------- init helpers --------------------
 void MatrixMul::initResources()
 {
-    libsmctrl_set_stream_mask(stream, p->masks[task_id]);
+    libsmctrl_set_stream_mask_ext(stream, p->getMask(task_id));
 
     const size_t elems = (size_t)N * (size_t)N;
     const size_t bytes = elems * sizeof(float);
@@ -285,7 +285,7 @@ void MatrixMul::runContinuous()
 
         // Normal period execution
         auto actual_release = steady_clock::now();
-        libsmctrl_set_stream_mask(stream, p->masks[task_id]);
+        libsmctrl_set_stream_mask_ext(stream, p->getMask(task_id));
         kernelOnceMeasure(actual_release);
 
         double ps = p->period[task_id]; // seconds

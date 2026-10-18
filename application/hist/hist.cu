@@ -169,7 +169,7 @@ void Histogram::taskInit()
     CUDA_CHECK(cudaStreamCreate(&stream));
 
     // Apply the configured SM/TPC mask
-    libsmctrl_set_stream_mask(stream, p->masks[task_id]);
+    libsmctrl_set_stream_mask_ext(stream, p->getMask(task_id));
 
     // Host (pinned) + Device buffers
     CUDA_CHECK(cudaHostAlloc(&h_in,   NUM_ELEMS * sizeof(unsigned int), cudaHostAllocDefault));
@@ -215,7 +215,7 @@ void Histogram::kernelOnceMeasure()
     float pre_ms = static_cast<float>(pre_ns * 1e-6f);
 
     // Re-apply mask in case controller changed it
-    libsmctrl_set_stream_mask(stream, p->masks[task_id]);
+    libsmctrl_set_stream_mask_ext(stream, p->getMask(task_id));
 
     // Clear bins
     CUDA_CHECK(cudaMemsetAsync(d_bins, 0, NUM_BINS * sizeof(unsigned int), stream));

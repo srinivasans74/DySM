@@ -14,7 +14,7 @@
 using json = nlohmann::json;
 
 // Declare (defined elsewhere, e.g., scheduler.cpp)
-uint64_t assignmask(int sm_req, int total_sms);
+uint128_t assignmask(int sm_req, int total_sms);
 
 // workload -> (TPC -> ExecTime_ms)
 using TPCMap = std::map<int, double>;
@@ -37,31 +37,31 @@ static inline int sm_to_tpc(int sm) { return (sm + 1) / 2; }
 // -------------------- NO-OVERLAP MASK HELPERS --------------------
 // Mask convention: bit=1 means "disable this TPC" (same as your assignmask()).
 // We enable ONLY the slice [tpc_start, tpc_start+tpc_count-1] and disable everything else.
-static uint64_t mask_disable_all_except_range(int tpc_start, int tpc_count, int total_tpcs)
+static uint128_t mask_disable_all_except_range(int tpc_start, int tpc_count, int total_tpcs)
 {
-    if (total_tpcs <= 0) return 0ULL;
+    if (total_tpcs <= 0) return ~uint128_t(0);
 
-    const uint64_t all_bits =
-        (total_tpcs >= 64) ? ~0ULL : ((1ULL << total_tpcs) - 1ULL);
+    const uint128_t all_bits =
+        (total_tpcs >= 128) ? ~uint128_t(0) : ((uint128_t(1) << total_tpcs) - 1ULL);
 
     if (tpc_count <= 0) {
         // enable none, disable all valid
-        return all_bits;
+        return ~uint128_t(0);
     }
 
     if (tpc_start < 0) tpc_start = 0;
-    if (tpc_start >= total_tpcs) return all_bits;
+    if (tpc_start >= total_tpcs) return ~uint128_t(0);
 
     int end = tpc_start + tpc_count;   // exclusive
     if (end > total_tpcs) end = total_tpcs;
     tpc_count = end - tpc_start;
-    if (tpc_count <= 0) return all_bits;
+    if (tpc_count <= 0) return ~uint128_t(0);
 
-    uint64_t enable =
-        (tpc_count >= 64) ? ~0ULL : (((1ULL << tpc_count) - 1ULL) << tpc_start);
+    uint128_t enable =
+        (tpc_count >= 128) ? ~uint128_t(0) : (((uint128_t(1) << tpc_count) - 1ULL) << tpc_start);
     enable &= all_bits;
 
-    uint64_t disable = (~enable) & all_bits;
+    uint128_t disable = ~enable;
     return disable;
 }
 
@@ -356,6 +356,7 @@ bool stgminit(parameters* p,
                 int start = slices[i].first;
                 int count = slices[i].second;
 
+                std::lock_guard<std::mutex> lock(p->task_mutexes[i]);
                 p->masks[i] = mask_disable_all_except_range(start, count, TOTAL_TPCS);
 
                 std::cout << "[STGM] FINAL task " << i
@@ -363,7 +364,7 @@ bool stgminit(parameters* p,
                           << " sms=" << p->sms[i]
                           << " tpcs=" << req_tpcs[i]
                           << " slice=[" << start << "," << (start + count - 1) << "]"
-                          << " mask=0x" << std::hex << p->masks[i] << std::dec
+                          << " mask=0x" << std::hex << mask_hex(p->masks[i]) << std::dec
                           << "\n";
             }
 

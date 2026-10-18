@@ -22,3 +22,12 @@ Output
 
 * The generated figure is saved in the Figures/ directory
 * The plot illustrates how increasing overlap affects task response times
+```
+
+### Local execution notes
+
+Local RTX 5090 notes: activate `../../../.venv/bin/activate` and run `./run.sh`.
+The experiment keeps upstream dimensions 1024 x 512 x 512, rank 32, 8 TPCs per
+task, overlap 0..8, and 10 releases per point. The only CUDA-source changes allow
+85 detected TPCs and avoid an out-of-range 64-bit shift; only TPCs 0..15 are used.
+Compilation targets sm_120 with C++17 and pthread support. Logs remain in `logs/`.
