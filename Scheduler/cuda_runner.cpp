@@ -1,3 +1,12 @@
+// cuda_runner.cpp
+// Adds a SEPARATE template + helper for "mminterupt" that:
+//  - creates the handle
+//  - stores it so controller can call interrupt later
+//  - runs (blocking)
+//  - clears handle and destroys on exit
+//
+// Everything else stays the same.
+
 #include "cuda_runner.h"
 #include "Parameters.h"
 #include <iostream>
@@ -48,7 +57,8 @@ static void run_task_blocking(const char* name,
               << task_id << ".\n";
 }
 
-
+// -------------------- Interrupt-capable runner (stores handle) --------------------
+// We keep handles only for mminterupt tasks.
 static std::mutex g_mm_int_mu;
 static std::vector<void*> g_mm_int_handles;  // index by task_id
 
@@ -67,6 +77,7 @@ static void* load_mm_int_handle(int task_id)
     return g_mm_int_handles[task_id];
 }
 
+// Call this from your controller thread when you want to interrupt that task:
 void mminterupt_interrupt_task(int task_id)
 {
     void* h = load_mm_int_handle(task_id);
@@ -88,7 +99,7 @@ static void run_task_blocking_interruptible(const char* name,
                                            InterruptFn /*interrupt_fn*/)
 {
     // NOTE: interrupt_fn is not used here; it will be called externally using the stored handle.
-    // We keep it in the signature so we can call site can pass matrixMul_interrupt.
+    // We keep it in the signature so your call site can pass matrixMul_interrupt.
 
     std::cout << "[GPU] Launching persistent " << name
               << " workload (Task " << task_id << ")...\n";
@@ -99,6 +110,7 @@ static void run_task_blocking_interruptible(const char* name,
         return;
     }
 
+    // Store handle so controller can call mminterupt_interrupt_task(task_id)
     store_mm_int_handle(task_id, handle);
 
     try {
@@ -123,7 +135,10 @@ void runCudaKernel(const std::string& workload, int task_id, parameters* p)
         run_task_blocking("MatrixMul", task_id, p,
             matrixMul_create, matrixMul_run, matrixMul_destroy);
     }
-
+    // else if (workload == "vadd") {
+    //     run_task_blocking("VectorAdd", task_id, p,
+    //         vectorAdd_create, vectorAdd_run, vectorAdd_destroy);
+    // }
     else if (workload == "projection") {
         run_task_blocking("Projection", task_id, p,
             projection_create, projection_run, projection_destroy);
@@ -136,7 +151,10 @@ void runCudaKernel(const std::string& workload, int task_id, parameters* p)
         run_task_blocking("Hotspot", task_id, p,
             hotspot_create, hotspot_run, hotspot_destroy);
     }
-
+    // else if (workload == "srad") {
+    //     run_task_blocking("SRAD", task_id, p,
+    //         srad_create, srad_run, srad_destroy);
+    // }
     else if (workload == "stencil") {
         run_task_blocking("Stencil3D", task_id, p,
             stencil_create, stencil_run, stencil_destroy);

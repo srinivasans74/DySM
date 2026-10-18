@@ -203,6 +203,8 @@ void Histogram::taskInit()
 }
 
 // ============================================================
+// Single kernel dispatch with standalone-style timing
+//   RT = preemption_delay + GPU_execution_time
 // ============================================================
 void Histogram::kernelOnceMeasure()
 {
@@ -263,7 +265,11 @@ void Histogram::runContinuous()
         long long period_ns = static_cast<long long>(std::llround(period_s * 1e9));
 
         sleep_until_abs_hybrid_raw(next_release);
+
+        // mark the time just before we "launch" the kernel
         preemption_ts = ts_now_raw();
+
+        // measure RT + ET like standalone
         kernelOnceMeasure();
 
         next_release = ts_add(next_release, period_ns);

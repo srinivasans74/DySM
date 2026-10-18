@@ -1,8 +1,16 @@
+// matrixMul.cu
+// Adds an interrupt() that:
+//   1) stops the current periodic execution safely
+//   2) doubles N (N = N * 2)
+//   3) re-initializes buffers/grid/events
+//   4) restarts the periodic loop (continues runContinuous)
+//
 // Design:
 // - interrupt() is called from another thread.
 // - runContinuous() is the worker thread.
 // - We use atomic flags + condition_variable to wake sleep_until early.
 // - Restart happens INSIDE the worker thread (safe CUDA resource handling).
+
 #include <cuda_runtime.h>
 #include <iostream>
 #include <atomic>
@@ -54,11 +62,15 @@ public:
     void taskInit();
     void runContinuous();   // worker loop
     void taskFinish();
+
+    // Called from controller/other thread:
+    // - requests current loop to restart with N = N*2
     void interrupt();
 
 private:
     void kernelOnceMeasure(const steady_clock::time_point& actual_release_tp);
 
+    // Restart machinery (worker thread performs restart safely)
     void request_restart();           // sets flags and wakes thread
     bool consume_restart_request();   // worker consumes flag
     bool consume_stop_request();      // worker consumes flag
@@ -155,9 +167,12 @@ void MatrixMul::taskFinish()
 {
     std::cout << "[MatrixMul] Cleaning Task " << task_id << "\n";
 
+    // signal stop and wake worker if sleeping
     stop_requested.store(true, std::memory_order_release);
     cv.notify_all();
 
+    // NOTE: taskFinish() is called after runContinuous returns in your current design.
+    // So we just free what exists:
     if (stream) {
         cudaStreamSynchronize(stream);
     }
@@ -234,8 +249,10 @@ void MatrixMul::do_restart()
 }
 
 // Called from controller thread:
+// “terminate the task and make N=Nx2 restart runContinuous()”
 void MatrixMul::interrupt()
 {
+    // We do NOT touch CUDA resources here (unsafe from other thread).
     // We just request restart; worker thread will do it safely.
     request_restart();
 }
@@ -298,6 +315,7 @@ void matrixMul_destroy(void* handle) {
     delete mm;
 }
 
+// If you want to trigger from C side:
 void matrixMul_interrupt(void* handle) {
     static_cast<MatrixMul*>(handle)->interrupt();
 }

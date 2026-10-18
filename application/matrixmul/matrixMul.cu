@@ -1,3 +1,14 @@
+// matrixMul.cu — MATCHED to your “working” structure, BUT:
+// A) Uses steady_clock + sleep_until like the working code (no clock_nanosleep)
+// B) Keeps termination condition: while (gpu_running.load(...))
+// C) Uses explicit cudaMemcpyAsync + cudaStreamSynchronize (Option B) — NOT mapped hostalloc
+// D) No shared memory / no async thread / no files
+//
+// Metrics:
+// - ET: kernel-only time via CUDA events
+// - RT: (finish - actual_release) where actual_release is taken immediately after sleep_until returns
+//       (this matches the behavior of your working code more closely; it cannot go negative)
+
 #include <cuda_runtime.h>
 #include <iostream>
 #include <atomic>
@@ -8,7 +19,9 @@
 
 #include "../../libsmctrl/libsmctrl.h"
 #include "../../Scheduler/Parameters.h"
+
 extern std::atomic<bool> gpu_running;
+
 using steady_clock = std::chrono::steady_clock;
 
 // ============================================================
@@ -57,6 +70,7 @@ public:
 
 private:
     void kernelOnceMeasure(const steady_clock::time_point& actual_release_tp);
+
     int task_id;
     parameters* p;
     int N;
@@ -113,7 +127,11 @@ void MatrixMul::taskInit()
     std::cout << "[MatrixMul] Task " << task_id << " initialized.\n";
 }
 
-
+// ============================================================
+// One job (ET + RT) — “working code style”
+//   RT is measured from ACTUAL release (after sleep_until returns), not scheduled timestamp.
+//   This avoids negative RT and matches your working program’s measurement behavior.
+// ============================================================
 void MatrixMul::kernelOnceMeasure(const steady_clock::time_point& actual_release_tp)
 {
     const size_t bytes = (size_t)N * (size_t)N * sizeof(float);
@@ -135,7 +153,13 @@ void MatrixMul::kernelOnceMeasure(const steady_clock::time_point& actual_release
     p->responsetimes[task_id]  = et_ms+rt_ms;
 }
 
-
+// ============================================================
+// Periodic loop — MATCHED structure:
+// - steady_clock
+// - sleep_until(next_release)
+// - keep termination condition: while(gpu_running.load())
+// - update next_release using current p->period[task_id] (in seconds) each iteration
+// ============================================================
 void MatrixMul::runContinuous()
 {
     auto next_release = steady_clock::now();

@@ -203,6 +203,7 @@ void libsmctrl_set_next_mask(uint64_t mask) {
 // CUDA 12.7 and 12.8 use the same offset
 // 12.7 tested on 565.77
 // 12.8 tested on 570.124.06
+#define CU_13_2_MASK_OFF 0x604
 
 // Offsets for the stream struct on Jetson aarch64
 #define CU_9_0_MASK_OFF_JETSON 0x128
@@ -336,6 +337,9 @@ void libsmctrl_set_stream_mask_ext(void* stream, uint128_t mask) {
 	case 12070:
 	case 12080:
 		hw_mask_v2 = (void*)(stream_struct_base + CU_12_7_MASK_OFF);
+		break;
+	case 13020:
+		hw_mask_v2 = (void*)(stream_struct_base + CU_13_2_MASK_OFF);
 		break;
 #elif __aarch64__
 	case 9000: {

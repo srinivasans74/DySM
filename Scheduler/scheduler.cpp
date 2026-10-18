@@ -1,5 +1,6 @@
 #include "Parameters.h"
 #include "controller.h"
+#include "gain_matrix.h"
 #include "cuda_runner.h"  
 #include <fstream>
 #include <sstream>
@@ -49,13 +50,11 @@ uint64_t assignmask(int sm_req, int total_sms)
     sm_req = std::clamp(sm_req, 1, TOTAL_SMS);
     int tpc_req = sm_to_tpc(sm_req);
     tpc_req = std::clamp(tpc_req, 1, TOTAL_TPCS);
-    const uint64_t all_bits =
-        (TOTAL_TPCS >= 64) ? ~0ULL : ((1ULL << TOTAL_TPCS) - 1ULL);
     uint64_t enabled = (tpc_req >= 64)
                          ? ~0ULL
                          : ((1ULL << tpc_req) - 1ULL);
 
-    uint64_t disable = (~enabled) & all_bits;
+    uint64_t disable = ~enabled; // Disable all unassigned TPCs.
 
     return disable;
 }
@@ -135,11 +134,14 @@ int main(int argc, char* argv[]) {
         std::cout << "Adhoc\n";
     } 
      else if (solution == 6) {
-        std::cout << "Equal is SMShare\n";
+        std::cout << "Equal\n";
+    }
+    else if (solution == 7) {
+        std::cout << "MPC\n";
     } 
     
     else {
-        std::cerr << "Unknown solution ID: " << solution << " (must be 1, 2, or 3)\n";
+        std::cerr << "Unknown solution ID: " << solution << " (must be 3, 4, 5, 6, or 7)\n";
         return 1;
     }
     std::cout << "=================================\n\n";
@@ -154,6 +156,10 @@ int main(int argc, char* argv[]) {
     }
 
     int num_tasks = static_cast<int>(task_list.size());
+    if (solution == 7 && num_tasks != NUM_TASKS) {
+        std::cerr << "[MPC] Regenerate gain_matrix.h for this task CSV.\n";
+        return 1;
+    }
     std::cout << "Loaded " << num_tasks << " tasks from " << csv_path << "\n";
 
     parameters* p = new parameters(num_tasks, true);
@@ -252,7 +258,7 @@ int main(int argc, char* argv[]) {
         outer_thread = std::thread(stgm, p);
         std::cout << "STGM" << std::endl;
     }
-    else 
+    else if (solution == 6)
     {
     
     
@@ -267,7 +273,11 @@ int main(int argc, char* argv[]) {
 
     }
     
-    
+    else if (solution == 7) {
+        outer_loop_duration = inner_loop_duration;
+        std::cout << "MPC\n";
+        outer_thread = std::thread(dysm_mpc, p);
+    }
     
     // ============================================================
     // === Run for Given Duration ================================

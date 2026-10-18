@@ -85,6 +85,7 @@ static inline void sleep_until_abs_hybrid_raw(const timespec& target)
 
 
 // ============================================================
+// I/O helpers (simple C-style like original)
 // ============================================================
 static inline void fatal(const char* s) {
     std::fprintf(stderr, "error: %s\n", s);
@@ -106,6 +107,7 @@ static void read_grid_file(float *vect, int rows, int cols, const char *file) {
 }
 
 // ============================================================
+// CUDA Kernel — Hotspot (pyramid update block)
 // ============================================================
 #ifndef BLOCK_SIZE
 #define BLOCK_SIZE 16
@@ -472,6 +474,7 @@ void Hotspot::taskFinish()
     if (temp_d1) CUDA_CHECK(cudaFree(temp_d1));
     if (stream)  CUDA_CHECK(cudaStreamDestroy(stream));
 
+    // Optional: write last temperature to file (host copy)
     // Uncomment if you need file output in the periodic version:
     // {
     //     const int size = GRID_ROWS * GRID_COLS;

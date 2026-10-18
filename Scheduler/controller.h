@@ -29,6 +29,7 @@ void monitor(parameters* p);
 // void outerloop(parameters* p);
 void adhoc(parameters* p);
 void stgm(parameters* p);
+void dysm_mpc(parameters* p);
 // ===== Helper functions =====
 float calculateDeadlineMiss(const std::vector<float>& responseTimes, float period);
 float calculateAverage(const std::vector<float>& values);

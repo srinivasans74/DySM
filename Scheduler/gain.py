@@ -102,7 +102,7 @@ def build_A_B_coupled(e_vec, p_vec, total_sms, coupling=0.25):
 
     return A, B
 
-def save_as_cpp(K_cpp, out_path):
+def save_as_cpp(K_cpp, B, out_path, csv_path, total_sms):
     num_tasks = K_cpp.shape[0]
     guard = "GAIN_MATRIX_H_"
 
@@ -114,6 +114,15 @@ def save_as_cpp(K_cpp, out_path):
         f.write("constexpr float gain[NUM_TASKS][NUM_TASKS] = {\n")
         for i in range(num_tasks):
             row = ", ".join(f"{K_cpp[i, j]:.9f}f" for j in range(num_tasks))
+            comma = "," if i != num_tasks - 1 else ""
+            f.write(f"    {{{row}}}{comma}\n")
+        f.write("};\n\n")
+        f.write(f"// Model source CSV: {os.path.abspath(csv_path)}\n")
+        f.write(f"// Model operating total SMs: {total_sms}\n")
+        f.write("// Same plant used for gain above: delta_RRT = model_B * delta_SM.\n")
+        f.write("constexpr double model_B[NUM_TASKS][NUM_TASKS] = {\n")
+        for i in range(num_tasks):
+            row = ", ".join(f"{B[i, j]:.17g}" for j in range(num_tasks))
             comma = "," if i != num_tasks - 1 else ""
             f.write(f"    {{{row}}}{comma}\n")
         f.write("};\n\n#endif\n")
@@ -166,7 +175,7 @@ def main():
     print("[INFO] clipped C++ gain =\n", K_cpp)
     print("=============================================")
 
-    save_as_cpp(np.abs(K_cpp), out_path)
+    save_as_cpp(np.abs(K_cpp), B, out_path, csv_path, total_sms)
     print("[DONE] Gain matrix written to", out_path)
 
 if __name__ == "__main__":

@@ -1,0 +1,4 @@
+sl_no,workload,task_rate,setpoint,tunable/nontunable,range (%)
+1,mm,66.535,0.90,nontunable,0
+2,projection,39.947,0.90,nontunable,0
+3,hotspot,21.262,0.90,nontunable,0

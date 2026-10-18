@@ -1,3 +1,13 @@
+// A) Uses steady_clock + sleep_until (no clock_nanosleep)
+// B) Keeps termination condition: while (gpu_running.load(...))
+// C) Uses explicit cudaMemcpyAsync + cudaStreamSynchronize (Option B) — NOT mapped hostalloc
+// D) No shared memory / no async thread / no files
+//
+// Metrics:
+// - ET: kernel-only time via CUDA events
+// - RT: (finish - actual_release) where actual_release is taken immediately after sleep_until returns
+//       (this matches the behavior of your working code more closely; it cannot go negative)
+
 #include <cuda_runtime.h>
 #include <iostream>
 #include <atomic>
@@ -115,6 +125,7 @@ void MTTKRP::taskInit()
     const size_t b_bytes = b_elems * sizeof(float);
     const size_t m_bytes = m_elems * sizeof(float);
 
+    // Host buffers: pinned (good for memcpyAsync), NOT mapped
     CUDA_CHECK(cudaHostAlloc((void**)&h_X, x_bytes, cudaHostAllocDefault));
     CUDA_CHECK(cudaHostAlloc((void**)&h_A, a_bytes, cudaHostAllocDefault));
     CUDA_CHECK(cudaHostAlloc((void**)&h_B, b_bytes, cudaHostAllocDefault));
@@ -151,7 +162,11 @@ void MTTKRP::taskInit()
     std::cout << "[MTTKRP] Task " << task_id << " initialized.\n";
 }
 
-
+// ============================================================
+// One job (ET + RT) — “working code style”
+//   RT is measured from ACTUAL release (after sleep_until returns), not scheduled timestamp.
+//   This avoids negative RT and matches your working program’s measurement behavior.
+// ============================================================
 void MTTKRP::kernelOnceMeasure(const steady_clock::time_point& actual_release_tp)
 {
     const size_t x_bytes = (size_t)I * (size_t)J * (size_t)K * sizeof(float);
@@ -162,6 +177,7 @@ void MTTKRP::kernelOnceMeasure(const steady_clock::time_point& actual_release_tp
     auto finish_tp = steady_clock::now();
     float rt_ms = std::chrono::duration<float, std::milli>(finish_tp - actual_release_tp).count();
 
+    // Explicit stream-ordered transfers (Option C)
     CUDA_CHECK(cudaMemcpyAsync(d_X, h_X, x_bytes, cudaMemcpyHostToDevice, stream));
     CUDA_CHECK(cudaMemcpyAsync(d_A, h_A, a_bytes, cudaMemcpyHostToDevice, stream));
     CUDA_CHECK(cudaMemcpyAsync(d_B, h_B, b_bytes, cudaMemcpyHostToDevice, stream));
@@ -182,7 +198,13 @@ void MTTKRP::kernelOnceMeasure(const steady_clock::time_point& actual_release_tp
     p->responsetimes[task_id]  = et_ms + rt_ms;
 }
 
-
+// ============================================================
+// Periodic loop — MATCHED structure:
+// - steady_clock
+// - sleep_until(next_release)
+// - keep termination condition: while(gpu_running.load())
+// - update next_release using current p->period[task_id] (in seconds) each iteration
+// ============================================================
 void MTTKRP::runContinuous()
 {
     auto next_release = steady_clock::now();
@@ -200,7 +222,9 @@ void MTTKRP::runContinuous()
     }
 }
 
-
+// ============================================================
+// Cleanup
+// ============================================================
 void MTTKRP::taskFinish()
 {
     std::cout << "[MTTKRP] Cleaning Task " << task_id << "\n";
@@ -221,7 +245,9 @@ void MTTKRP::taskFinish()
     CUDA_CHECK(cudaStreamDestroy(stream));
 }
 
-
+// ============================================================
+// Public API (C linkage) — same pattern as your MatrixMul
+// ============================================================
 extern "C" {
 
 void* mttkrp_create(int task_id, parameters* p) {

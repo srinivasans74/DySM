@@ -1,5 +1,39 @@
 # DySM
 
+## ECRTS_25 P / MPC branch (RTX 5090)
+
+This branch carries the current ECRTS_25 runtime and experiment sources. It keeps
+`dysm_mpc()` as the MPC controller, uses an effective 80-SM budget, and includes
+the CUDA 13.2 stream-mask offset. The checked-in gains and model are generated
+for `mm` + `stencil` with a 0.70 RRT setpoint.
+
+With CUDA 13.2 installed at `/usr/local/cuda`, build from source at the repository
+root (the repository also contains older build artifacts):
+
+```bash
+python3 -m venv .venv
+.venv/bin/pip install numpy scipy
+GPU_SMS=80 .venv/bin/python Scheduler/gain.py \
+  experiment/traces/trace_mm_stencil.csv Scheduler/gain_matrix.h
+make -C libsmctrl -B libsmctrl.so CUDA=/usr/local/cuda
+make -C Scheduler -B -j4
+```
+
+Run each controller to completion with separate output directories:
+
+```bash
+cd experiment
+unset MASK_OFF
+../Scheduler/scheduler traces/trace_mm_stencil.csv 150 logs_P/ 3
+../Scheduler/scheduler traces/trace_mm_stencil.csv 150 logs_MPC/ 7
+```
+
+Mode `7` selects MPC when calling `scheduler` directly. The legacy
+`run_experiment.sh` still uses `7` for its batch mode. Logs are saved at normal
+completion; Ctrl+C does not save a partial run. Regenerate the header and rebuild
+when changing the task CSV. The runtime budget is capped at 80 SM; setting
+`GPU_SMS` changes the model generator only. Model calibration is unchanged.
+
 ## Abstract
 
 Many of today’s real-time embedded systems increasingly rely on GPUs for AI-related computing. However, existing GPU scheduling solutions for spatially shared GPU systems are mostly open-loop and depend on worst-case execution time (WCET) estimation for offline schedulability analysis. Such approaches cannot adapt to runtime workload variations. While adaptive scheduling techniques have been proposed to handle execution-time variability, prior work primarily targets CPUs or time-slicing GPUs, where only one task executes on the GPU at a time. In contrast, spatial sharing enables concurrent kernel execution via Streaming Multiprocessor (SM) partitioning, allowing more efficient GPU utilization. This motivates the need for adaptive solutions tailored to spatially shared GPU systems.

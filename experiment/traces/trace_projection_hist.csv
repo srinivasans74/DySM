@@ -1,0 +1,3 @@
+sl_no,workload,task_rate,setpoint,tunable/nontunable,range (%)
+1,projection,21.034,0.70,nontunable,0
+2,hist,16.208,0.70,nontunable,0

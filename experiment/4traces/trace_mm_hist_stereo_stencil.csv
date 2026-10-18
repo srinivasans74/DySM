@@ -1,0 +1,5 @@
+sl_no,workload,task_rate,setpoint,tunable/nontunable,range (%)
+1,mm,110.891,0.70,nontunable,0
+2,hist,37.819,0.70,nontunable,0
+3,stereo,32.581,0.70,nontunable,0
+4,stencil,52.500,0.70,nontunable,0

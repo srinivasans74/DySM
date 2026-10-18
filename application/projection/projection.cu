@@ -1,3 +1,11 @@
+// projection.cu — MATCHED to MatrixMul timing & structure
+// - steady_clock + sleep_until
+// - RT measured from ACTUAL release
+// - No clock_nanosleep / no async thread
+// - Same gpu_running termination
+// - CUDA event based ET
+// - malloc + cudaMalloc (NO cudaHostAlloc / cudaHostGetDevicePointer)
+
 #include "projection.h"
 #include <cuda_runtime.h>
 #include <chrono>
@@ -19,6 +27,7 @@
 #include "../common/include/support.h"
 
 extern std::atomic<bool> gpu_running;
+
 using steady_clock = std::chrono::steady_clock;
 
 // ============================================================
@@ -160,6 +169,7 @@ void Projection::taskInit()
 }
 
 // ============================================================
+// One job — MATCHED RT/ET semantics
 // ============================================================
 void Projection::kernelOnceMeasure(
     const steady_clock::time_point& actual_release)
@@ -191,7 +201,7 @@ void Projection::kernelOnceMeasure(
 }
 
 // ============================================================
-// Periodic loop 
+// Periodic loop — IDENTICAL to MatrixMul
 // ============================================================
 void Projection::runContinuous()
 {

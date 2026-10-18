@@ -12,7 +12,7 @@ endif
 # Compiler Settings
 # ============================================================
 CXX       = g++
-NVCC      = nvcc
+NVCC      = $(CUDA_PATH)/bin/nvcc
 PROJECT_ROOT := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
 # Base flags for CPU and CUDA (x86_64)
 CXXFLAGS  = -std=c++17 -pthread -O0 -g -Wall -m64 -fno-omit-frame-pointer
@@ -21,12 +21,12 @@ NVCCFLAGS = -std=c++17 -O0 -G -g -m64 \
             --default-stream per-thread \
             --extended-lambda --expt-relaxed-constexpr \
             -Xcompiler "-fno-omit-frame-pointer" \
-            -arch=sm_70  # <-- change to your GPU arch (e.g., sm_80)
+            -arch=sm_120
 
 # ============================================================
 # CUDA Path Auto-Detection
 # ============================================================
-CUDA_PATH     := $(shell dirname $(shell dirname $(shell which nvcc)))
+CUDA_PATH     ?= /usr/local/cuda
 CUDA_LIB_PATH := $(CUDA_PATH)/lib64
 CUDA_INC_PATH := $(CUDA_PATH)/include
 
@@ -80,12 +80,17 @@ TARGET = scheduler
 # ============================================================
 all: $(TARGET)
 
+# Rebuild when gain.py exports new controller parameters.
+controller.o: controller.h gain_matrix.h
+scheduler.o: controller.h gain_matrix.h
+
 $(TARGET): $(OBJS)
 	@echo "[LINK] Building final x86_64 binary..."
 	$(CXX) -g -O0 -m64 -o $@ $^ \
 	    -I$(CUDA_INC_PATH) \
 	    -I$(LIBSMCTRL_DIR) \
 	    -L$(LIBSMCTRL_DIR) -L$(CUDA_LIB_PATH) \
+	    -Wl,-rpath,'$$ORIGIN/../libsmctrl' -Wl,-rpath,$(CUDA_LIB_PATH) \
 	    -lsmctrl -lcudart -lcuda -lpthread
 
 # ------------------------------------------------------------

@@ -1,3 +1,14 @@
+// stereo.cu — MATCHED to your “working” structure, BUT:
+// A) Uses steady_clock + sleep_until (no clock_nanosleep / MONOTONIC_RAW helpers)
+// B) Keeps termination condition: while (gpu_running.load(...))
+// C) Uses explicit cudaMemcpyAsync + cudaStreamSynchronize (NOT mapped host memory)
+// D) No hostalloc *mapped pointer* usage (no cudaHostGetDevicePointer, no cudaDeviceMapHost flag needed)
+// E) Keeps your texture path + kernel as-is
+//
+// Metrics (same style as your matrixMul example):
+// - ET: kernel-only time via CUDA events
+// - RT: (finish - actual_release) taken immediately after sleep_until returns
+
 #include <cuda_runtime.h>
 #include <iostream>
 #include <atomic>
@@ -10,7 +21,9 @@
 
 #include "../../libsmctrl/libsmctrl.h"
 #include "../../Scheduler/Parameters.h"
+
 extern std::atomic<bool> gpu_running;
+
 using steady_clock = std::chrono::steady_clock;
 
 // ============================================================
@@ -28,7 +41,7 @@ using steady_clock = std::chrono::steady_clock;
 static inline int iDivUp(int a, int b) { return (a + b - 1) / b; }
 
 // ============================================================
-// CUDA Kernel — Stereo Disparity 
+// CUDA Kernel — Stereo Disparity (UNCHANGED)
 // ============================================================
 #define BLOCK_X 8
 #define BLOCK_Y 8
@@ -114,7 +127,7 @@ __global__ void stereoDisparityKernel(
 }
 
 // ============================================================
-// StereoDisparity class 
+// StereoDisparity class — matched to matrixMul structure
 // ============================================================
 class StereoDisparity {
 public:
@@ -181,6 +194,7 @@ void StereoDisparity::taskInit()
     const size_t elems = (size_t)W * (size_t)H;
     const size_t bytes = elems * sizeof(unsigned int);
 
+    // Host buffers: pinned (good for memcpyAsync), NOT mapped
     CUDA_CHECK(cudaHostAlloc((void**)&h_img0, bytes, cudaHostAllocDefault));
     CUDA_CHECK(cudaHostAlloc((void**)&h_img1, bytes, cudaHostAllocDefault));
     CUDA_CHECK(cudaHostAlloc((void**)&h_out,  bytes, cudaHostAllocDefault));
@@ -196,7 +210,7 @@ void StereoDisparity::taskInit()
     CUDA_CHECK(cudaMemcpyAsync(d_img0, h_img0, bytes, cudaMemcpyHostToDevice, stream));
     CUDA_CHECK(cudaMemcpyAsync(d_img1, h_img1, bytes, cudaMemcpyHostToDevice, stream));
 
-    // Texture setup (pitch2D) from DEVICE pointers
+    // Texture setup (pitch2D) from DEVICE pointers (no host mapping)
     cudaChannelFormatDesc ca_desc = cudaCreateChannelDesc<unsigned int>();
 
     cudaResourceDesc texResLeft{};
@@ -234,8 +248,18 @@ void StereoDisparity::taskInit()
     std::cout << "[StereoDisparity] Task " << task_id << " initialized.\n";
 }
 
+// ============================================================
+// One job (ET + RT) — “working code style”
+//   RT is measured from ACTUAL release (after sleep_until returns).
+// ============================================================
 void StereoDisparity::kernelOnceMeasure(const steady_clock::time_point& actual_release_tp)
 {
+    // (Optional) if images change each period, you can update host then H2D here.
+    // For now, keep like your matrixMul example: kernel-only each period.
+    // If you need per-period H2D, uncomment:
+    // const size_t bytes = (size_t)W * (size_t)H * sizeof(unsigned int);
+    // CUDA_CHECK(cudaMemcpyAsync(d_img0, h_img0, bytes, cudaMemcpyHostToDevice, stream));
+    // CUDA_CHECK(cudaMemcpyAsync(d_img1, h_img1, bytes, cudaMemcpyHostToDevice, stream));
 
     auto finish_tp = steady_clock::now();
     float rt_ms = std::chrono::duration<float, std::milli>(finish_tp - actual_release_tp).count();
@@ -255,7 +279,13 @@ void StereoDisparity::kernelOnceMeasure(const steady_clock::time_point& actual_r
     p->responsetimes[task_id]  = et_ms + rt_ms;
 }
 
-
+// ============================================================
+// Periodic loop — MATCHED structure:
+// - steady_clock
+// - sleep_until(next_release)
+// - while(gpu_running.load())
+// - update next_release using current p->period[task_id] (seconds) each iteration
+// ============================================================
 void StereoDisparity::runContinuous()
 {
     auto next_release = steady_clock::now();

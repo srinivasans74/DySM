@@ -13,12 +13,14 @@
 #include <nlohmann/json.hpp>
 using json = nlohmann::json;
 
+// Declare (defined elsewhere, e.g., scheduler.cpp)
 uint64_t assignmask(int sm_req, int total_sms);
 
 // workload -> (TPC -> ExecTime_ms)
 using TPCMap = std::map<int, double>;
 static std::unordered_map<std::string, TPCMap> workload_profile_db;
 
+// JSON paths (keys MUST match your workload names passed in)
 static const std::unordered_map<std::string, std::string> workload_json_path = {
     {"mm",         "../benchmarking_tpc/logs/tpc_results_mm"},
     {"projection", "../benchmarking_tpc/logs/tpc_results_projection_mapped"},
@@ -29,9 +31,12 @@ static const std::unordered_map<std::string, std::string> workload_json_path = {
     {"mminterupt",  "../benchmarking_tpc/logs/tpc_results_mm"}
 };
 
+// Jetson/Ampere mapping: 2 SM per TPC
 static inline int sm_to_tpc(int sm) { return (sm + 1) / 2; }
 
 // -------------------- NO-OVERLAP MASK HELPERS --------------------
+// Mask convention: bit=1 means "disable this TPC" (same as your assignmask()).
+// We enable ONLY the slice [tpc_start, tpc_start+tpc_count-1] and disable everything else.
 static uint64_t mask_disable_all_except_range(int tpc_start, int tpc_count, int total_tpcs)
 {
     if (total_tpcs <= 0) return 0ULL;
@@ -40,6 +45,7 @@ static uint64_t mask_disable_all_except_range(int tpc_start, int tpc_count, int 
         (total_tpcs >= 64) ? ~0ULL : ((1ULL << total_tpcs) - 1ULL);
 
     if (tpc_count <= 0) {
+        // enable none, disable all valid
         return all_bits;
     }
 
@@ -165,6 +171,7 @@ static bool load_profile_for_workload(const std::string& workload)
     return true;
 }
 
+// Gi(N): execution time (ms) for N SMs
 static double Gi_ms_for_sms(const std::string& workload, int sm_count)
 {
     const auto& profile = workload_profile_db.at(workload);
@@ -178,7 +185,8 @@ static double Gi_ms_for_sms(const std::string& workload, int sm_count)
     return profile.rbegin()->second; // clamp
 }
 
-
+// Utilization Ui = Ei/Pi   (ALL in ms)
+// Ei = Gi_ms(Ni) * exec_scale
 static double util_i_ms(const std::string& workload, int Ni, double Pi_ms, double exec_scale)
 {
     double gi_ms = Gi_ms_for_sms(workload, Ni);
@@ -186,6 +194,7 @@ static double util_i_ms(const std::string& workload, int Ni, double Pi_ms, doubl
     return Ei_ms / Pi_ms;
 }
 
+// WFD feasibility on Np identical cores capacity 1 each.
 static bool schedulable_wfd(const std::vector<double>& U, int Np)
 {
     if (Np <= 0) return false;
@@ -208,6 +217,7 @@ static bool schedulable_wfd(const std::vector<double>& U, int Np)
     return true;
 }
 
+// Score = (Gi(N) - Gi(N+1))/Pi, scaled
 static double marginal_gain_score_ms(const std::string& workload, int Ni, double Pi_ms, double exec_scale)
 {
     double gN  = Gi_ms_for_sms(workload, Ni);
@@ -240,6 +250,7 @@ static void print_state(const std::vector<std::string>& workloads,
     std::cout << "[STGM] --------------\n\n";
 }
 
+// Your requested initial table print (setpoint column header kept; value omitted)
 static void print_task_table(parameters* /*p*/,
                              const std::vector<std::string>& workloads,
                              const std::vector<double>& periods_ms,
@@ -301,10 +312,13 @@ bool stgminit(parameters* p,
         }
     }
 
+    // Ni init = 1 for ALL tasks (kept same as your logic)
     std::vector<int> Ni(n, 1);
 
+    // Print your requested table before beginning
     print_task_table(p, workloads, periods_ms, Ni);
 
+    // Debug print initial state
     print_state(workloads, periods_ms, Ni, Np, NSM, exec_scale);
 
     while (true) {

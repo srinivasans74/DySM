@@ -5,6 +5,7 @@
 #include <stdexcept>
 #include <iostream>
 #include <cuda_runtime.h>
+#include <algorithm>
 parameters::parameters(int n, bool adapt)
 {
     if (n <= 0)
@@ -81,6 +82,8 @@ parameters::parameters(int n, bool adapt)
         std::cout << "[parameters] Detected GPU: " << prop.name
                   << " (" << maxsms << " SMs)\n";
     }
+    maxsms = std::min(maxsms, 80); // Effective SM budget shared by P and MPC.
+    std::cout << "[parameters] Effective SM budget: " << maxsms << "\n";
     minsms = 1;
 
     
@@ -234,7 +237,7 @@ void parameters::dumpLogsToJSON(const std::string& output_dir) const
         file.close();
 
         std::cout << "[parameters] Dumped metrics for task " << i
-                  << "at" << filename << "\n";
+                  << " → " << filename << "\n";
     }
 
 }
