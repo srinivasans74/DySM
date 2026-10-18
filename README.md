@@ -4,8 +4,8 @@
 
 This branch retains the existing P and MPC controllers and uses the detected
 170 SMs / 85 TPCs on the RTX 5090, with the existing 128-bit stream-mask API and
-CUDA 13.2 support. The historical branch name `ecrts25-mpc-80sm` is retained;
-the current runtime is not capped at 80 SMs. Two tasks start at 84/86 SMs.
+CUDA 13.2 support. The branch is `ecrts25-mpc`; the runtime uses all 170 SMs.
+Two tasks start at 84/86 SMs.
 
 The committed gain header is the latest generated configuration: three tasks
 (`projection`, `hist`, `stencil`) from experiment 6.3, with a 170-SM model budget.
