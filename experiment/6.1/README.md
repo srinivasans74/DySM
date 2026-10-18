@@ -80,5 +80,5 @@ Gain generation defaults to `GPU_SMS=170`; it still updates the shared
 
 All four 180-second runs and the aggregate figure are included. Result validation
 remains open: STGM failed to load its relative-path profiles from this entry and
-kept initial allocations; P's generated two-task gain was clipped to all 10s.
-The recorded results preserve these behaviors. Neither issue was changed here.
+kept initial allocations. The recorded results preserve this behavior; the STGM
+profile-loading issue was not changed here.

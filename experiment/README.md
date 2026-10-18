@@ -25,8 +25,8 @@ for your chosen task CSV before returning to other P/MPC experiments.
 Complete 6.2/6.4 measurements are retained. Full-length 6.1 (four controllers,
 180 seconds each) and 6.3 (five Adhoc and four P runs, 150 seconds each) have now
 completed and generated their figures. Runner/plot completion does not establish
-controller correctness: 6.1's STGM profile-loading fallback and all-10 P gain
-remain unresolved, and detailed review of 6.3 is pending.
+controller correctness: 6.1's STGM profile-loading fallback remains unresolved,
+and detailed review of 6.3 is pending.
 
 ## Directory organization
 

@@ -33,8 +33,8 @@ Build products are excluded; measurement logs and generated figures are included
 
 - 6.1: all four 180-second runs and the aggregate figure are recorded. Result
   validation remains open: STGM's relative profile path fails from this entry,
-  leaving initial allocations, and P's generated 2-task gain clips to all 10s.
-  These behaviors are preserved, not presented as validated baseline results.
+  leaving initial allocations. This behavior is preserved, not presented as
+  a validated STGM baseline result.
 - 6.2: complete overlap sweep and figure are recorded.
 - 6.3: Adhoc's five and P's four 150-second runs completed; both figures are
   included. Detailed interpretation/review of the results remains pending.
