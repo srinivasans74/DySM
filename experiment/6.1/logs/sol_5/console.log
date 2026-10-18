@@ -1,0 +1,796 @@
+
+===== SELECTED CONTROL MODE =====
+STGM=================================
+
+Loaded 2 tasks from /home/yuanyang/ECRTS_original_20261017/ECRTS_25/experiment/6.1/task_set.csv
+[parameters] Detected GPU: NVIDIA GeForce RTX 5090 (170 SMs)
+[parameters] Effective SM budget: 170
+[parameters] Initialized with 2 tasks. RateAdaption = true
+
+Parameters initialized and ready for controller.
+
+=== [System Configuration Summary] ===
+Total Tasks     : 2
+Rate Adaption   : true
+
+ID   Workload    Rate      Setpoint  Tunable   Delta     
+-----------------------------------------------
+1    mminterupt  0.04533   0.8       Yes       21        
+2    stereo      0.021256  0.8       Yes       0         
+-----------------------------------------------
+[initialize] Allocated tracking structures for 2 tasks.
+solution = 5
+[GPU] Launching persistent mminterupt workload (Task 0)...
+[GPU] Launching persistent StereoDisparity workload (Task 1)...
+[MatrixMul] Init Task 0 (N=1024)
+[StereoDisparity] Init Task 1 (480x480)
+[MatrixMul] Task 0 initialized.
+[StereoDisparity] Task 1 initialized.
+STGM
+[monitor] Started
+[STGM] Loaded profile for 'mminterupt' (42 points) from "/home/yuanyang/ECRTS_original_20261017/ECRTS_25/Scheduler/../benchmarking_tpc/logs/tpc_results_mm"
+[STGM] Loaded profile for 'stereo' (42 points) from "/home/yuanyang/ECRTS_original_20261017/ECRTS_25/Scheduler/../benchmarking_tpc/logs/tpc_results_stereodisparity"
+
+[STGM] -----------------------------------------------
+#    workload    period_ms   setpoint    sms     
+[STGM] -----------------------------------------------
+1    mminterupt  45.33       -           1       
+2    stereo      21.256      -           1       
+[STGM] -----------------------------------------------
+
+
+[STGM] ---- STATE ---- Np=1 NSM=170 exec_scale=1.25
+[STGM] task 0 wl=mminterupt Pi(ms)=45.33 Ni=1 Gi(ms)=86.6179 Ei(ms)=108.272 Ui=2.38854
+[STGM] task 1 wl=stereo Pi(ms)=21.256 Ni=1 Gi(ms)=23.4899 Ei(ms)=29.3624 Ui=1.38137
+[STGM] --------------
+
+[STGM] FINAL task 0 wl=mminterupt sms=18 tpcs=9 slice=[0,8] mask=0xfffffffffffffffffffffffffffffe00
+[STGM] FINAL task 1 wl=stereo sms=13 tpcs=7 slice=[9,15] mask=0xffffffffffffffffffffffffffff01ff
+[STGM] SUCCESS
+STGM
+[outerloop] Activated (MONITOR-ONLY).
+
+[outerloop] Control period 0 | Time = 5s
+Task 0 | Period(ms)=45.33 | RTR=0.117592 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.117344 | SMs=13
+
+[outerloop] Control period 1 | Time = 6s
+Task 0 | Period(ms)=45.33 | RTR=0.516227 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.66654 | SMs=13
+
+[outerloop] Control period 2 | Time = 7s
+Task 0 | Period(ms)=45.33 | RTR=0.534201 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.67794 | SMs=13
+
+[outerloop] Control period 3 | Time = 8s
+Task 0 | Period(ms)=45.33 | RTR=0.534199 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.67775 | SMs=13
+
+[outerloop] Control period 4 | Time = 9s
+Task 0 | Period(ms)=45.33 | RTR=0.534197 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.678172 | SMs=13
+
+[outerloop] Control period 5 | Time = 10s
+Task 0 | Period(ms)=45.33 | RTR=0.534207 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.678188 | SMs=13
+
+[outerloop] Control period 6 | Time = 11s
+Task 0 | Period(ms)=45.33 | RTR=0.534197 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.678073 | SMs=13
+
+[outerloop] Control period 7 | Time = 12s
+Task 0 | Period(ms)=45.33 | RTR=0.534099 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677999 | SMs=13
+
+[outerloop] Control period 8 | Time = 13s
+Task 0 | Period(ms)=45.33 | RTR=0.534141 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677978 | SMs=13
+
+[outerloop] Control period 9 | Time = 14s
+Task 0 | Period(ms)=45.33 | RTR=0.534109 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677883 | SMs=13
+
+[outerloop] Control period 10 | Time = 15s
+Task 0 | Period(ms)=45.33 | RTR=0.534165 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.678144 | SMs=13
+
+[outerloop] Control period 11 | Time = 16s
+Task 0 | Period(ms)=45.33 | RTR=0.534196 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.678159 | SMs=13
+
+[outerloop] Control period 12 | Time = 17s
+Task 0 | Period(ms)=45.33 | RTR=0.534099 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677994 | SMs=13
+
+[outerloop] Control period 13 | Time = 18s
+Task 0 | Period(ms)=45.33 | RTR=0.534099 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677759 | SMs=13
+
+[outerloop] Control period 14 | Time = 19s
+Task 0 | Period(ms)=45.33 | RTR=0.534147 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677861 | SMs=13
+
+[outerloop] Control period 15 | Time = 20s
+Task 0 | Period(ms)=45.33 | RTR=0.53422 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677891 | SMs=13
+
+[outerloop] Control period 16 | Time = 21s
+Task 0 | Period(ms)=45.33 | RTR=0.534323 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677996 | SMs=13
+
+[outerloop] Control period 17 | Time = 22s
+Task 0 | Period(ms)=45.33 | RTR=0.534094 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.678126 | SMs=13
+
+[outerloop] Control period 18 | Time = 23s
+Task 0 | Period(ms)=45.33 | RTR=0.533941 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677764 | SMs=13
+
+[outerloop] Control period 19 | Time = 24s
+Task 0 | Period(ms)=45.33 | RTR=0.53411 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677388 | SMs=13
+
+[outerloop] Control period 20 | Time = 25s
+Task 0 | Period(ms)=45.33 | RTR=0.533981 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.67793 | SMs=13
+
+[outerloop] Control period 21 | Time = 26s
+Task 0 | Period(ms)=45.33 | RTR=0.53399 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677644 | SMs=13
+
+[outerloop] Control period 22 | Time = 27s
+Task 0 | Period(ms)=45.33 | RTR=0.534048 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677949 | SMs=13
+
+[outerloop] Control period 23 | Time = 28s
+Task 0 | Period(ms)=45.33 | RTR=0.534051 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677768 | SMs=13
+
+[outerloop] Control period 24 | Time = 29s
+Task 0 | Period(ms)=45.33 | RTR=0.533971 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677691 | SMs=13
+
+[outerloop] Control period 25 | Time = 30s
+Task 0 | Period(ms)=45.33 | RTR=0.534024 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677525 | SMs=13
+
+[outerloop] Control period 26 | Time = 31s
+Task 0 | Period(ms)=45.33 | RTR=0.534145 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677824 | SMs=13
+
+[outerloop] Control period 27 | Time = 32s
+Task 0 | Period(ms)=45.33 | RTR=0.534022 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.678083 | SMs=13
+
+[outerloop] Control period 28 | Time = 33s
+Task 0 | Period(ms)=45.33 | RTR=0.534003 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677757 | SMs=13
+
+[outerloop] Control period 29 | Time = 34s
+Task 0 | Period(ms)=45.33 | RTR=0.533994 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677426 | SMs=13
+
+[outerloop] Control period 30 | Time = 35s
+Task 0 | Period(ms)=45.33 | RTR=0.53402 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677755 | SMs=13
+
+[outerloop] Control period 31 | Time = 36s
+Task 0 | Period(ms)=45.33 | RTR=0.533952 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677805 | SMs=13
+
+[outerloop] Control period 32 | Time = 37s
+Task 0 | Period(ms)=45.33 | RTR=0.533966 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677731 | SMs=13
+
+[outerloop] Control period 33 | Time = 38s
+Task 0 | Period(ms)=45.33 | RTR=0.534135 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677974 | SMs=13
+
+[outerloop] Control period 34 | Time = 39s
+Task 0 | Period(ms)=45.33 | RTR=0.533941 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677503 | SMs=13
+
+[outerloop] Control period 35 | Time = 40s
+Task 0 | Period(ms)=45.33 | RTR=0.534011 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677787 | SMs=13
+
+[outerloop] Control period 36 | Time = 41s
+Task 0 | Period(ms)=45.33 | RTR=0.533987 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677905 | SMs=13
+
+[outerloop] Control period 37 | Time = 42s
+Task 0 | Period(ms)=45.33 | RTR=0.534011 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677935 | SMs=13
+
+[outerloop] Control period 38 | Time = 43s
+Task 0 | Period(ms)=45.33 | RTR=0.534003 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677609 | SMs=13
+
+[outerloop] Control period 39 | Time = 44s
+Task 0 | Period(ms)=45.33 | RTR=0.534002 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.678097 | SMs=13
+
+[outerloop] Control period 40 | Time = 45s
+Task 0 | Period(ms)=45.33 | RTR=0.534216 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.678044 | SMs=13
+
+[outerloop] Control period 41 | Time = 46s
+Task 0 | Period(ms)=45.33 | RTR=0.533953 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677754 | SMs=13
+
+[outerloop] Control period 42 | Time = 47s
+Task 0 | Period(ms)=45.33 | RTR=0.534001 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.678053 | SMs=13
+
+[outerloop] Control period 43 | Time = 48s
+Task 0 | Period(ms)=45.33 | RTR=0.533947 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677448 | SMs=13
+
+[outerloop] Control period 44 | Time = 49s
+Task 0 | Period(ms)=45.33 | RTR=0.533935 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677832 | SMs=13
+
+[outerloop] Control period 45 | Time = 50s
+Task 0 | Period(ms)=45.33 | RTR=0.53401 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.67788 | SMs=13
+
+[outerloop] Control period 46 | Time = 51s
+Task 0 | Period(ms)=45.33 | RTR=0.534027 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677858 | SMs=13
+
+[outerloop] Control period 47 | Time = 52s
+Task 0 | Period(ms)=45.33 | RTR=0.533941 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677788 | SMs=13
+
+[outerloop] Control period 48 | Time = 53s
+Task 0 | Period(ms)=45.33 | RTR=0.533939 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.67778 | SMs=13
+
+[outerloop] Control period 49 | Time = 54s
+Task 0 | Period(ms)=45.33 | RTR=0.533993 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677671 | SMs=13
+
+[outerloop] Control period 50 | Time = 55s
+Task 0 | Period(ms)=45.33 | RTR=0.534025 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677369 | SMs=13
+
+[outerloop] Control period 51 | Time = 56s
+Task 0 | Period(ms)=45.33 | RTR=0.534037 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677738 | SMs=13
+
+[outerloop] Control period 52 | Time = 57s
+Task 0 | Period(ms)=45.33 | RTR=0.533965 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677829 | SMs=13
+
+[outerloop] Control period 53 | Time = 58s
+Task 0 | Period(ms)=45.33 | RTR=0.533973 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677842 | SMs=13
+
+[outerloop] Control period 54 | Time = 59s
+Task 0 | Period(ms)=45.33 | RTR=0.533998 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677761 | SMs=13
+
+[outerloop] Control period 55 | Time = 60s
+Task 0 | Period(ms)=45.33 | RTR=0.533943 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677782 | SMs=13
+
+[outerloop] Control period 56 | Time = 61s
+Task 0 | Period(ms)=45.33 | RTR=0.53397 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677849 | SMs=13
+
+[outerloop] Control period 57 | Time = 62s
+Task 0 | Period(ms)=45.33 | RTR=0.533976 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677466 | SMs=13
+
+[outerloop] Control period 58 | Time = 63s
+Task 0 | Period(ms)=45.33 | RTR=0.53394 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.678098 | SMs=13
+
+[outerloop] Control period 59 | Time = 64s
+Task 0 | Period(ms)=45.33 | RTR=0.53391 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677755 | SMs=13
+
+[outerloop] Control period 60 | Time = 65s
+Task 0 | Period(ms)=45.33 | RTR=0.533957 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677795 | SMs=13
+
+[outerloop] Control period 61 | Time = 66s
+Task 0 | Period(ms)=45.33 | RTR=0.53404 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677758 | SMs=13
+
+[outerloop] Control period 62 | Time = 67s
+Task 0 | Period(ms)=45.33 | RTR=0.53395 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.678074 | SMs=13
+
+[outerloop] Control period 63 | Time = 68s
+Task 0 | Period(ms)=45.33 | RTR=0.534009 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.67785 | SMs=13
+
+[outerloop] Control period 64 | Time = 69s
+Task 0 | Period(ms)=45.33 | RTR=0.533953 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677812 | SMs=13
+
+[outerloop] Control period 65 | Time = 70s
+Task 0 | Period(ms)=45.33 | RTR=0.534007 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677792 | SMs=13
+
+[outerloop] Control period 66 | Time = 71s
+Task 0 | Period(ms)=45.33 | RTR=0.534006 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.67786 | SMs=13
+
+[outerloop] Control period 67 | Time = 72s
+Task 0 | Period(ms)=45.33 | RTR=0.533886 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677622 | SMs=13
+
+[outerloop] Control period 68 | Time = 73s
+Task 0 | Period(ms)=45.33 | RTR=0.53395 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677491 | SMs=13
+
+[outerloop] Control period 69 | Time = 74s
+Task 0 | Period(ms)=45.33 | RTR=0.534131 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.67777 | SMs=13
+
+[outerloop] Control period 70 | Time = 75s
+Task 0 | Period(ms)=45.33 | RTR=0.533984 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677803 | SMs=13
+
+[outerloop] Control period 71 | Time = 76s
+Task 0 | Period(ms)=45.33 | RTR=0.533979 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677805 | SMs=13
+
+[outerloop] Control period 72 | Time = 77s
+Task 0 | Period(ms)=45.33 | RTR=0.533962 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677773 | SMs=13
+
+[outerloop] Control period 73 | Time = 78s
+Task 0 | Period(ms)=45.33 | RTR=0.533958 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677871 | SMs=13
+
+[outerloop] Control period 74 | Time = 79s
+Task 0 | Period(ms)=45.33 | RTR=0.533988 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677862 | SMs=13
+
+[outerloop] Control period 75 | Time = 80s
+Task 0 | Period(ms)=45.33 | RTR=0.533996 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677992 | SMs=13
+
+[outerloop] Control period 76 | Time = 81s
+Task 0 | Period(ms)=45.33 | RTR=0.534333 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.6784 | SMs=13
+
+[outerloop] Control period 77 | Time = 82s
+Task 0 | Period(ms)=45.33 | RTR=0.533932 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.6779 | SMs=13
+
+[outerloop] Control period 78 | Time = 83s
+Task 0 | Period(ms)=45.33 | RTR=0.534001 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677747 | SMs=13
+
+[outerloop] Control period 79 | Time = 84s
+Task 0 | Period(ms)=45.33 | RTR=0.534012 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677853 | SMs=13
+
+[outerloop] Control period 80 | Time = 85s
+Task 0 | Period(ms)=45.33 | RTR=0.533961 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677734 | SMs=13
+
+[outerloop] Control period 81 | Time = 86s
+Task 0 | Period(ms)=45.33 | RTR=0.533955 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677908 | SMs=13
+
+[outerloop] Control period 82 | Time = 87s
+Task 0 | Period(ms)=45.33 | RTR=0.533929 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677923 | SMs=13
+
+[outerloop] Control period 83 | Time = 88s
+Task 0 | Period(ms)=45.33 | RTR=0.534162 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677836 | SMs=13
+
+[outerloop] Control period 84 | Time = 89s
+Task 0 | Period(ms)=45.33 | RTR=0.533926 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.67779 | SMs=13
+
+[outerloop] Control period 85 | Time = 90s
+Task 0 | Period(ms)=45.33 | RTR=0.533944 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677588 | SMs=13
+
+[outerloop] Control period 86 | Time = 91s
+Task 0 | Period(ms)=45.33 | RTR=0.533933 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677406 | SMs=13
+
+[outerloop] Control period 87 | Time = 92s
+Task 0 | Period(ms)=45.33 | RTR=0.533919 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.67746 | SMs=13
+
+[outerloop] Control period 88 | Time = 93s
+Task 0 | Period(ms)=45.33 | RTR=0.533958 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677558 | SMs=13
+
+[outerloop] Control period 89 | Time = 94s
+Task 0 | Period(ms)=45.33 | RTR=0.533989 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677505 | SMs=13
+
+[outerloop] Control period 90 | Time = 95s
+Task 0 | Period(ms)=45.33 | RTR=0.534113 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677848 | SMs=13
+[MAIN] Half time reached (90.0186s). Interrupting tunable tasks...
+[CTRL] Interrupt sent to mminterupt task 0
+[MAIN] Task 1 is tunable but workload=stereo has no interrupt hook.
+[MatrixMul] Task 0 restarting... (old N=1024)
+******************************************** 
+New N = <<	 1280******************************************** 
+******************************************** 
+******************************************** 
+[MatrixMul] Task 0 restart complete. (new N=1280)
+
+[outerloop] Control period 91 | Time = 96s
+Task 0 | Period(ms)=45.33 | RTR=0.988008 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677142 | SMs=13
+
+[outerloop] Control period 92 | Time = 97s
+Task 0 | Period(ms)=45.33 | RTR=1.03572 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677159 | SMs=13
+
+[outerloop] Control period 93 | Time = 98s
+Task 0 | Period(ms)=45.33 | RTR=1.0356 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677202 | SMs=13
+
+[outerloop] Control period 94 | Time = 99s
+Task 0 | Period(ms)=45.33 | RTR=1.0356 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.676908 | SMs=13
+
+[outerloop] Control period 95 | Time = 100s
+Task 0 | Period(ms)=45.33 | RTR=1.03565 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677065 | SMs=13
+
+[outerloop] Control period 96 | Time = 101s
+Task 0 | Period(ms)=45.33 | RTR=1.03558 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677211 | SMs=13
+
+[outerloop] Control period 97 | Time = 102s
+Task 0 | Period(ms)=45.33 | RTR=1.03569 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677092 | SMs=13
+
+[outerloop] Control period 98 | Time = 103s
+Task 0 | Period(ms)=45.33 | RTR=1.03581 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677156 | SMs=13
+
+[outerloop] Control period 99 | Time = 104s
+Task 0 | Period(ms)=45.33 | RTR=1.0356 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677026 | SMs=13
+
+[outerloop] Control period 100 | Time = 105s
+Task 0 | Period(ms)=45.33 | RTR=1.03559 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.676952 | SMs=13
+
+[outerloop] Control period 101 | Time = 106s
+Task 0 | Period(ms)=45.33 | RTR=1.03562 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677096 | SMs=13
+
+[outerloop] Control period 102 | Time = 107s
+Task 0 | Period(ms)=45.33 | RTR=1.03556 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.676929 | SMs=13
+
+[outerloop] Control period 103 | Time = 108s
+Task 0 | Period(ms)=45.33 | RTR=1.03566 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677173 | SMs=13
+
+[outerloop] Control period 104 | Time = 109s
+Task 0 | Period(ms)=45.33 | RTR=1.03564 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.676901 | SMs=13
+
+[outerloop] Control period 105 | Time = 110s
+Task 0 | Period(ms)=45.33 | RTR=1.03579 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.676815 | SMs=13
+
+[outerloop] Control period 106 | Time = 111s
+Task 0 | Period(ms)=45.33 | RTR=1.03562 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677126 | SMs=13
+
+[outerloop] Control period 107 | Time = 112s
+Task 0 | Period(ms)=45.33 | RTR=1.03566 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677128 | SMs=13
+
+[outerloop] Control period 108 | Time = 113s
+Task 0 | Period(ms)=45.33 | RTR=1.03564 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677036 | SMs=13
+
+[outerloop] Control period 109 | Time = 114s
+Task 0 | Period(ms)=45.33 | RTR=1.03565 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677059 | SMs=13
+
+[outerloop] Control period 110 | Time = 115s
+Task 0 | Period(ms)=45.33 | RTR=1.03561 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677291 | SMs=13
+
+[outerloop] Control period 111 | Time = 116s
+Task 0 | Period(ms)=45.33 | RTR=1.03557 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.676994 | SMs=13
+
+[outerloop] Control period 112 | Time = 117s
+Task 0 | Period(ms)=45.33 | RTR=1.03582 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.676874 | SMs=13
+
+[outerloop] Control period 113 | Time = 118s
+Task 0 | Period(ms)=45.33 | RTR=1.03562 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677172 | SMs=13
+
+[outerloop] Control period 114 | Time = 119s
+Task 0 | Period(ms)=45.33 | RTR=1.03559 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.676884 | SMs=13
+
+[outerloop] Control period 115 | Time = 120s
+Task 0 | Period(ms)=45.33 | RTR=1.03555 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.676829 | SMs=13
+
+[outerloop] Control period 116 | Time = 121s
+Task 0 | Period(ms)=45.33 | RTR=1.03557 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677256 | SMs=13
+
+[outerloop] Control period 117 | Time = 122s
+Task 0 | Period(ms)=45.33 | RTR=1.03563 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677308 | SMs=13
+
+[outerloop] Control period 118 | Time = 123s
+Task 0 | Period(ms)=45.33 | RTR=1.03565 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.67692 | SMs=13
+
+[outerloop] Control period 119 | Time = 124s
+Task 0 | Period(ms)=45.33 | RTR=1.03574 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677149 | SMs=13
+
+[outerloop] Control period 120 | Time = 125s
+Task 0 | Period(ms)=45.33 | RTR=1.03555 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677233 | SMs=13
+
+[outerloop] Control period 121 | Time = 126s
+Task 0 | Period(ms)=45.33 | RTR=1.03549 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.67709 | SMs=13
+
+[outerloop] Control period 122 | Time = 127s
+Task 0 | Period(ms)=45.33 | RTR=1.03549 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.676967 | SMs=13
+
+[outerloop] Control period 123 | Time = 128s
+Task 0 | Period(ms)=45.33 | RTR=1.03553 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677056 | SMs=13
+
+[outerloop] Control period 124 | Time = 129s
+Task 0 | Period(ms)=45.33 | RTR=1.03555 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.676624 | SMs=13
+
+[outerloop] Control period 125 | Time = 130s
+Task 0 | Period(ms)=45.33 | RTR=1.03559 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.676782 | SMs=13
+
+[outerloop] Control period 126 | Time = 131s
+Task 0 | Period(ms)=45.33 | RTR=1.03576 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677338 | SMs=13
+
+[outerloop] Control period 127 | Time = 132s
+Task 0 | Period(ms)=45.33 | RTR=1.03553 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.676902 | SMs=13
+
+[outerloop] Control period 128 | Time = 133s
+Task 0 | Period(ms)=45.33 | RTR=1.03557 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677148 | SMs=13
+
+[outerloop] Control period 129 | Time = 134s
+Task 0 | Period(ms)=45.33 | RTR=1.0355 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677 | SMs=13
+
+[outerloop] Control period 130 | Time = 135s
+Task 0 | Period(ms)=45.33 | RTR=1.03548 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.67717 | SMs=13
+
+[outerloop] Control period 131 | Time = 136s
+Task 0 | Period(ms)=45.33 | RTR=1.03547 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677083 | SMs=13
+
+[outerloop] Control period 132 | Time = 137s
+Task 0 | Period(ms)=45.33 | RTR=1.03539 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.676939 | SMs=13
+
+[outerloop] Control period 133 | Time = 138s
+Task 0 | Period(ms)=45.33 | RTR=1.03554 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.676705 | SMs=13
+
+[outerloop] Control period 134 | Time = 139s
+Task 0 | Period(ms)=45.33 | RTR=1.03534 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.676909 | SMs=13
+
+[outerloop] Control period 135 | Time = 140s
+Task 0 | Period(ms)=45.33 | RTR=1.03538 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677199 | SMs=13
+
+[outerloop] Control period 136 | Time = 141s
+Task 0 | Period(ms)=45.33 | RTR=1.03579 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677198 | SMs=13
+
+[outerloop] Control period 137 | Time = 142s
+Task 0 | Period(ms)=45.33 | RTR=1.03538 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.676981 | SMs=13
+
+[outerloop] Control period 138 | Time = 143s
+Task 0 | Period(ms)=45.33 | RTR=1.03535 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.676737 | SMs=13
+
+[outerloop] Control period 139 | Time = 144s
+Task 0 | Period(ms)=45.33 | RTR=1.03538 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.676945 | SMs=13
+
+[outerloop] Control period 140 | Time = 145s
+Task 0 | Period(ms)=45.33 | RTR=1.03539 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.676988 | SMs=13
+
+[outerloop] Control period 141 | Time = 146s
+Task 0 | Period(ms)=45.33 | RTR=1.03556 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677035 | SMs=13
+
+[outerloop] Control period 142 | Time = 147s
+Task 0 | Period(ms)=45.33 | RTR=1.03545 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677159 | SMs=13
+
+[outerloop] Control period 143 | Time = 148s
+Task 0 | Period(ms)=45.33 | RTR=1.03547 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.676858 | SMs=13
+
+[outerloop] Control period 144 | Time = 149s
+Task 0 | Period(ms)=45.33 | RTR=1.03542 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677041 | SMs=13
+
+[outerloop] Control period 145 | Time = 150s
+Task 0 | Period(ms)=45.33 | RTR=1.03543 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677231 | SMs=13
+
+[outerloop] Control period 146 | Time = 151s
+Task 0 | Period(ms)=45.33 | RTR=1.03535 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.67692 | SMs=13
+
+[outerloop] Control period 147 | Time = 152s
+Task 0 | Period(ms)=45.33 | RTR=1.03536 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677042 | SMs=13
+
+[outerloop] Control period 148 | Time = 153s
+Task 0 | Period(ms)=45.33 | RTR=1.03556 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677075 | SMs=13
+
+[outerloop] Control period 149 | Time = 154s
+Task 0 | Period(ms)=45.33 | RTR=1.03542 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677125 | SMs=13
+
+[outerloop] Control period 150 | Time = 155s
+Task 0 | Period(ms)=45.33 | RTR=1.0354 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677108 | SMs=13
+
+[outerloop] Control period 151 | Time = 156s
+Task 0 | Period(ms)=45.33 | RTR=1.0354 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677089 | SMs=13
+
+[outerloop] Control period 152 | Time = 157s
+Task 0 | Period(ms)=45.33 | RTR=1.03532 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.676817 | SMs=13
+
+[outerloop] Control period 153 | Time = 158s
+Task 0 | Period(ms)=45.33 | RTR=1.03542 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.676912 | SMs=13
+
+[outerloop] Control period 154 | Time = 159s
+Task 0 | Period(ms)=45.33 | RTR=1.03543 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677098 | SMs=13
+
+[outerloop] Control period 155 | Time = 160s
+Task 0 | Period(ms)=45.33 | RTR=1.03561 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677205 | SMs=13
+
+[outerloop] Control period 156 | Time = 161s
+Task 0 | Period(ms)=45.33 | RTR=1.03536 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.67669 | SMs=13
+
+[outerloop] Control period 157 | Time = 162s
+Task 0 | Period(ms)=45.33 | RTR=1.03529 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.676818 | SMs=13
+
+[outerloop] Control period 158 | Time = 163s
+Task 0 | Period(ms)=45.33 | RTR=1.03535 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.676777 | SMs=13
+
+[outerloop] Control period 159 | Time = 164s
+Task 0 | Period(ms)=45.33 | RTR=1.03531 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.676965 | SMs=13
+
+[outerloop] Control period 160 | Time = 165s
+Task 0 | Period(ms)=45.33 | RTR=1.03536 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677017 | SMs=13
+
+[outerloop] Control period 161 | Time = 166s
+Task 0 | Period(ms)=45.33 | RTR=1.0354 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677003 | SMs=13
+
+[outerloop] Control period 162 | Time = 167s
+Task 0 | Period(ms)=45.33 | RTR=1.03558 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677215 | SMs=13
+
+[outerloop] Control period 163 | Time = 168s
+Task 0 | Period(ms)=45.33 | RTR=1.03544 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.676976 | SMs=13
+
+[outerloop] Control period 164 | Time = 169s
+Task 0 | Period(ms)=45.33 | RTR=1.03545 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.676994 | SMs=13
+
+[outerloop] Control period 165 | Time = 170s
+Task 0 | Period(ms)=45.33 | RTR=1.03544 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.676964 | SMs=13
+
+[outerloop] Control period 166 | Time = 171s
+Task 0 | Period(ms)=45.33 | RTR=1.03548 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.676821 | SMs=13
+
+[outerloop] Control period 167 | Time = 172s
+Task 0 | Period(ms)=45.33 | RTR=1.03548 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.67704 | SMs=13
+
+[outerloop] Control period 168 | Time = 173s
+Task 0 | Period(ms)=45.33 | RTR=1.03545 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.676652 | SMs=13
+
+[outerloop] Control period 169 | Time = 174s
+Task 0 | Period(ms)=45.33 | RTR=1.03562 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677082 | SMs=13
+
+[outerloop] Control period 170 | Time = 175s
+Task 0 | Period(ms)=45.33 | RTR=1.03539 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677094 | SMs=13
+
+[outerloop] Control period 171 | Time = 176s
+Task 0 | Period(ms)=45.33 | RTR=1.03543 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677073 | SMs=13
+
+[outerloop] Control period 172 | Time = 177s
+Task 0 | Period(ms)=45.33 | RTR=1.03546 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677134 | SMs=13
+
+[outerloop] Control period 173 | Time = 178s
+Task 0 | Period(ms)=45.33 | RTR=1.0354 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.676794 | SMs=13
+
+[outerloop] Control period 174 | Time = 179s
+Task 0 | Period(ms)=45.33 | RTR=1.03534 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677162 | SMs=13
+
+[outerloop] Control period 175 | Time = 180s
+Task 0 | Period(ms)=45.33 | RTR=1.03525 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.676996 | SMs=13
+
+[outerloop] Control period 176 | Time = 181s
+Task 0 | Period(ms)=45.33 | RTR=1.03539 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.676709 | SMs=13
+
+[outerloop] Control period 177 | Time = 182s
+Task 0 | Period(ms)=45.33 | RTR=1.03519 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.676564 | SMs=13
+
+[outerloop] Control period 178 | Time = 183s
+Task 0 | Period(ms)=45.33 | RTR=1.03525 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.676769 | SMs=13
+
+[outerloop] Control period 179 | Time = 184s
+Task 0 | Period(ms)=45.33 | RTR=1.03529 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677018 | SMs=13
+
+[outerloop] Control period 180 | Time = 185s
+Task 0 | Period(ms)=45.33 | RTR=1.03534 | SMs=18
+Task 1 | Period(ms)=21.256 | RTR=0.677095 | SMs=13
+[MAIN] Time limit reached (180.042s). Exiting...
+[StereoDisparity] Cleaning Task 1
+[MatrixMul] Task 0 runContinuous() exit.
+[MatrixMul] Cleaning Task 0
+[GPU] StereoDisparity workload stopped for task 1.
+[GPU] mminterupt workload stopped for task 0.
+[outerloop] Stopped after 181 periods.
+[MAIN] All threads stopped. Experiment complete.
+[parameters] Dumped metrics for task 0 → /tmp/dysm-stgm-recheck-20261018/logs//task_0
+[parameters] Dumped metrics for task 1 → /tmp/dysm-stgm-recheck-20261018/logs//task_1
+[INFO] Intermediate logs written to /tmp/dysm-stgm-recheck-20261018/logs/
+[parameters] Dumped wallclocktime → /tmp/dysm-stgm-recheck-20261018/logs//wallclocktime

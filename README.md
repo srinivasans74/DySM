@@ -31,10 +31,10 @@ Build products are excluded; measurement logs and generated figures are included
 
 ### Experiment status as of 2026-10-18
 
-- 6.1: all four 180-second runs and the aggregate figure are recorded. Result
-  validation remains open: STGM's relative profile path fails from this entry,
-  leaving initial allocations. This behavior is preserved, not presented as
-  a validated STGM baseline result.
+- 6.1: all four 180-second runs and the aggregate figure are recorded. STGM
+  was rerun after fixing executable-relative profile lookup; both profiles
+  loaded and static initialization succeeded. Its logs and the aggregate
+  figure have been updated; other controllers' measurements are unchanged.
 - 6.2: complete overlap sweep and figure are recorded.
 - 6.3: Adhoc's five and P's four 150-second runs completed; both figures are
   included. Detailed interpretation/review of the results remains pending.

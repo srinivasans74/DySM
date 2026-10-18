@@ -78,7 +78,9 @@ Gain generation defaults to `GPU_SMS=170`; it still updates the shared
 
 ### Recorded run status (2026-10-18)
 
-All four 180-second runs and the aggregate figure are included. Result validation
-remains open: STGM failed to load its relative-path profiles from this entry and
-kept initial allocations. The recorded results preserve this behavior; the STGM
-profile-loading issue was not changed here.
+All four 180-second runs and the aggregate figure are included. STGM profile paths
+now resolve relative to the scheduler executable, independently of the launch
+directory. Its 180-second run was repeated: both profiles loaded and STGM static
+initialization succeeded. Updated sol_5 logs include console.log; the aggregate
+figure was regenerated. Other controllers' logs and the STGM allocation algorithm
+and profile data were not changed.

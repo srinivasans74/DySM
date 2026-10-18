@@ -2,6 +2,7 @@
 #include <unordered_map>
 #include <map>
 #include <fstream>
+#include <filesystem>
 #include <iostream>
 #include <algorithm>
 #include <limits>
@@ -125,9 +126,11 @@ static bool load_profile_for_workload(const std::string& workload)
         return false;
     }
 
-    std::ifstream f(pit->second);
+    const auto profile_path =
+        std::filesystem::read_symlink("/proc/self/exe").parent_path() / pit->second;
+    std::ifstream f(profile_path);
     if (!f.is_open()) {
-        std::cerr << "[STGM] Cannot open JSON file: " << pit->second << "\n";
+        std::cerr << "[STGM] Cannot open JSON file: " << profile_path << "\n";
         return false;
     }
 
@@ -165,7 +168,7 @@ static bool load_profile_for_workload(const std::string& workload)
     }
 
     std::cout << "[STGM] Loaded profile for '" << workload << "' (" << profile.size()
-              << " points) from " << pit->second << "\n";
+              << " points) from " << profile_path << "\n";
 
     workload_profile_db.emplace(workload, std::move(profile));
     return true;
