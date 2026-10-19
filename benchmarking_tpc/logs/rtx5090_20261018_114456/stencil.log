@@ -1,0 +1,260 @@
+libsmctrl: WARNING, TPC masking is untested on Hopper, and will likely yield incorrect results! Proceed with caution.
+[CUDA Benchmark] 3D Stencil with libsmctrl TPC mask sweep
+Detected 170 SMs across 85 TPCs
+
+[Active TPCs:  1]
+  Average GPU time (10 runs) = 43.508 ms
+
+[Active TPCs:  2]
+  Average GPU time (10 runs) = 22.012 ms
+
+[Active TPCs:  3]
+  Average GPU time (10 runs) = 14.668 ms
+
+[Active TPCs:  4]
+  Average GPU time (10 runs) = 11.052 ms
+
+[Active TPCs:  5]
+  Average GPU time (10 runs) = 8.860 ms
+
+[Active TPCs:  6]
+  Average GPU time (10 runs) = 7.371 ms
+
+[Active TPCs:  7]
+  Average GPU time (10 runs) = 6.317 ms
+
+[Active TPCs:  8]
+  Average GPU time (10 runs) = 5.553 ms
+
+[Active TPCs:  9]
+  Average GPU time (10 runs) = 4.973 ms
+
+[Active TPCs: 10]
+  Average GPU time (10 runs) = 4.513 ms
+
+[Active TPCs: 11]
+  Average GPU time (10 runs) = 4.127 ms
+
+[Active TPCs: 12]
+  Average GPU time (10 runs) = 3.819 ms
+
+[Active TPCs: 13]
+  Average GPU time (10 runs) = 3.584 ms
+
+[Active TPCs: 14]
+  Average GPU time (10 runs) = 3.381 ms
+
+[Active TPCs: 15]
+  Average GPU time (10 runs) = 3.236 ms
+
+[Active TPCs: 16]
+  Average GPU time (10 runs) = 3.124 ms
+
+[Active TPCs: 17]
+  Average GPU time (10 runs) = 3.019 ms
+
+[Active TPCs: 18]
+  Average GPU time (10 runs) = 2.932 ms
+
+[Active TPCs: 19]
+  Average GPU time (10 runs) = 2.851 ms
+
+[Active TPCs: 20]
+  Average GPU time (10 runs) = 2.785 ms
+
+[Active TPCs: 21]
+  Average GPU time (10 runs) = 2.731 ms
+
+[Active TPCs: 22]
+  Average GPU time (10 runs) = 2.652 ms
+
+[Active TPCs: 23]
+  Average GPU time (10 runs) = 2.589 ms
+
+[Active TPCs: 24]
+  Average GPU time (10 runs) = 2.535 ms
+
+[Active TPCs: 25]
+  Average GPU time (10 runs) = 2.485 ms
+
+[Active TPCs: 26]
+  Average GPU time (10 runs) = 2.445 ms
+
+[Active TPCs: 27]
+  Average GPU time (10 runs) = 2.393 ms
+
+[Active TPCs: 28]
+  Average GPU time (10 runs) = 2.372 ms
+
+[Active TPCs: 29]
+  Average GPU time (10 runs) = 2.351 ms
+
+[Active TPCs: 30]
+  Average GPU time (10 runs) = 2.346 ms
+
+[Active TPCs: 31]
+  Average GPU time (10 runs) = 2.334 ms
+
+[Active TPCs: 32]
+  Average GPU time (10 runs) = 2.302 ms
+
+[Active TPCs: 33]
+  Average GPU time (10 runs) = 2.320 ms
+
+[Active TPCs: 34]
+  Average GPU time (10 runs) = 2.335 ms
+
+[Active TPCs: 35]
+  Average GPU time (10 runs) = 2.340 ms
+
+[Active TPCs: 36]
+  Average GPU time (10 runs) = 2.341 ms
+
+[Active TPCs: 37]
+  Average GPU time (10 runs) = 2.355 ms
+
+[Active TPCs: 38]
+  Average GPU time (10 runs) = 2.366 ms
+
+[Active TPCs: 39]
+  Average GPU time (10 runs) = 2.368 ms
+
+[Active TPCs: 40]
+  Average GPU time (10 runs) = 2.376 ms
+
+[Active TPCs: 41]
+  Average GPU time (10 runs) = 2.384 ms
+
+[Active TPCs: 42]
+  Average GPU time (10 runs) = 2.388 ms
+
+[Active TPCs: 43]
+  Average GPU time (10 runs) = 2.391 ms
+
+[Active TPCs: 44]
+  Average GPU time (10 runs) = 2.409 ms
+
+[Active TPCs: 45]
+  Average GPU time (10 runs) = 2.428 ms
+
+[Active TPCs: 46]
+  Average GPU time (10 runs) = 2.430 ms
+
+[Active TPCs: 47]
+  Average GPU time (10 runs) = 2.442 ms
+
+[Active TPCs: 48]
+  Average GPU time (10 runs) = 2.457 ms
+
+[Active TPCs: 49]
+  Average GPU time (10 runs) = 2.452 ms
+
+[Active TPCs: 50]
+  Average GPU time (10 runs) = 2.472 ms
+
+[Active TPCs: 51]
+  Average GPU time (10 runs) = 2.485 ms
+
+[Active TPCs: 52]
+  Average GPU time (10 runs) = 2.524 ms
+
+[Active TPCs: 53]
+  Average GPU time (10 runs) = 2.554 ms
+
+[Active TPCs: 54]
+  Average GPU time (10 runs) = 2.546 ms
+
+[Active TPCs: 55]
+  Average GPU time (10 runs) = 2.543 ms
+
+[Active TPCs: 56]
+  Average GPU time (10 runs) = 2.541 ms
+
+[Active TPCs: 57]
+  Average GPU time (10 runs) = 2.565 ms
+
+[Active TPCs: 58]
+  Average GPU time (10 runs) = 2.596 ms
+
+[Active TPCs: 59]
+  Average GPU time (10 runs) = 2.596 ms
+
+[Active TPCs: 60]
+  Average GPU time (10 runs) = 2.599 ms
+
+[Active TPCs: 61]
+  Average GPU time (10 runs) = 2.593 ms
+
+[Active TPCs: 62]
+  Average GPU time (10 runs) = 2.583 ms
+
+[Active TPCs: 63]
+  Average GPU time (10 runs) = 2.571 ms
+
+[Active TPCs: 64]
+  Average GPU time (10 runs) = 2.548 ms
+
+[Active TPCs: 65]
+  Average GPU time (10 runs) = 2.515 ms
+
+[Active TPCs: 66]
+  Average GPU time (10 runs) = 2.560 ms
+
+[Active TPCs: 67]
+  Average GPU time (10 runs) = 2.586 ms
+
+[Active TPCs: 68]
+  Average GPU time (10 runs) = 2.603 ms
+
+[Active TPCs: 69]
+  Average GPU time (10 runs) = 2.619 ms
+
+[Active TPCs: 70]
+  Average GPU time (10 runs) = 2.625 ms
+
+[Active TPCs: 71]
+  Average GPU time (10 runs) = 2.616 ms
+
+[Active TPCs: 72]
+  Average GPU time (10 runs) = 2.622 ms
+
+[Active TPCs: 73]
+  Average GPU time (10 runs) = 2.614 ms
+
+[Active TPCs: 74]
+  Average GPU time (10 runs) = 2.607 ms
+
+[Active TPCs: 75]
+  Average GPU time (10 runs) = 2.599 ms
+
+[Active TPCs: 76]
+  Average GPU time (10 runs) = 2.586 ms
+
+[Active TPCs: 77]
+  Average GPU time (10 runs) = 2.577 ms
+
+[Active TPCs: 78]
+  Average GPU time (10 runs) = 2.565 ms
+
+[Active TPCs: 79]
+  Average GPU time (10 runs) = 2.563 ms
+
+[Active TPCs: 80]
+  Average GPU time (10 runs) = 2.569 ms
+
+[Active TPCs: 81]
+  Average GPU time (10 runs) = 2.565 ms
+
+[Active TPCs: 82]
+  Average GPU time (10 runs) = 2.560 ms
+
+[Active TPCs: 83]
+  Average GPU time (10 runs) = 2.547 ms
+
+[Active TPCs: 84]
+  Average GPU time (10 runs) = 2.545 ms
+
+[Active TPCs: 85]
+  Average GPU time (10 runs) = 2.537 ms
+[DONE] /home/yuanyang/ECRTS_original_20261017/ECRTS_25/benchmarking_tpc/logs/rtx5090_20261018_114456/tpc_results_stencil
+[CUDA Benchmark] Done.

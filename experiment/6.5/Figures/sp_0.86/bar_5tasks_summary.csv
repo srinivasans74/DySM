@@ -1,0 +1,16 @@
+task_id,workload,controller,setpoint,mean_rrt,mean_sms,window_start,window_end_exclusive,samples_per_task
+0,mm,Adhoc,0.86,1.04878,10.0,350,400,50
+1,projection,Adhoc,0.86,1.025852,4.0,350,400,50
+2,hist,Adhoc,0.86,1.031346,4.0,350,400,50
+3,stencil,Adhoc,0.86,2.039442,14.0,350,400,50
+4,stereo,Adhoc,0.86,1.025766,10.0,350,400,50
+0,mm,DySM-P,0.86,0.869256,11.2,350,400,50
+1,projection,DySM-P,0.86,0.843232,3.92,350,400,50
+2,hist,DySM-P,0.86,0.83485,4.16,350,400,50
+3,stencil,DySM-P,0.86,0.86231,14.0,350,400,50
+4,stereo,DySM-P,0.86,0.819888,11.68,350,400,50
+0,mm,MPC,0.86,0.808454,12.0,350,400,50
+1,projection,MPC,0.86,0.789528,4.0,350,400,50
+2,hist,MPC,0.86,0.7784559999999999,4.0,350,400,50
+3,stencil,MPC,0.86,0.862418,14.0,350,400,50
+4,stereo,MPC,0.86,0.788054,12.0,350,400,50

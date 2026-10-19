@@ -1,88 +1,61 @@
-# Parameters.py
-from dataclasses import dataclass, field
-from typing import List
+"""Completed-job records, adapted from Srini's PyTorch experiment structure."""
+from dataclasses import dataclass
+import math
 import threading
+import time
+from typing import Optional
 
-DataType = float
+# Inherited ML plant, RRT/SM: keep original instances 2 and 3 (indices 1, 2).
+# This is a reduced inherited model, not a new two-instance identification.
+MODEL_B = [[-0.028319982458333327, -0.0014145018541666706], [-0.0018402428958333415, -0.027112935291666657]]
 
-@dataclass
+
+@dataclass(frozen=True)
+class JobSample:
+    release_ns: int
+    completion_ns: int
+    gpu_time_ms: float
+    batch_size: int
+    enqueue_ns: Optional[int] = None
+
+
 class Parameters:
-    tasks: int
+    def __init__(self, tasks, period_s):
+        if tasks <= 0 or not math.isfinite(period_s) or period_s <= 0:
+            raise ValueError('Positive task count and period required')
+        self.period_ns = round(period_s * 1e9)
+        self.jobs = [[] for _ in range(tasks)]
+        self.cursor = [0] * tasks
+        self.locks = [threading.Lock() for _ in range(tasks)]
+        self.batch_size = [20] * tasks
 
-    # per-task configuration
-    task_period_s: List[float] = field(default_factory=list)  # seconds
-    batch_size: List[int] = field(default_factory=list)
+    def record_job(self, task_id, sample):
+        if (sample.completion_ns < sample.release_ns
+                or not math.isfinite(sample.gpu_time_ms) or sample.gpu_time_ms < 0):
+            raise ValueError('Invalid completed-job timing')
+        with self.locks[task_id]:
+            self.jobs[task_id].append(sample)
 
-    # per-task sample streams (written by inference threads)
-    responsetime: List[List[DataType]] = field(default_factory=list)       # RT samples (ms)
-    inferencelatency: List[List[DataType]] = field(default_factory=list)   # ET samples (ms)
+    def take_window(self, task_id):
+        with self.locks[task_id]:
+            samples = self.jobs[task_id][self.cursor[task_id]:]
+            self.cursor[task_id] = len(self.jobs[task_id])
+        count = len(samples)
+        response_ns = [s.completion_ns - s.release_ns for s in samples]
+        misses = sum(t > self.period_ns for t in response_ns)
+        mean_ns = sum(response_ns) / count if count else None
+        return dict(sample_count=count, deadline_miss_count=misses,
+                    response_time_ms=mean_ns / 1e6 if count else None,
+                    rtr=mean_ns / self.period_ns if count else None,
+                    inference_latency_ms=sum(s.gpu_time_ms for s in samples) / count if count else None,
+                    deadline_miss_pct=100.0 * misses / count if count else None)
 
-    # per-task controller outputs (written by controller)
-    rtr: List[List[DataType]] = field(default_factory=list)                # RTR per control period
-    deadlinemiss: List[List[float]] = field(default_factory=list)          # DM% per control period
-    num_sms: List[List[int]] = field(default_factory=list)                 # SMs per control period
-    tpc_masks: List[List[int]] = field(default_factory=list)               # disable masks per control period
+    def set_batch(self, task_id, batch, clock=time.monotonic_ns):
+        with self.locks[task_id]:
+            requested = clock()
+            self.batch_size[task_id] = batch
+            return requested
 
-    # optional intermediate dumps (if you still want them)
-    intermediateresponsetime: List[List[DataType]] = field(default_factory=list)
-    intermediateinferencelatency: List[List[DataType]] = field(default_factory=list)
-    intermediatertr: List[List[DataType]] = field(default_factory=list)
-
-    # optional "file" buffers for later JSON/CSV plotting
-    filertr: List[List[DataType]] = field(default_factory=list)
-    fileinferencelatency: List[List[DataType]] = field(default_factory=list)
-    fileresponsetime: List[List[DataType]] = field(default_factory=list)
-    filesms: List[List[int]] = field(default_factory=list)
-    filedeadlinemiss: List[List[float]] = field(default_factory=list)
-
-    # one lock per task
-    locks: List[threading.Lock] = field(default_factory=list)
-
-    def __post_init__(self):
-        n = int(self.tasks)
-
-        if not self.task_period_s:
-            self.task_period_s = [0.0] * n
-
-        if not self.batch_size:
-            self.batch_size = [0] * n
-
-        # Streams from inference threads
-        if not self.responsetime:
-            self.responsetime = [[] for _ in range(n)]
-        if not self.inferencelatency:
-            self.inferencelatency = [[] for _ in range(n)]
-
-        # Controller outputs
-        if not self.rtr:
-            self.rtr = [[] for _ in range(n)]
-        if not self.deadlinemiss:
-            self.deadlinemiss = [[] for _ in range(n)]
-        if not self.num_sms:
-            self.num_sms = [[] for _ in range(n)]
-        if not self.tpc_masks:
-            self.tpc_masks = [[] for _ in range(n)]
-
-        # Optional intermediate
-        if not self.intermediateresponsetime:
-            self.intermediateresponsetime = [[] for _ in range(n)]
-        if not self.intermediateinferencelatency:
-            self.intermediateinferencelatency = [[] for _ in range(n)]
-        if not self.intermediatertr:
-            self.intermediatertr = [[] for _ in range(n)]
-
-        # Optional file buffers
-        if not self.filertr:
-            self.filertr = [[] for _ in range(n)]
-        if not self.fileinferencelatency:
-            self.fileinferencelatency = [[] for _ in range(n)]
-        if not self.fileresponsetime:
-            self.fileresponsetime = [[] for _ in range(n)]
-        if not self.filesms:
-            self.filesms = [[] for _ in range(n)]
-        if not self.filedeadlinemiss:
-            self.filedeadlinemiss = [[] for _ in range(n)]
-
-        # Locks
-        if not self.locks:
-            self.locks = [threading.Lock() for _ in range(n)]
+    def get_batch(self, task_id):
+        with self.locks[task_id]:
+            return self.batch_size[task_id]

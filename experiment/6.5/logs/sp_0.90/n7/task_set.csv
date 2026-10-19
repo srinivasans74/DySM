@@ -1,0 +1,8 @@
+sl_no,workload,task_rate,setpoint,tunable/nontunable,range (%),e
+1,mm,45.330,0.90,nontunable,0,5.713325641396092
+2,projection,39.947,0.90,nontunable,0,5.080261060769798
+3,hist,22.692,0.90,nontunable,0,6.786422415233409
+4,stencil,31.500,0.90,nontunable,0,8.1418591257013
+5,stereo,21.256,0.90,nontunable,0,2.690167087093322
+6,hotspot,21.262,0.90,nontunable,0,0.8833208167872668
+7,blackscholes,14.832,0.90,nontunable,0,24.960492862431273

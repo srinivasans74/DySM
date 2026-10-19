@@ -1,307 +1,211 @@
-# scheduler_experiments.py
-import os
-import time
-import threading
+"""Two periodic ResNet-50 instances driven by the current project MPC.
+
+Adapted from Srini's Pytorch_experiment/scheduler.py. Importing this module
+does not import PyTorch, initialize CUDA, or load a GPU masking library.
+"""
+from dataclasses import asdict, dataclass
+import argparse
 import json
+import os
+from pathlib import Path
+import queue
 import sys
+import threading
+import time
 
-from controller import Controller
-from inferworkload import PeriodicInferenceTask
-from Parameters import Parameters
-
-def dump_logs_to_json(p: Parameters, output_dir: str):
-    os.makedirs(output_dir, exist_ok=True)
-
-    # ---------- meta info ----------
-    meta = {
-        "tasks": p.tasks,
-        "task_period_s": list(p.task_period_s),
-        "saved_at_unix": time.time(),
-    }
-
-    with open(os.path.join(output_dir, "meta.json"), "w") as f:
-        json.dump(meta, f, indent=2)
-
-    # ---------- per-task logs ----------
-    for i in range(p.tasks):
-        filename = os.path.join(output_dir, f"task_{i}.json")
-
-        with p.locks[i]:
-            data = {
-                # control-period averaged values
-                "rtr": list(p.filertr[i]),                       # RTR per control period
-                "sms": list(p.filesms[i]),                       # SMs applied per control period
-                "inference_latency_ms": list(p.fileinferencelatency[i]),  # avg ET per control period
-                "response_time_ms": list(p.fileresponsetime[i]),          # avg RT per control period
-
-                # NEW: deadline miss percentage per control period
-                "deadline_miss_pct": list(p.filedeadlinemiss[i]),
-
-                # mask history
-                "tpc_masks_hex": [f"0x{m:016x}" for m in p.tpc_masks[i]],
-            }
-
-        with open(filename, "w") as f:
-            json.dump(data, f, indent=2)
-
-        print(f"[logs] wrote {filename}")
-
-def _unique_run_dir(base_dir: str) -> str:
-    os.makedirs(base_dir, exist_ok=True)
-    k = 1
-    while True:
-        d = os.path.join(base_dir, f"run{k:03d}")
-        if not os.path.exists(d):
-            os.makedirs(d, exist_ok=True)
-            return d
-        k += 1
+BASE_DIR = Path(__file__).resolve().parent
+ROOT = BASE_DIR.parents[1]
+TASKS = 2
 
 
-def _maybe_init_batch_trace(p: Parameters):
-    # optional: track batch size changes over time in the shared header
-    if not hasattr(p, "batch_size_trace"):
-        p.batch_size_trace = [[] for _ in range(p.tasks)]
+@dataclass
+class RunConfig:
+    task_period_s: float = .05
+    control_period_s: float = 1.
+    periods: int = 480
+    setpoint: float = .80
+    total_tpcs: int = 85
+    model_name: str = 'resnet50'
+    libsmctrl_path: str = ''
+
+    def validate(self):
+        if (self.task_period_s != .05 or self.control_period_s != 1.
+                or self.model_name != 'resnet50' or not 0 < self.setpoint < 1
+                or not isinstance(self.periods, int) or self.periods <= 0
+                or not isinstance(self.total_tpcs, int) or self.total_tpcs != 85):
+            raise ValueError('Expected ResNet-50, 50 ms tasks, 1 s control, and a valid budget/reference')
 
 
-def _set_batch_size(p: Parameters, task_id: int, new_bs: int, t_elapsed: float):
-    with p.locks[task_id]:
-        p.batch_size[task_id] = int(new_bs)
-        if hasattr(p, "batch_size_trace"):
-            p.batch_size_trace[task_id].append({"t": float(t_elapsed), "batch": int(new_bs)})
+def batch_schedule(config):
+    # Keep workload changes fixed in wall time when comparing control periods.
+    second = 1_000_000_000
+    return [(200*second, 0, 40), (280*second, 1, 40)] + [
+        (360*second, i, 20) for i in range(TASKS)]
 
 
-def run_one_experiment(
-    *,
-    num_tasks: int,
-    duration_s: float,
-    controlperiod_s: float,
-    period_s: float,
-    batchsize_init: int,
-    total_tpcs: int,
-    solution: str,                 # "adhoc" or "smscaling"
-    setpoint: float,
-    kp: float,
-    out_dir: str,
-    verbose: bool = True,
-    dynamic_batch_schedule=None,   # list of (t_sec, task_id, new_bs)
-):
-    stop_event = threading.Event()
+def initial_sms(total_tpcs, count):
+    # Same whole-TPC distribution as Scheduler/scheduler.cpp.
+    return [2 * (total_tpcs // count + (i >= count - total_tpcs % count))
+            for i in range(count)]
 
-    # fresh shared header each experiment (clears old logs)
-    p = Parameters(tasks=num_tasks)
-    _maybe_init_batch_trace(p)
 
-    for i in range(num_tasks):
-        p.task_period_s[i] = float(period_s)
-        p.batch_size[i] = int(batchsize_init)
-        p.tpc_masks[i].append(0)  # start with "disable none"
-
-    # start inference threads
-    tpcs_per_task = max(1, total_tpcs // num_tasks)
+def run_one_experiment(config, controller, tasks, output, *, clock=time.monotonic_ns, wait_until=None,
+                       provenance=None):
+    config.validate()
+    if len(tasks) != TASKS or [t.task_id for t in tasks] != list(range(TASKS)):
+        raise ValueError('Exactly two ordered tasks are required')
+    state, stop = tasks[0].params, tasks[0].stop_event
+    if any(t.params is not state or t.stop_event is not stop for t in tasks):
+        raise ValueError('Tasks must share the same parameters and stop event')
+    output = Path(output)
+    output.mkdir(parents=True, exist_ok=False)
+    errors = queue.Queue()
     threads = []
-    for i in range(num_tasks):
-        task = PeriodicInferenceTask(
-            task_id=i,
-            batch_size=batchsize_init,     # initial only; runtime changes via p.batch_size[i]
-            period_s=period_s,
-            total_tpcs=tpcs_per_task,
-            params=p,
-            stop_event=stop_event,
-            img_path="n02099601_3004.jpg",
-            duration_s=duration_s,
-            verbose=False,  # set True if you want per-batch-change prints from tasks
-        )
-        t = threading.Thread(target=task.run, daemon=True)
-        t.start()
-        threads.append(t)
+    windows = [[] for _ in tasks]
+    events, pulses = [], []
+    result = dict(status='failed', config=asdict(config), completed_control_periods=0,
+                  epoch_ns=None, provenance=provenance or {})
+    mean = initial_sms(config.total_tpcs, TASKS)
+    reference = [config.setpoint] * TASKS
+    failure = None
 
-    # controller thread
-    ctrl = Controller(
-        duration=duration_s,
-        controlperiod=controlperiod_s,
-        params=p,
-        stop_event=stop_event,
-        solution=solution,
-        setpoint=setpoint,
-        kp=kp,
-        total_tpcs=total_tpcs,
-        verbose=verbose,
-    )
-    tctrl = threading.Thread(target=ctrl.run, daemon=True)
-    tctrl.start()
+    def worker(task, epoch):
+        try:
+            task.run(epoch)
+        except BaseException as exc:
+            errors.put('Task {}: {}: {}'.format(task.task_id, type(exc).__name__, exc))
+            stop.set()
 
-    # scheduler loop to apply runtime batch-size changes
-    start = time.time()
-    sched = list(dynamic_batch_schedule or [])
-    sched.sort(key=lambda x: x[0])
-    next_idx = 0
+    def wait(target):
+        if wait_until is not None:
+            wait_until(target)
+        else:
+            while not stop.is_set():
+                remaining = (target - clock()) / 1e9
+                if remaining <= 0:
+                    break
+                stop.wait(remaining)
 
-    for i in range(num_tasks):
-        _set_batch_size(p, i, batchsize_init, 0.0)
+    try:
+        for task in tasks:
+            task.prepare()
+        result['devices'] = [getattr(t, 'device_info', {}) for t in tasks]
+        controller.bind_streams([t.stream_handle for t in tasks], config.libsmctrl_path)
+        controller.publish(mean, [0.] * TASKS, config.control_period_s)
+        epoch = result['epoch_ns'] = clock()
+        for task in tasks:
+            thread = threading.Thread(target=worker, args=(task, epoch), name='inference-'+str(task.task_id))
+            threads.append(thread)
+            thread.start()
+        schedule = batch_schedule(config)
+        previous_sample_ns = [epoch] * TASKS
+        for k in range(1, config.periods + 1):
+            boundary = epoch + round(k * config.control_period_s * 1e9)
+            wait(boundary)
+            if stop.is_set():
+                raise RuntimeError('Inference stopped before the final control boundary')
+            rows = []
+            for i in range(TASKS):
+                row = state.take_window(i)
+                sampled = clock()
+                row.update(control_period=k, planned_end_ns=boundary,
+                           window_start_ns=previous_sample_ns[i], window_end_ns=sampled,
+                           mean_sms_command=mean[i])
+                previous_sample_ns[i] = sampled
+                windows[i].append(row)
+                rows.append(row)
+            result['completed_control_periods'] = k
+            print(f'[MPC] Control period {k}: RRT={[row["rtr"] for row in rows]}, SM command={mean}', flush=True)
+            if k == config.periods:
+                break
+            for relative, i, batch in schedule:
+                if relative == boundary - epoch:
+                    requested = state.set_batch(i, batch, clock)
+                    events.append(dict(task_id=i, batch_size=batch, planned_ns=epoch+relative,
+                                       requested_ns=requested))
+            rrt = [row['rtr'] for row in rows]
+            decision = controller.decide(mean, rrt, reference)
+            mean = decision['mean_sms']
+            for i, row in enumerate(rows):
+                row['next_mean_sms_command'] = mean[i]
+                row['predicted_rrt'] = (decision['predicted_rrt'][i]
+                                        if decision['predicted_rrt'] is not None else None)
+            controller.publish(mean, [0. if r is None else z-r for z, r in zip(reference, rrt)],
+                               config.control_period_s)
+    except BaseException as exc:
+        failure = exc
+    finally:
+        stop.set()
+        for thread in threads:
+            thread.join()
+        # Workers synchronize in-flight work before releasing their stream/model.
+        try:
+            controller.stop()
+        except BaseException as exc:
+            failure = failure or exc
+        try:
+            pulses = controller.actuation_log()
+        except BaseException as exc:
+            failure = failure or exc
+        for task in tasks:
+            try:
+                task.close()
+            except BaseException as exc:
+                failure = failure or exc
+        try:
+            controller.close()
+        except BaseException as exc:
+            failure = failure or exc
+    worker_errors = []
+    while not errors.empty():
+        worker_errors.append(errors.get_nowait())
+    if worker_errors:
+        failure = RuntimeError('; '.join(worker_errors))
+    for event in events:
+        event['first_enqueue_ns'] = next((job.enqueue_ns for job in state.jobs[event['task_id']]
+            if job.batch_size == event['batch_size'] and job.enqueue_ns is not None
+            and job.enqueue_ns >= event['requested_ns']), None)
+    result.update(status='failed' if failure else 'complete',
+                  error=str(failure) if failure else None, batch_events=events)
+    for i in range(TASKS):
+        # Include all drained completions, even those after the final sampling boundary.
+        payload = dict(task_id=i, windows=windows[i], jobs=[asdict(s) for s in state.jobs[i]])
+        (output/('task_{}.json'.format(i))).write_text(json.dumps(payload, indent=2, allow_nan=False)+'\n')
+    (output/'actuation.json').write_text(json.dumps(pulses, indent=2, allow_nan=False)+'\n')
+    (output/'run.json').write_text(json.dumps(result, indent=2, allow_nan=False)+'\n')
+    if failure:
+        raise failure
+    return result
 
-    while True:
-        elapsed = time.time() - start
-        if elapsed >= duration_s:
-            break
-
-        while next_idx < len(sched) and elapsed >= sched[next_idx][0]:
-            t_sec, task_id, new_bs = sched[next_idx]
-            _set_batch_size(p, task_id, new_bs, elapsed)
-            print(f"[scheduler] t={elapsed:6.2f}s: task{task_id} batch_size -> {new_bs}", flush=True)
-            next_idx += 1
-
-        time.sleep(0.02)
-
-    # stop everything
-    stop_event.set()
-    tctrl.join(timeout=3)
-    for t in threads:
-        t.join(timeout=3)
-
-    # save logs
-    dump_logs_to_json(p, output_dir=out_dir)
-    print(f"[DONE] saved -> {out_dir}")
 
 
-def experiment_sweep_setpoints(num_tasks: int):
-    duration_s = 100.0
-    controlperiod_s = 2.0
-    period_s = 0.040
-    batchsize = 20
-    total_tpcs = 41
-
-    setpoints = [0.60, 0.70, 0.80, 0.90]
-
-    # ADHOC sweep
-    for sp in setpoints:
-        base = os.path.join("logs", "sweep", f"adhoc_sp{sp:.2f}")
-        out_dir = _unique_run_dir(base)
-        run_one_experiment(
-            num_tasks=num_tasks,
-            duration_s=duration_s,
-            controlperiod_s=controlperiod_s,
-            period_s=period_s,
-            batchsize_init=batchsize,
-            total_tpcs=total_tpcs,
-            solution="adhoc",
-            setpoint=sp,
-            kp=0.0,
-            out_dir=out_dir,
-            verbose=True,
-        )
-
-    for sp in setpoints:
-        base = os.path.join("logs", "sweep", f"proposed_sp{sp:.2f}")
-        out_dir = _unique_run_dir(base)
-        run_one_experiment(
-            num_tasks=num_tasks,
-            duration_s=duration_s,
-            controlperiod_s=controlperiod_s,
-            period_s=period_s,
-            batchsize_init=batchsize,
-            total_tpcs=total_tpcs,
-            solution="smscaling",
-            setpoint=sp,
-            kp=4.0,  # tune if needed
-            out_dir=out_dir,
-            verbose=True,
-        )
-
-
-# def experiment_dynamic_batch_proposed(num_tasks: int):
-#     duration_s = 200.0
-#     controlperiod_s = 2.0
-#     period_s = 0.050
-#     batchsize = 20
-#     total_tpcs = 41
-
-#     dynamic_schedule = [
-#         (40.0, 0, 40),    # t=40: increase batchsize of task 1
-#         (80.0, 1, 40),    # t=80: increase batchsize of task 2
-#         (160.0, 0, 20),   # t=160: revert task 1 back to 20
-#         (160.0, 1, 20),   # t=160: revert task 2 back to 20
-#     ]
-
-#     base = os.path.join("logs", "dynamic", "proposed_batch_changes")
-#     out_dir = _unique_run_dir(base)
-
-#     run_one_experiment(
-#         num_tasks=num_tasks,
-#         duration_s=duration_s,
-#         controlperiod_s=controlperiod_s,
-#         period_s=period_s,
-#         batchsize_init=batchsize,
-#         total_tpcs=total_tpcs,
-#         solution="smscaling",
-#         setpoint=0.70,
-#         kp=4.5,
-#         out_dir=out_dir,
-#         verbose=True,
-#         dynamic_batch_schedule=dynamic_schedule,
-#     )
-    
-def experiment_dynamic_batch_proposed(num_tasks: int):
-    duration_s = 240.0
-    controlperiod_s = 1.0
-    period_s = 0.030
-    batchsize = 20
-    total_tpcs = 41
-
-    dynamic_schedule = [
-        (60.0, 0, 40),    # t=60: increase batchsize of task 1
-        (100.0, 1, 40),    # t=100: increase batchsize of task 2
-        (140.0, 2, 40),   # t=140: revert task 1 back to 20
-        (180.0, 0, 20),   # t=180: revert task 2 back to 20
-        (180.0, 1, 20),   # t=180: revert task 2 back to 20
-        (180.0, 2, 20),   # t=180: revert task 2 back to 20
-
-    ]
-
-    # ----------------------------
-    # Run ADHOC
-    # ----------------------------
-    base_adhoc = os.path.join("logs", "dynamic", "adhoc_batch_changes")
-    out_dir_adhoc = _unique_run_dir(base_adhoc)
-
-    run_one_experiment(
-        num_tasks=num_tasks,
-        duration_s=duration_s,
-        controlperiod_s=controlperiod_s,
-        period_s=period_s,
-        batchsize_init=batchsize,
-        total_tpcs=total_tpcs,
-        solution="adhoc",
-        setpoint=0.70,     # keep same setpoint for fair comparison
-        kp=0,
-        out_dir=out_dir_adhoc,
-        verbose=True,
-        dynamic_batch_schedule=dynamic_schedule,
-    )
-
-    # ----------------------------
-    # Run SMSCALING (proposed)
-    # ----------------------------
-    base_prop = os.path.join("logs", "dynamic", "proposed_batch_changes")
-    out_dir_prop = _unique_run_dir(base_prop)
-
-    run_one_experiment(
-        num_tasks=num_tasks,
-        duration_s=duration_s,
-        controlperiod_s=controlperiod_s,
-        period_s=period_s,
-        batchsize_init=batchsize,
-        total_tpcs=total_tpcs,
-        solution="smscaling",
-        setpoint=0.70,
-        kp=4.0,
-        out_dir=out_dir_prop,
-        verbose=True,
-        dynamic_batch_schedule=dynamic_schedule,
-    )
+def main():
+    from controller import Controller
+    from inferworkload import PeriodicInferenceTask
+    from Parameters import Parameters, MODEL_B
+    parser = argparse.ArgumentParser()
+    parser.add_argument("duration", type=int, nargs="?", default=480)
+    parser.add_argument("output", type=Path, nargs="?", default=BASE_DIR / "logs/sol_7")
+    parser.add_argument("--weights", type=Path, default=Path(os.environ.get(
+        "RESNET50_WEIGHTS", str(Path.home()/".cache/torch/hub/checkpoints/resnet50-11ad3fa6.pth"))))
+    args = parser.parse_args()
+    config = RunConfig(periods=args.duration, libsmctrl_path=str(ROOT/"libsmctrl/libsmctrl.so"))
+    config.validate()
+    if args.output.exists():
+        raise FileExistsError(f"Use a fresh output directory: {args.output}")
+    if not args.weights.is_file():
+        raise FileNotFoundError(f"ResNet-50 weights missing: {args.weights}")
+    state, stop = Parameters(TASKS, config.task_period_s), threading.Event()
+    controller = Controller(BASE_DIR/"libdysm_pytorch.so", MODEL_B, 2*config.total_tpcs)
+    tasks = [PeriodicInferenceTask(i, config, state, controller, stop,
+                                  BASE_DIR/"n02099601_3004.jpg", args.weights)
+             for i in range(TASKS)]
+    provenance = dict(model_B=MODEL_B, model_units="RRT/SM",
+                      model_source="Existing three-instance ML model, rows/columns 1 and 2",
+                      original_instance_ids=[2, 3],
+                      build=json.loads((BASE_DIR/"build.json").read_text()))
+    run_one_experiment(config, controller, tasks, args.output, provenance=provenance)
 
 
 if __name__ == "__main__":
-    num_tasks = int(sys.argv[1]) if len(sys.argv) > 1 else 3
-    #experiment_sweep_setpoints(num_tasks)
-    experiment_dynamic_batch_proposed(num_tasks)
-    print("All experiments completed.")
+    main()

@@ -2,52 +2,65 @@
 
 ## Current ECRTS_25 snapshot — RTX 5090
 
-This branch retains the existing P and MPC controllers and uses the detected
-170 SMs / 85 TPCs on the RTX 5090, with the existing 128-bit stream-mask API and
-CUDA 13.2 support. The branch is `ecrts25-mpc`; the runtime uses all 170 SMs.
-Two tasks start at 84/86 SMs.
+Branch: `ecrts25-mpc`. The runtime uses 170 SMs / 85 TPCs, the existing
+128-bit stream-mask API, and CUDA 13.2 support. Controller modes are P (3),
+Adhoc (4), STGM (5), SMshare (6), and MPC (7).
 
-The committed gain header is the latest generated configuration: three tasks
-(`projection`, `hist`, `stencil`) from experiment 6.3, with a 170-SM model budget.
-Regenerate gains and rebuild whenever the task configuration changes. The MPC
-candidate step is 1 SM and its action-cost coefficient is currently zero.
-Mode 3 is P, 4 Adhoc, 5 STGM, 6 SMshare, and 7 MPC.
+The actuator retains each task's TPC positions after initial placement:
+shrinking releases excess TPCs; growing uses free TPCs before sharing.
+MPC retains its one-SM candidate step and uses action-cost coefficient 0.004.
+Gain scaling is 0.005 and coupling is 0.15; output gains are no longer capped
+at 10. Regenerate B/K and rebuild for each task configuration. The committed
+header is the final 6.5 configuration: eight tasks, setpoint 0.90, 170 SMs.
 
-Activate your Python environment and install `numpy scipy matplotlib pandas`.
-With CUDA 13.2 at `/usr/local/cuda`, build the library and scheduler from source:
+Seven workload adapters have been added: BlackScholes, Reduction, Scan,
+Transpose, ConvolutionSeparable, NBody, and FDTD3D. Benchmarking supports
+all 85 TPCs and fits execution time as a/TPC + b. The added BlackScholes,
+Reduction, and Scan benchmarks match their application job sizes.
+
+### Experiments and results — 2026-10-19
+
+- 6.1–6.4: conference experiments and recorded results retained.
+- 6.5: completed 4–8 tasks × six setpoints (0.80–0.90, step 0.02) ×
+  Adhoc/P/MPC: 90 runs, 400 seconds each, fixed workload inputs.
+- 6.6: fourteen-task runner/configuration prepared; retains earlier model
+  inputs and is not presented as a completed validated experiment.
+- 6.7: earlier 4–7 task runs at 0.70/0.80 retained; overlapping results
+  are reused by the merged 6.5 sweep.
+- 6.8: two ResNet-50 instances with the current MPC/actuator adapter;
+  480 control periods, batch increases at 200/280 s and decrease at 360 s.
+- 6.9: recorded MPC decision overhead for 1–10 tasks. The runner currently
+  selects 8–10; set TASK_COUNTS explicitly for a full rerun. Default duration
+  is 200 seconds, with no extra startup allowance.
+
+6.5 statistics use the final 50 control periods excluding the endpoint
+([350:400] for a 401-sample log), averaging tasks equally. Generate its
+standalone RRT-line/DMR-bar panels and five-page paired PDF with:
+
+```bash
+cd experiment/6.5
+python3 plotting.py --panels logs
+```
+
+Outputs are in `Figures/4-8subfigures/` and
+`Figures/4-8_setpoints_rrt_dmr.pdf`. RRT is displayed with upper limit 1;
+Adhoc values above 1 are explicitly labelled "capped at 1". CSV statistics
+retain the original values. Figures are PDF only.
+
+Activate a Python environment with numpy, scipy, matplotlib and pandas.
+With CUDA 13.2 at /usr/local/cuda:
 
 ```bash
 make -C libsmctrl -B libsmctrl.so CUDA=/usr/local/cuda
-GPU_SMS=170 python3 Scheduler/gain.py \
-  experiment/6.3/3traces/trace_projection_hist_stencil.csv Scheduler/gain_matrix.h
+GPU_SMS=170 python3 Scheduler/gain.py experiment/6.5/task_set.csv Scheduler/gain_matrix.h
 make -C Scheduler -B -j4
 export LD_LIBRARY_PATH="$PWD/libsmctrl:/usr/local/cuda/lib64:${LD_LIBRARY_PATH:-}"
 ```
 
-Run each conference experiment from its own directory; see
-[`experiment/README.md`](experiment/README.md). The 6.1 batch selector is `all`.
-6.1 and 6.3 regenerate the shared gain header, so run them sequentially.
-Build products are excluded; measurement logs and generated figures are included.
-
-### Experiment status as of 2026-10-18
-
-- 6.1: all four 180-second runs and the aggregate figure are recorded. STGM
-  was rerun after fixing executable-relative profile lookup; both profiles
-  loaded and static initialization succeeded. Its logs and the aggregate
-  figure have been updated; other controllers' measurements are unchanged.
-- 6.2: complete overlap sweep and figure are recorded.
-- 6.3: Adhoc's five and P's four 150-second runs completed; both figures are
-  included. Detailed interpretation/review of the results remains pending.
-- 6.4: complete mask-overhead measurements and figure are recorded.
-- 6.5–6.7: reserved for the journal-extension experiments; not implemented here.
-- 6.8: existing ML entry, its local modules and input image are organized here.
-  The requested two-task experiment has not been implemented or validated.
-
-The conference runners preserve upstream task settings, separate P/Adhoc
-scripts, build commands and plotting calculations, with only documented
-execution fixes and hardware support. Legacy files outside the numbered
-experiment directories were removed. No P/MPC algorithm changes are introduced
-by this publishing step.
+See each experiment's README for its runner. Runs share the GPU and scheduler
+build, so execute them sequentially. Sources, canonical measurements and PDF
+figures are included; local binaries, caches and duplicate backup archives are
+excluded. Existing repository setup documents are retained.
 
 ## Abstract
 

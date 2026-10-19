@@ -10,7 +10,7 @@
 #include <cstdlib>
 #include <cstring>
 //#include "helper_cuda.h"
-#include "libsmctrl.h"  // for TPC mask control
+#include "tpc_control.h"
 
 using namespace std;
 
@@ -25,15 +25,14 @@ using namespace std;
 #define FACTOR_CHIP   0.5
 #define EXPAND_RATE   2
 
-
-#ifdef RD_WG_SIZE_0_0                                                            
-        #define BLOCK_SIZE RD_WG_SIZE_0_0                                        
-#elif defined(RD_WG_SIZE_0)                                                      
-        #define BLOCK_SIZE RD_WG_SIZE_0                                          
-#elif defined(RD_WG_SIZE)                                                        
-        #define BLOCK_SIZE RD_WG_SIZE                                            
-#else                                                                                    
-        #define BLOCK_SIZE 16                                                            
+#ifdef RD_WG_SIZE_0_0
+        #define BLOCK_SIZE RD_WG_SIZE_0_0
+#elif defined(RD_WG_SIZE_0)
+        #define BLOCK_SIZE RD_WG_SIZE_0
+#elif defined(RD_WG_SIZE)
+        #define BLOCK_SIZE RD_WG_SIZE
+#else
+        #define BLOCK_SIZE 16
 #endif
 
 #define STR_SIZE 256
@@ -90,15 +89,6 @@ void writeoutput(float *vect, int grid_rows, int grid_cols, const char *file) {
 }
 
 // ============================================================
-// Mask builder (libsmctrl)
-// ============================================================
-static inline uint64_t build_mask(int active) {
-    if (active <= 0) return 0xFFFFFFFFFFFFFFFEULL; // all disabled
-    if (active >= 64) return 0ULL;                 // all enabled
-    return ~((1ULL << active) - 1ULL);             // lower bits enabled
-}
-
-// ============================================================
 // CUDA Kernel
 // ============================================================
 __global__ void calculate_temp(
@@ -112,7 +102,7 @@ __global__ void calculate_temp(
 
     float step_div_Cap = step / Cap;
     float Rx_1 = 1 / Rx, Ry_1 = 1 / Ry, Rz_1 = 1 / Rz;
-    
+
     float amb_temp = 80.0;
 
     int bx = blockIdx.x, by = blockIdx.y;
@@ -183,17 +173,19 @@ int main() {
     const int RUNS = 3;
     cudaDeviceProp prop;
     int device = 0; // Assuming device 0
-    cudaGetDeviceProperties(&prop, device);
+    benchmark_cuda_check(cudaGetDeviceProperties(&prop, device));
     int num_sms = prop.multiProcessorCount;
-    int MAX_TPC = num_sms / 2;
+    const int MAX_TPC = benchmark_tpc_count(device);
+    std::cout << "GPU: " << prop.name << " (" << num_sms << " SMs, "
+              << MAX_TPC << " TPCs)\n";
 
     const char* TEMP_FILE = "data/hotspot/temp_512";
     const char* POWER_FILE = "data/hotspot/power_512";
-    const char* OUT_FILE = "output_hotspot.out";
+    const std::string OUT_FILE = benchmark_log_path("output_hotspot.out");
 
     cout << "[CUDA Benchmark] Hotspot " << GRID_ROWS << "x" << GRID_COLS
          << ", " << TOTAL_ITER << " iterations\n";
-    cout << "Using libsmctrl TPC mask control (0–" << MAX_TPC << ")\n";
+    cout << "Using libsmctrl TPC mask control (1–" << MAX_TPC << ")\n";
     cout << fixed << setprecision(3);
 
     const int size = GRID_ROWS * GRID_COLS;
@@ -206,12 +198,12 @@ int main() {
 
     // Device memory
     float *temp_d[2], *power_d;
-    cudaMalloc(&temp_d[0], size * sizeof(float));
-    cudaMalloc(&temp_d[1], size * sizeof(float));
-    cudaMalloc(&power_d, size * sizeof(float));
+    benchmark_cuda_check(cudaMalloc(&temp_d[0], size * sizeof(float)));
+    benchmark_cuda_check(cudaMalloc(&temp_d[1], size * sizeof(float)));
+    benchmark_cuda_check(cudaMalloc(&power_d, size * sizeof(float)));
 
-    cudaMemcpy(power_d, power_h.data(), size * sizeof(float), cudaMemcpyHostToDevice);
-    cudaMemcpy(temp_d[0], temp_h.data(), size * sizeof(float), cudaMemcpyHostToDevice);
+    benchmark_cuda_check(cudaMemcpy(power_d, power_h.data(), size * sizeof(float), cudaMemcpyHostToDevice));
+    benchmark_cuda_check(cudaMemcpy(temp_d[0], temp_h.data(), size * sizeof(float), cudaMemcpyHostToDevice));
 
     // Compute constants
     float grid_height = chip_height / GRID_ROWS;
@@ -235,25 +227,28 @@ int main() {
 
     vector<pair<int, float>> results;
 
-    for (int tpc_active = 0; tpc_active <= MAX_TPC; ++tpc_active) {
-        uint64_t mask = build_mask(tpc_active);
-        libsmctrl_set_global_mask(mask);
+    cudaStream_t stream;
+    benchmark_cuda_check(cudaStreamCreate(&stream));
+
+    for (int tpc_active = 1; tpc_active <= MAX_TPC; ++tpc_active) {
+        const uint128_t mask = benchmark_tpc_mask(tpc_active);
+        libsmctrl_set_stream_mask_ext(stream, mask);
 
         cout << "\n[Active TPCs: " << setw(2) << tpc_active
-             << "] Mask = 0x" << hex << mask << dec << "\n";
+             << "]" << std::endl;
 
         vector<float> timings;
         for (int run = 0; run < RUNS; ++run) {
             cudaEvent_t start, stop;
-            cudaEventCreate(&start);
-            cudaEventCreate(&stop);
+            benchmark_cuda_check(cudaEventCreate(&start));
+            benchmark_cuda_check(cudaEventCreate(&stop));
 
-            cudaEventRecord(start);
+            benchmark_cuda_check(cudaEventRecord(start, stream));
 
             int src = 0, dst = 1;
             for (int t = 0; t < TOTAL_ITER; t += PYRAMID_HEIGHT) {
                 int temp = src; src = dst; dst = temp;
-                calculate_temp<<<dimGrid, dimBlock>>>(
+                calculate_temp<<<dimGrid, dimBlock, 0, stream>>>(
                     min(PYRAMID_HEIGHT, TOTAL_ITER - t),
                     power_d, temp_d[src], temp_d[dst],
                     GRID_COLS, GRID_ROWS, borderCols, borderRows,
@@ -261,15 +256,17 @@ int main() {
                 );
             }
 
-            cudaEventRecord(stop);
-            cudaEventSynchronize(stop);
+            benchmark_cuda_check(cudaGetLastError());
+
+            benchmark_cuda_check(cudaEventRecord(stop, stream));
+            benchmark_cuda_check(cudaEventSynchronize(stop));
 
             float ms = 0.0f;
-            cudaEventElapsedTime(&ms, start, stop);
+            benchmark_cuda_check(cudaEventElapsedTime(&ms, start, stop));
             timings.push_back(ms);
 
-            cudaEventDestroy(start);
-            cudaEventDestroy(stop);
+            benchmark_cuda_check(cudaEventDestroy(start));
+            benchmark_cuda_check(cudaEventDestroy(stop));
         }
 
         float avg = 0.0f;
@@ -282,12 +279,12 @@ int main() {
 
     // Copy back final temp and write to file
     vector<float> out_h(size);
-    cudaMemcpy(out_h.data(), temp_d[0], size * sizeof(float), cudaMemcpyDeviceToHost);
-    writeoutput(out_h.data(), GRID_ROWS, GRID_COLS, OUT_FILE);
+    benchmark_cuda_check(cudaMemcpy(out_h.data(), temp_d[0], size * sizeof(float), cudaMemcpyDeviceToHost));
+    writeoutput(out_h.data(), GRID_ROWS, GRID_COLS, OUT_FILE.c_str());
 
     // Save JSON
-    ofstream json("logs/tpc_results_hotspot");
-    json << "{\n  \"results\": [\n";
+    ofstream json(benchmark_log_path("tpc_results_hotspot"));
+    json << "{\n  \"total_tpcs\": " << MAX_TPC << ",\n  \"results\": [\n";
     for (size_t i = 0; i < results.size(); ++i) {
         json << "    {\"TPC\": " << results[i].first
              << ", \"ExecTime_ms\": " << results[i].second << "}";
@@ -297,11 +294,12 @@ int main() {
     json << "  ]\n}\n";
     json.close();
 
-    cout << "\n[CUDA Benchmark] Results saved to logs/tpc_results_hotspot.json\n";
+    std::cout << "[DONE] " << benchmark_log_path("tpc_results_hotspot") << std::endl;
 
-    cudaFree(power_d);
-    cudaFree(temp_d[0]);
-    cudaFree(temp_d[1]);
+    benchmark_cuda_check(cudaFree(power_d));
+    benchmark_cuda_check(cudaFree(temp_d[0]));
+    benchmark_cuda_check(cudaFree(temp_d[1]));
     cout << "[CUDA Benchmark] Done.\n";
+    benchmark_cuda_check(cudaStreamDestroy(stream));
     return 0;
 }

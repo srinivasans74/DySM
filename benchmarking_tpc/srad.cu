@@ -1,5 +1,5 @@
 // srad_smctrl_sweep_projection_style.cu
-// Benchmark SRAD kernels with TPC mask sweep (1..41) — projection-style
+// Benchmark SRAD kernels with TPC mask sweep (all detected TPCs) — projection-style
 
 #include <cuda_runtime.h>
 #include <iostream>
@@ -8,7 +8,7 @@
 #include <fstream>
 #include <cmath>
 #include <cstdint>
-#include "libsmctrl.h"
+#include "tpc_control.h"
 
 // -------------------------------
 // Constants and configuration
@@ -98,33 +98,18 @@ __global__ void srad2(float* E, float* W, float* N, float* S,
 }
 
 // -------------------------------
-// Build TPC disable mask
-// -------------------------------
-static inline uint64_t build_mask_from_active_tpc(int active_tpc) {
-    if (active_tpc <= 0)  return ~0ULL;
-    if (active_tpc >= 64) return 0ULL;
-    const uint64_t allowed = (1ULL << active_tpc) - 1ULL;
-    return ~allowed;
-}
-
-// -------------------------------
 // Main
 // -------------------------------
 int main()
 {
     int num_sms = 0;
     checkCudaErrors(cudaDeviceGetAttribute(&num_sms, cudaDevAttrMultiProcessorCount, 0));
-    cudaDeviceProp prop;
-    uint32_t num_tpcs = 0;
-    if (libsmctrl_get_tpc_info_cuda(&num_tpcs, 0) != 0 || num_tpcs == 0) {
-        std::cerr << "libsmctrl_get_tpc_info_cuda failed.\n";
-        return 1;
-    }
+    const int num_tpcs = benchmark_tpc_count();
 
     int sms_per_tpc = num_sms / num_tpcs;
     std::cout << "GPU: " << num_sms << " SMs, " << num_tpcs << " TPCs ("
               << sms_per_tpc << " SMs/TPC)\n";
-    std::cout << "[SRAD Benchmark] Sweep TPC active = 1..41\n";
+    std::cout << "[SRAD Benchmark] Sweep TPC active = 1.." << num_tpcs << "\n";
     std::cout << std::fixed << std::setprecision(3);
 
     // Host data
@@ -150,15 +135,15 @@ int main()
     checkCudaErrors(cudaStreamCreate(&stream));
 
     std::vector<std::pair<int, float>> results;
-    results.reserve(41);
+    results.reserve(num_tpcs);
 
-    // Sweep 1–41 active TPCs
-    for (int tpc_active = 1; tpc_active <= 4; ++tpc_active) {
-        uint64_t mask = build_mask_from_active_tpc(tpc_active);
-        libsmctrl_set_global_mask(mask);
+    // Sweep all detected TPCs
+    for (int tpc_active = 1; tpc_active <= num_tpcs; ++tpc_active) {
+        const uint128_t mask = benchmark_tpc_mask(tpc_active);
+        libsmctrl_set_stream_mask_ext(stream, mask);
 
         std::cout << "\n[Active TPCs: " << std::setw(2) << tpc_active
-                  << "] Mask = 0x" << std::hex << mask << std::dec << "\n";
+                  << "]" << std::endl;
 
         std::vector<float> timings;
         timings.reserve(RUNS);
@@ -172,6 +157,8 @@ int main()
 
             srad1<<<grid, block, 0, stream>>>(d_E, d_W, d_N, d_S, d_J, d_C, COLS, ROWS, 1.0f);
             srad2<<<grid, block, 0, stream>>>(d_E, d_W, d_N, d_S, d_J, d_C, COLS, ROWS, lambda);
+
+            benchmark_cuda_check(cudaGetLastError());
 
             checkCudaErrors(cudaEventRecord(stop, stream));
             checkCudaErrors(cudaEventSynchronize(stop));
@@ -193,8 +180,8 @@ int main()
     }
 
     // Write results to JSON
-    std::ofstream jsonFile("logs/tpc_results_srad");
-    jsonFile << "{\n  \"results\": [\n";
+    std::ofstream jsonFile(benchmark_log_path("tpc_results_srad"));
+    jsonFile << "{\n  \"total_tpcs\": " << num_tpcs << ",\n  \"results\": [\n";
     for (size_t i = 0; i < results.size(); ++i) {
         jsonFile << "    {\"TPC\": " << results[i].first
                  << ", \"ExecTime_ms\": " << results[i].second << "}";
@@ -204,7 +191,7 @@ int main()
     jsonFile << "  ]\n}\n";
     jsonFile.close();
 
-    std::cout << "\n[SRAD Benchmark] Results saved to logs/tpc_results_srad.json\n";
+    std::cout << "[DONE] " << benchmark_log_path("tpc_results_srad") << std::endl;
 
     // Cleanup
     checkCudaErrors(cudaStreamDestroy(stream));

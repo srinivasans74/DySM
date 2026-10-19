@@ -6,7 +6,7 @@
 #include <random>
 #include <cstdint>
 #include <chrono>
-#include "libsmctrl.h"  // for TPC mask control
+#include "tpc_control.h"
 
 using namespace std;
 
@@ -24,15 +24,6 @@ inline void check(cudaError_t result, const char *const func, const char *const 
                   << "\"" << func << "\"" << std::endl;
         exit(EXIT_FAILURE);
     }
-}
-
-// ============================================================
-// TPC Mask Builder
-// ============================================================
-static inline uint64_t build_mask(int active) {
-    if (active <= 0) return 0xFFFFFFFFFFFFFFFEULL; // all disabled
-    if (active >= 64) return 0ULL;                 // all enabled
-    return ~((1ULL << active) - 1ULL);             // lower bits enabled
 }
 
 // ============================================================
@@ -135,12 +126,14 @@ int main() {
     cudaDeviceProp prop;
     const int RUNS = 3;
     int device = 0; // Assuming device 0
-    cudaGetDeviceProperties(&prop, device);
+    benchmark_cuda_check(cudaGetDeviceProperties(&prop, device));
     int num_sms = prop.multiProcessorCount;
-    int MAX_TPC = num_sms / 2;
+    const int MAX_TPC = benchmark_tpc_count(device);
+    std::cout << "GPU: " << prop.name << " (" << num_sms << " SMs, "
+              << MAX_TPC << " TPCs)\n";
 
     cout << "[CUDA Benchmark] Stereo Disparity (" << W << "x" << H << ")\n";
-    cout << "Using libsmctrl TPC mask control (0–" << MAX_TPC << ")\n";
+    cout << "Using libsmctrl TPC mask control (1–" << MAX_TPC << ")\n";
     cout << fixed << setprecision(3);
 
     const size_t size = W * H * sizeof(unsigned int);
@@ -156,11 +149,11 @@ int main() {
 
     // Allocate device memory
     unsigned int *d_img0, *d_img1, *d_out;
-    cudaMalloc(&d_img0, size);
-    cudaMalloc(&d_img1, size);
-    cudaMalloc(&d_out, size);
-    cudaMemcpy(d_img0, h_img0.data(), size, cudaMemcpyHostToDevice);
-    cudaMemcpy(d_img1, h_img1.data(), size, cudaMemcpyHostToDevice);
+    benchmark_cuda_check(cudaMalloc(&d_img0, size));
+    benchmark_cuda_check(cudaMalloc(&d_img1, size));
+    benchmark_cuda_check(cudaMalloc(&d_out, size));
+    benchmark_cuda_check(cudaMemcpy(d_img0, h_img0.data(), size, cudaMemcpyHostToDevice));
+    benchmark_cuda_check(cudaMemcpy(d_img1, h_img1.data(), size, cudaMemcpyHostToDevice));
 
     // Create texture objects
     cudaChannelFormatDesc ca_desc = cudaCreateChannelDesc<unsigned int>();
@@ -192,35 +185,40 @@ int main() {
 
     vector<pair<int, float>> results;
 
-    for (int tpc_active = 0; tpc_active <= MAX_TPC; ++tpc_active) {
-        uint64_t mask = build_mask(tpc_active);
-        libsmctrl_set_global_mask(mask);
+    cudaStream_t stream;
+    benchmark_cuda_check(cudaStreamCreate(&stream));
+
+    for (int tpc_active = 1; tpc_active <= MAX_TPC; ++tpc_active) {
+        const uint128_t mask = benchmark_tpc_mask(tpc_active);
+        libsmctrl_set_stream_mask_ext(stream, mask);
 
         cout << "\n[Active TPCs: " << setw(2) << tpc_active
-             << "] Mask = 0x" << hex << mask << dec << "\n";
+             << "]" << std::endl;
 
         vector<float> timings;
         for (int run = 0; run < RUNS; ++run) {
             cudaEvent_t start, stop;
-            cudaEventCreate(&start);
-            cudaEventCreate(&stop);
+            benchmark_cuda_check(cudaEventCreate(&start));
+            benchmark_cuda_check(cudaEventCreate(&stop));
 
-            cudaEventRecord(start);
+            benchmark_cuda_check(cudaEventRecord(start, stream));
 
-            stereoDisparityKernel<<<blocks, threads>>>(
+            stereoDisparityKernel<<<blocks, threads, 0, stream>>>(
                 d_img0, d_img1, d_out, W, H, MIN_DISP, MAX_DISP,
                 tex2Dleft, tex2Dright
             );
 
-            cudaEventRecord(stop);
-            cudaEventSynchronize(stop);
+            benchmark_cuda_check(cudaGetLastError());
+
+            benchmark_cuda_check(cudaEventRecord(stop, stream));
+            benchmark_cuda_check(cudaEventSynchronize(stop));
 
             float ms = 0.0f;
-            cudaEventElapsedTime(&ms, start, stop);
+            benchmark_cuda_check(cudaEventElapsedTime(&ms, start, stop));
             timings.push_back(ms);
 
-            cudaEventDestroy(start);
-            cudaEventDestroy(stop);
+            benchmark_cuda_check(cudaEventDestroy(start));
+            benchmark_cuda_check(cudaEventDestroy(stop));
         }
 
         float avg = 0.0f;
@@ -231,10 +229,10 @@ int main() {
         results.emplace_back(tpc_active, avg);
     }
 
-    cudaMemcpy(h_out.data(), d_out, size, cudaMemcpyDeviceToHost);
+    benchmark_cuda_check(cudaMemcpy(h_out.data(), d_out, size, cudaMemcpyDeviceToHost));
 
     // Save disparity output
-    ofstream outFile("logs/output_stereodisparity.txt");
+    ofstream outFile(benchmark_log_path("output_stereodisparity.txt"));
     for (int y = 0; y < H; ++y) {
         for (int x = 0; x < W; ++x)
             outFile << h_out[y * W + x] << " ";
@@ -243,8 +241,8 @@ int main() {
     outFile.close();
 
     // Save JSON benchmark results
-    ofstream json("logs/tpc_results_stereodisparity");
-    json << "{\n  \"results\": [\n";
+    ofstream json(benchmark_log_path("tpc_results_stereodisparity"));
+    json << "{\n  \"total_tpcs\": " << MAX_TPC << ",\n  \"results\": [\n";
     for (size_t i = 0; i < results.size(); ++i) {
         json << "    {\"TPC\": " << results[i].first
              << ", \"ExecTime_ms\": " << results[i].second << "}";
@@ -254,15 +252,16 @@ int main() {
     json << "  ]\n}\n";
     json.close();
 
-    cout << "\n[CUDA Benchmark] Results saved to logs/tpc_results_stereodisparity\n";
+    std::cout << "[DONE] " << benchmark_log_path("tpc_results_stereodisparity") << std::endl;
 
-    cudaDestroyTextureObject(tex2Dleft);
-    cudaDestroyTextureObject(tex2Dright);
-    cudaFree(d_img0);
-    cudaFree(d_img1);
-    cudaFree(d_out);
+    benchmark_cuda_check(cudaDestroyTextureObject(tex2Dleft));
+    benchmark_cuda_check(cudaDestroyTextureObject(tex2Dright));
+    benchmark_cuda_check(cudaFree(d_img0));
+    benchmark_cuda_check(cudaFree(d_img1));
+    benchmark_cuda_check(cudaFree(d_out));
 
     cout << "[CUDA Benchmark] Done.\n";
+    benchmark_cuda_check(cudaStreamDestroy(stream));
     return 0;
 }
 

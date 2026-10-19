@@ -6,7 +6,7 @@
 #include <cstdint>
 #include <chrono>
 
-#include "libsmctrl.h"  // for TPC mask control
+#include "tpc_control.h"
 #include "common/include/support.h"
 
 using namespace std;
@@ -32,14 +32,6 @@ inline void check(cudaError_t result, const char *const func, const char *const 
              << " (" << cudaGetErrorName(result) << ")\n";
         exit(EXIT_FAILURE);
     }
-}
-
-// -------------------------------------------------------------
-// Mask builder
-// -------------------------------------------------------------
-static inline uint64_t build_mask(int active) {
-    if (active >= 64) return 0ULL;
-    return ~((1ULL << active) - 1ULL);
 }
 
 // -------------------------------------------------------------
@@ -104,8 +96,7 @@ int main() {
     // --- Device setup ---
     int num_sms = 0;
     checkCudaErrors(cudaDeviceGetAttribute(&num_sms, cudaDevAttrMultiProcessorCount, 0));
-    uint32_t num_tpcs = 0;
-    libsmctrl_get_tpc_info_cuda(&num_tpcs, 0);
+    const int num_tpcs = benchmark_tpc_count();
     cout << "Detected " << num_sms << " SMs across " << num_tpcs << " TPCs\n";
 
     // --- Allocate memory ---
@@ -134,30 +125,34 @@ int main() {
     // --- Sweep TPC masks ---
     vector<pair<int, float>> results;
 
+    cudaStream_t stream;
+    benchmark_cuda_check(cudaStreamCreate(&stream));
+
     for (int tpc_active = 1; tpc_active <= num_tpcs; ++tpc_active) {
-        uint64_t mask = build_mask(tpc_active);
-        libsmctrl_set_global_mask(mask);
+        const uint128_t mask = benchmark_tpc_mask(tpc_active);
+        libsmctrl_set_stream_mask_ext(stream, mask);
 
         cout << "\n[Active TPCs: " << setw(2) << tpc_active
-             << "] Mask = 0x" << hex << mask << dec << "\n";
+             << "]" << std::endl;
 
         vector<float> timings;
         for (int run = 0; run < REPEAT_COUNT; ++run) {
             cudaEvent_t start, stop;
-            cudaEventCreate(&start);
-            cudaEventCreate(&stop);
+            benchmark_cuda_check(cudaEventCreate(&start));
+            benchmark_cuda_check(cudaEventCreate(&stop));
 
-            cudaEventRecord(start);
-            stencil3d<<<gridDim, blockDim>>>(d_psi, d_npsi, d_sigX, d_sigY, d_sigZ, NX, NY, NZ);
-            cudaEventRecord(stop);
-            cudaEventSynchronize(stop);
+            benchmark_cuda_check(cudaEventRecord(start, stream));
+            stencil3d<<<gridDim, blockDim, 0, stream>>>(d_psi, d_npsi, d_sigX, d_sigY, d_sigZ, NX, NY, NZ);
+            benchmark_cuda_check(cudaGetLastError());
+            benchmark_cuda_check(cudaEventRecord(stop, stream));
+            benchmark_cuda_check(cudaEventSynchronize(stop));
 
             float ms = 0.0f;
-            cudaEventElapsedTime(&ms, start, stop);
+            benchmark_cuda_check(cudaEventElapsedTime(&ms, start, stop));
             timings.push_back(ms);
 
-            cudaEventDestroy(start);
-            cudaEventDestroy(stop);
+            benchmark_cuda_check(cudaEventDestroy(start));
+            benchmark_cuda_check(cudaEventDestroy(stop));
         }
 
         float avg = 0.0f;
@@ -169,8 +164,8 @@ int main() {
     }
 
     // --- Save results ---
-    ofstream json("logs/tpc_results_stencil");
-    json << "{\n  \"results\": [\n";
+    ofstream json(benchmark_log_path("tpc_results_stencil"));
+    json << "{\n  \"total_tpcs\": " << num_tpcs << ",\n  \"results\": [\n";
     for (size_t i = 0; i < results.size(); ++i) {
         json << "    {\"TPC\": " << results[i].first
              << ", \"ExecTime_ms\": " << results[i].second << "}";
@@ -180,14 +175,15 @@ int main() {
     json << "  ]\n}\n";
     json.close();
 
-    cout << "\n[CUDA Benchmark] Results saved to logs/tpc_results_stencil.json\n";
+    std::cout << "[DONE] " << benchmark_log_path("tpc_results_stencil") << std::endl;
 
     // --- Cleanup ---
-    cudaFree(d_psi);
-    cudaFree(d_npsi);
-    cudaFree(d_sigX);
-    cudaFree(d_sigY);
-    cudaFree(d_sigZ);
+    benchmark_cuda_check(cudaFree(d_psi));
+    benchmark_cuda_check(cudaFree(d_npsi));
+    benchmark_cuda_check(cudaFree(d_sigX));
+    benchmark_cuda_check(cudaFree(d_sigY));
+    benchmark_cuda_check(cudaFree(d_sigZ));
     cout << "[CUDA Benchmark] Done.\n";
+    benchmark_cuda_check(cudaStreamDestroy(stream));
     return 0;
 }

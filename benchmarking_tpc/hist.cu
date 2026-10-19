@@ -7,7 +7,7 @@
 #include <fstream>
 #include <cmath>
 
-#include "libsmctrl.h"  // TPC mask control (1 = disabled, 0 = enabled)
+#include "tpc_control.h"
 //#include "helper_cuda.h"
 
 using namespace std;
@@ -33,17 +33,6 @@ __global__ void histogram_kernel(unsigned int* input, unsigned int* bins,
 }
 
 // ==========================================================
-// Helper — Build disable mask for libsmctrl
-// ==========================================================
-static inline uint64_t build_mask(int active)
-{
-    if (active <= 0) return 0xFFFFFFFFFFFFFFFEULL;  // all disabled
-    if (active >= 64) return 0ULL;                  // all enabled
-    uint64_t enable_mask = (1ULL << active) - 1ULL; // enable lower bits
-    return ~enable_mask;                            // disable others
-}
-
-// ==========================================================
 // Main Benchmark
 // ==========================================================
 int main()
@@ -53,19 +42,21 @@ int main()
     const int RUNS = 10;
     cudaDeviceProp prop;
     int device = 0; // Assuming device 0
-    cudaGetDeviceProperties(&prop, device);
+    benchmark_cuda_check(cudaGetDeviceProperties(&prop, device));
     int num_sms = prop.multiProcessorCount;
-    int MAX_TPC = num_sms / 2;
+    const int MAX_TPC = benchmark_tpc_count(device);
+    std::cout << "GPU: " << prop.name << " (" << num_sms << " SMs, "
+              << MAX_TPC << " TPCs)\n";
 
     cout << "[CUDA Benchmark] Histogram (" << NUM_ELEMS << " elements, "
          << NUM_BINS << " bins)\n";
-    cout << "Using libsmctrl TPC mask control (0–" << MAX_TPC << ")\n";
+    cout << "Using libsmctrl TPC mask control (1–" << MAX_TPC << ")\n";
     cout << fixed << setprecision(3);
 
     // Host memory
     unsigned int *h_in = nullptr, *h_bins = nullptr;
-    cudaMallocHost(&h_in, NUM_ELEMS * sizeof(unsigned int));
-    cudaMallocHost(&h_bins, NUM_BINS * sizeof(unsigned int));
+    benchmark_cuda_check(cudaMallocHost(&h_in, NUM_ELEMS * sizeof(unsigned int)));
+    benchmark_cuda_check(cudaMallocHost(&h_bins, NUM_BINS * sizeof(unsigned int)));
 
     // Fill input data
     std::mt19937 gen(std::random_device{}());
@@ -75,11 +66,11 @@ int main()
 
     // Device memory
     unsigned int *d_in = nullptr, *d_bins = nullptr;
-    cudaMalloc(&d_in, NUM_ELEMS * sizeof(unsigned int));
-    cudaMalloc(&d_bins, NUM_BINS * sizeof(unsigned int));
+    benchmark_cuda_check(cudaMalloc(&d_in, NUM_ELEMS * sizeof(unsigned int)));
+    benchmark_cuda_check(cudaMalloc(&d_bins, NUM_BINS * sizeof(unsigned int)));
 
     // Copy input once
-    cudaMemcpy(d_in, h_in, NUM_ELEMS * sizeof(unsigned int), cudaMemcpyHostToDevice);
+    benchmark_cuda_check(cudaMemcpy(d_in, h_in, NUM_ELEMS * sizeof(unsigned int), cudaMemcpyHostToDevice));
 
     // Grid setup
     unsigned int grid_size = static_cast<unsigned int>(
@@ -90,33 +81,38 @@ int main()
     // Results
     vector<pair<int, float>> results;
 
-    for (int tpc_active = 0; tpc_active <= MAX_TPC; ++tpc_active) {
-        uint64_t mask = build_mask(tpc_active);
-        libsmctrl_set_global_mask(mask);
+    cudaStream_t stream;
+    benchmark_cuda_check(cudaStreamCreate(&stream));
+
+    for (int tpc_active = 1; tpc_active <= MAX_TPC; ++tpc_active) {
+        const uint128_t mask = benchmark_tpc_mask(tpc_active);
+        libsmctrl_set_stream_mask_ext(stream, mask);
 
         cout << "\n[Active TPCs: " << setw(2) << tpc_active
-             << "] Mask = 0x" << hex << mask << dec << endl;
+             << "]" << std::endl;
 
         vector<float> times;
         for (int run = 0; run < RUNS; ++run) {
             cudaEvent_t start, stop;
-            cudaEventCreate(&start);
-            cudaEventCreate(&stop);
+            benchmark_cuda_check(cudaEventCreate(&start));
+            benchmark_cuda_check(cudaEventCreate(&stop));
 
-            cudaMemset(d_bins, 0, NUM_BINS * sizeof(unsigned int));
-            cudaEventRecord(start);
+            benchmark_cuda_check(cudaMemsetAsync(d_bins, 0, NUM_BINS * sizeof(unsigned int), stream));
+            benchmark_cuda_check(cudaEventRecord(start, stream));
 
-            histogram_kernel<<<grid, block>>>(d_in, d_bins, NUM_ELEMS, NUM_BINS);
+            histogram_kernel<<<grid, block, 0, stream>>>(d_in, d_bins, NUM_ELEMS, NUM_BINS);
 
-            cudaEventRecord(stop);
-            cudaEventSynchronize(stop);
+            benchmark_cuda_check(cudaGetLastError());
+
+            benchmark_cuda_check(cudaEventRecord(stop, stream));
+            benchmark_cuda_check(cudaEventSynchronize(stop));
 
             float ms = 0.0f;
-            cudaEventElapsedTime(&ms, start, stop);
+            benchmark_cuda_check(cudaEventElapsedTime(&ms, start, stop));
             times.push_back(ms);
 
-            cudaEventDestroy(start);
-            cudaEventDestroy(stop);
+            benchmark_cuda_check(cudaEventDestroy(start));
+            benchmark_cuda_check(cudaEventDestroy(stop));
         }
 
         float avg = 0.0f;
@@ -130,12 +126,12 @@ int main()
     // ======================================================
     // Save JSON Output
     // ======================================================
-    ofstream json("logs/tpc_results_hist");
+    ofstream json(benchmark_log_path("tpc_results_hist"));
     if (!json) {
         cerr << "⚠Could not open logs/tpc_results_hist.json, writing fallback file.\n";
         json.open("tpc_results_hist_fallback");
     }
-    json << "{\n  \"results\": [\n";
+    json << "{\n  \"total_tpcs\": " << MAX_TPC << ",\n  \"results\": [\n";
     for (size_t i = 0; i < results.size(); ++i) {
         json << "    {\"TPC\": " << results[i].first
              << ", \"ExecTime_ms\": " << results[i].second << "}";
@@ -145,14 +141,15 @@ int main()
     json << "  ]\n}\n";
     json.close();
 
-    cout << "\n[CUDA Benchmark] Results saved to logs/tpc_results_hist.json\n";
+    std::cout << "[DONE] " << benchmark_log_path("tpc_results_hist") << std::endl;
 
     // Cleanup
-    cudaFreeHost(h_in);
-    cudaFreeHost(h_bins);
-    cudaFree(d_in);
-    cudaFree(d_bins);
+    benchmark_cuda_check(cudaFreeHost(h_in));
+    benchmark_cuda_check(cudaFreeHost(h_bins));
+    benchmark_cuda_check(cudaFree(d_in));
+    benchmark_cuda_check(cudaFree(d_bins));
 
     cout << "[CUDA Benchmark] Done.\n";
+    benchmark_cuda_check(cudaStreamDestroy(stream));
     return 0;
 }

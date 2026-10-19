@@ -47,6 +47,13 @@ VECTORADD_DIR  = $(APP_DIR)/vectoradd
 SRAD_DIR       = $(APP_DIR)/srad
 MATTINT_DIR    = $(APP_DIR)/matrixmulinter
 MTTKRP_DIR    = $(APP_DIR)/mttkrp
+BLACKSCHOLES_DIR = $(APP_DIR)/blackscholes
+REDUCTION_DIR    = $(APP_DIR)/reduction
+SCAN_DIR         = $(APP_DIR)/scan
+TRANSPOSE_DIR    = $(APP_DIR)/transpose
+CONVOLUTION_DIR  = $(APP_DIR)/convolution_separable
+NBODY_DIR        = $(APP_DIR)/nbody
+FDTD3D_DIR       = $(APP_DIR)/fdtd3d
 
 # ============================================================
 # Source Files
@@ -67,7 +74,14 @@ CUDA_SRCS = \
     $(wildcard $(VECTORADD_DIR)/*.cu) \
     $(wildcard $(SRAD_DIR)/*.cu) \
     $(wildcard $(MTTKRP_DIR)/*.cu) \
-    $(wildcard $(MATTINT_DIR)/*.cu)
+    $(wildcard $(MATTINT_DIR)/*.cu) \
+    $(wildcard $(BLACKSCHOLES_DIR)/*.cu) \
+    $(wildcard $(REDUCTION_DIR)/*.cu) \
+    $(wildcard $(SCAN_DIR)/*.cu) \
+    $(wildcard $(TRANSPOSE_DIR)/*.cu) \
+    $(wildcard $(CONVOLUTION_DIR)/*.cu) \
+    $(wildcard $(NBODY_DIR)/*.cu) \
+    $(wildcard $(FDTD3D_DIR)/*.cu)
 
 OBJS_CPP  = $(CPP_SRCS:.cpp=.o)
 OBJS_CUDA = $(CUDA_SRCS:.cu=.o)

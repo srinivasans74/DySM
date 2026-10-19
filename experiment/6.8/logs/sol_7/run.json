@@ -1,0 +1,99 @@
+{
+  "status": "complete",
+  "config": {
+    "task_period_s": 0.05,
+    "control_period_s": 1.0,
+    "periods": 480,
+    "setpoint": 0.8,
+    "total_tpcs": 85,
+    "model_name": "resnet50",
+    "libsmctrl_path": "/home/yuanyang/ECRTS_original_20261017/ECRTS_25/libsmctrl/libsmctrl.so"
+  },
+  "completed_control_periods": 480,
+  "epoch_ns": 150378010340038,
+  "provenance": {
+    "model_B": [
+      [
+        -0.028319982458333327,
+        -0.0014145018541666706
+      ],
+      [
+        -0.0018402428958333415,
+        -0.027112935291666657
+      ]
+    ],
+    "model_units": "RRT/SM",
+    "model_source": "Existing three-instance ML model, rows/columns 1 and 2",
+    "original_instance_ids": [
+      2,
+      3
+    ],
+    "build": {
+      "controller_sha256": "21efe65f55cd3a9d1012e7676b8440bba135614928af14ab25916ee29ef95d0f",
+      "bridge_sha256": "f8a91697139edd6b32b5f40b1cfa37c63f6d67790b26c0c0a12fb95bbe05f812",
+      "decision_sha256": "ab0e18d63ababe12a7fad73e751f098bdd0d03da868d08ec7c1e6f22dacd7138",
+      "library_sha256": "a2bc40d8836972b2577b73487daab369a0ef388e51d17d10a4478f532f0c613e",
+      "compiler_flags": "-std=c++17 -O0 -g -shared -fPIC -pthread",
+      "core": "Current Scheduler/controller.cpp MPC, allocator and delta-sigma actuator"
+    }
+  },
+  "devices": [
+    {
+      "name": "NVIDIA GeForce RTX 5090",
+      "device": 0,
+      "total_tpcs": 85,
+      "sms": 170,
+      "compute_capability": [
+        12,
+        0
+      ],
+      "torch": "2.7.1+cu128",
+      "torchvision": "0.22.1+cu128",
+      "cuda_runtime": "12.8"
+    },
+    {
+      "name": "NVIDIA GeForce RTX 5090",
+      "device": 0,
+      "total_tpcs": 85,
+      "sms": 170,
+      "compute_capability": [
+        12,
+        0
+      ],
+      "torch": "2.7.1+cu128",
+      "torchvision": "0.22.1+cu128",
+      "cuda_runtime": "12.8"
+    }
+  ],
+  "error": null,
+  "batch_events": [
+    {
+      "task_id": 0,
+      "batch_size": 40,
+      "planned_ns": 150578010340038,
+      "requested_ns": 150578010506804,
+      "first_enqueue_ns": 150578060447852
+    },
+    {
+      "task_id": 1,
+      "batch_size": 40,
+      "planned_ns": 150658010340038,
+      "requested_ns": 150658010462750,
+      "first_enqueue_ns": 150658060440228
+    },
+    {
+      "task_id": 0,
+      "batch_size": 20,
+      "planned_ns": 150738010340038,
+      "requested_ns": 150738010451444,
+      "first_enqueue_ns": 150738060459924
+    },
+    {
+      "task_id": 1,
+      "batch_size": 20,
+      "planned_ns": 150738010340038,
+      "requested_ns": 150738010452434,
+      "first_enqueue_ns": 150738010503513
+    }
+  ]
+}

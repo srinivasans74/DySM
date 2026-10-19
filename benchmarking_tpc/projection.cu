@@ -8,7 +8,7 @@
 #include <chrono>
 #include <cmath>
 
-#include "libsmctrl.h"  // TPC mask control
+#include "tpc_control.h"
 #include "common/include/support.h"
 
 #define checkCudaErrors(val) check((val), #val, __FILE__, __LINE__)
@@ -74,10 +74,12 @@ int main(int argc, char* argv[])
     const int RUNS         = 100;
     cudaDeviceProp prop;
     int device = 0; // Assuming device 0
-    cudaGetDeviceProperties(&prop, device);
+    benchmark_cuda_check(cudaGetDeviceProperties(&prop, device));
     int num_sms = prop.multiProcessorCount;
-    int MAX_TPC = num_sms / 2;
-    
+    const int MAX_TPC = benchmark_tpc_count(device);
+    std::cout << "GPU: " << prop.name << " (" << num_sms << " SMs, "
+              << MAX_TPC << " TPCs)\n";
+
     const int threadsPerBlock = 128;
 
     std::cout << "[CUDA Benchmark] projectPoints with cudaHostAllocMapped + TPC masks\n";
@@ -117,16 +119,13 @@ int main(int argc, char* argv[])
     results.reserve(MAX_TPC + 1);
 
     // ---------------- Sweep over TPC masks ------------------
-    for (int tpc_active = 0; tpc_active <= MAX_TPC; ++tpc_active)
+    for (int tpc_active = 1; tpc_active <= MAX_TPC; ++tpc_active)
     {
-        uint64_t mask = 0xFFFFFFFFFFFFFFFEULL;
-        if (tpc_active > 0 && tpc_active < 64)
-            mask = ~((1ULL << tpc_active) - 1ULL);
-
-        libsmctrl_set_global_mask(mask);
+        const uint128_t mask = benchmark_tpc_mask(tpc_active);
+        libsmctrl_set_stream_mask_ext(stream, mask);
 
         std::cout << "\n[Active TPCs: " << std::setw(2) << tpc_active
-                  << "] Mask = 0x" << std::hex << mask << std::dec << "\n";
+                  << "]" << std::endl;
 
         std::vector<float> timings;
         timings.reserve(RUNS);
@@ -139,6 +138,7 @@ int main(int argc, char* argv[])
 
             checkCudaErrors(cudaEventRecord(start, stream));
             projectPoints<<<blocksPerGrid, threadsPerBlock, 0, stream>>>(d_input, d_output, num_points, focal_len);
+            benchmark_cuda_check(cudaGetLastError());
             checkCudaErrors(cudaEventRecord(stop, stream));
             checkCudaErrors(cudaEventSynchronize(stop));
 
@@ -159,8 +159,8 @@ int main(int argc, char* argv[])
     }
 
     // ---------------- Save JSON -----------------------------
-    std::ofstream jsonFile("logs/tpc_results_projection_mapped");
-    jsonFile << "{\n  \"results\": [\n";
+    std::ofstream jsonFile(benchmark_log_path("tpc_results_projection"));
+    jsonFile << "{\n  \"total_tpcs\": " << MAX_TPC << ",\n  \"results\": [\n";
     for (size_t i = 0; i < results.size(); ++i) {
         jsonFile << "    {\"TPC\": " << results[i].first
                  << ", \"ExecTime_ms\": " << results[i].second << "}";
@@ -170,7 +170,7 @@ int main(int argc, char* argv[])
     jsonFile << "  ]\n}\n";
     jsonFile.close();
 
-    std::cout << "\n[CUDA Benchmark] Results saved to logs/tpc_results_projection_mapped.json\n";
+    std::cout << "[DONE] " << benchmark_log_path("tpc_results_projection") << std::endl;
 
     // ---------------- Cleanup -------------------------------
     checkCudaErrors(cudaStreamDestroy(stream));

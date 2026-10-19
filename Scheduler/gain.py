@@ -10,7 +10,8 @@ from scipy.signal import place_poles
 POLES = [0.6]
 EXEC_TIME_SCALE = 10.0
 GAIN_SCALE = 0.005
-GAIN_LIMIT = 10.0
+GAIN_LIMIT = float("inf")  # No limit on gain values for C++ output
+#GAIN_LIMIT = 10.0
 COUPLING = 0.15
 
 EXECUTION_TIME_TABLE = {

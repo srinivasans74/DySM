@@ -1,0 +1,15 @@
+sl_no,workload,task_rate,setpoint,tunable/nontunable,range (%),e
+1,mminterupt,45.330,0.80,tunable,21,
+2,hotspot,21.262,0.80,nontunable,0,
+3,hist,22.692,0.80,nontunable,0,
+4,stencil,31.500,0.80,nontunable,0,
+5,stereo,21.256,0.80,nontunable,0,
+6,projection,39.947,0.80,nontunable,0,
+7,mttkrp,30.000,0.80,nontunable,0,
+8,blackscholes,10.000000,0.80,nontunable,0,8.24
+9,reduction,5.000000,0.80,nontunable,0,3.62
+10,scan,10.000000,0.80,nontunable,0,8.62
+11,transpose,1.000000,0.80,nontunable,0,0.55
+12,convolution_separable,20.000000,0.80,nontunable,0,14.68
+13,nbody,20.000000,0.80,nontunable,0,18.52
+14,fdtd3d,10.000000,0.80,nontunable,0,7.28

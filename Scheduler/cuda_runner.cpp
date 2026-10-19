@@ -24,6 +24,13 @@
 //#include "../application/srad/srad.h"
 #include "../application/matrixmulinter/matrixMul.h"   
 #include "../application/mttkrp/mttkrp.h"   
+#include "../application/blackscholes/blackscholes.h"
+#include "../application/reduction/reduction.h"
+#include "../application/scan/scan.h"
+#include "../application/transpose/transpose.h"
+#include "../application/convolution_separable/convolution_separable.h"
+#include "../application/nbody/nbody.h"
+#include "../application/fdtd3d/fdtd3d.h"
 
 extern std::atomic<bool> gpu_running;
 
@@ -171,6 +178,34 @@ void runCudaKernel(const std::string& workload, int task_id, parameters* p)
     else if (workload == "mminterupt") {
         run_task_blocking_interruptible("mminterupt", task_id, p,
             matrixMul_create, matrixMul_run, matrixMul_destroy, matrixMul_interrupt);
+    }
+    else if (workload == "blackscholes") {
+        run_task_blocking("BlackScholes", task_id, p,
+            blackscholes_create, blackscholes_run, blackscholes_destroy);
+    }
+    else if (workload == "reduction") {
+        run_task_blocking("Reduction", task_id, p,
+            reduction_create, reduction_run, reduction_destroy);
+    }
+    else if (workload == "scan") {
+        run_task_blocking("Scan", task_id, p,
+            scan_create, scan_run, scan_destroy);
+    }
+    else if (workload == "transpose") {
+        run_task_blocking("Transpose", task_id, p,
+            transpose_create, transpose_run, transpose_destroy);
+    }
+    else if (workload == "convolution_separable") {
+        run_task_blocking("ConvolutionSeparable", task_id, p,
+            convolution_create, convolution_run, convolution_destroy);
+    }
+    else if (workload == "nbody") {
+        run_task_blocking("NBody", task_id, p,
+            nbody_create, nbody_run, nbody_destroy);
+    }
+    else if (workload == "fdtd3d") {
+        run_task_blocking("FDTD3D", task_id, p,
+            fdtd3d_create, fdtd3d_run, fdtd3d_destroy);
     }
     else {
         std::cerr << "[GPU] Unknown workload: " << workload << "\n";

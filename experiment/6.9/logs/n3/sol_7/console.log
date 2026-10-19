@@ -1,0 +1,1064 @@
+
+===== SELECTED CONTROL MODE =====
+MPC
+=================================
+
+Loaded 3 tasks from /home/yuanyang/ECRTS_original_20261017/ECRTS_25/experiment/6.9/logs/n3/task_set.csv
+[parameters] Detected GPU: NVIDIA GeForce RTX 5090 (170 SMs)
+[parameters] Effective SM budget: 170
+[parameters] Initialized with 3 tasks. RateAdaption = true
+
+Parameters initialized and ready for controller.
+
+=== [System Configuration Summary] ===
+Total Tasks     : 3
+Rate Adaption   : true
+
+ID   Workload    Rate      Setpoint  Tunable   Delta     
+-----------------------------------------------
+1    mm          0.04533   0.8       Yes       0         
+2    hotspot     0.021262  0.8       Yes       0         
+3    hist        0.022692  0.8       Yes       0         
+-----------------------------------------------
+[initialize] Allocated tracking structures for 3 tasks.
+solution = 7
+[GPU] Launching persistent MatrixMul workload (Task 0)...
+[GPU] Launching persistent Hotspot workload (Task 1)...
+[GPU] Launching persistent Histogram workload (Task 2)...
+[Hotspot] Init Task 1 (512x512, iters=60, H=2)
+[MatrixMul] Init Task 0 (N=1024)
+[Histogram] Init Task 2 (1048576 elems, 4096 bins)
+[MatrixMul] Task 0 initialized.
+[Histogram] Task 2 initialized.
+[Histogram] Task 2 pinned to CPU 2
+[Histogram] Periodic loop started (Task 2)
+[Hotspot] Task 1 initialized.
+[Hotspot] Task 1 pinned to CPU 1
+[Hotspot] Periodic loop started (Task 1)
+MPC
+[monitor] Started
+[CONTROL-TIMING] solution=7 tasks=3 period=0 decision_us=19.430000
+[MPC] Control period 0	Time = 5
+Task 1 | RT=7.78222 | ET=7.78182 | Period=45.33 | RTR=0.171679 | Error=0.628321 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.21184 | ET=1.21184 | Period=21.262 | RTR=0.0569956 | Error=0.743004 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xffffffffffe0000001ffffffffffffff
+Task 3 | RT=1.37215 | ET=1.37213 | Period=22.692 | RTR=0.0604684 | Error=0.739532 | Δd=-1 | Current SMs=58 | News SMs=57 | Current Mask=0xffffffffffffffffffffffffe0000000
+[CONTROL-TIMING] solution=7 tasks=3 period=1 decision_us=12.170000
+[MPC] Control period 1	Time = 6
+Task 1 | RT=7.78357 | ET=7.78312 | Period=45.33 | RTR=0.171709 | Error=0.628291 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.2208 | ET=1.2208 | Period=21.262 | RTR=0.057417 | Error=0.742583 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xffffffffffe0000001ffffffffffffff
+Task 3 | RT=1.3789 | ET=1.37895 | Period=22.692 | RTR=0.060766 | Error=0.739234 | Δd=-2 | Current SMs=58 | News SMs=56 | Current Mask=0xffffffffffffffffffffffffe0000000
+[CONTROL-TIMING] solution=7 tasks=3 period=2 decision_us=11.300000
+[MPC] Control period 2	Time = 7
+Task 1 | RT=7.78135 | ET=7.7809 | Period=45.33 | RTR=0.17166 | Error=0.62834 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.21978 | ET=1.21978 | Period=21.262 | RTR=0.0573692 | Error=0.742631 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xffffffffffe0000001ffffffffffffff
+Task 3 | RT=1.37967 | ET=1.37967 | Period=22.692 | RTR=0.0607999 | Error=0.7392 | Δd=-1 | Current SMs=56 | News SMs=55 | Current Mask=0xfffffffffffffffffffffffff0000000
+[CONTROL-TIMING] solution=7 tasks=3 period=3 decision_us=11.270000
+[MPC] Control period 3	Time = 8
+Task 1 | RT=7.78391 | ET=7.78344 | Period=45.33 | RTR=0.171717 | Error=0.628283 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.21852 | ET=1.21852 | Period=21.262 | RTR=0.0573097 | Error=0.74269 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xffffffffffe0000001ffffffffffffff
+Task 3 | RT=1.38754 | ET=1.38753 | Period=22.692 | RTR=0.0611468 | Error=0.738853 | Δd=-2 | Current SMs=56 | News SMs=54 | Current Mask=0xfffffffffffffffffffffffff0000000
+[CONTROL-TIMING] solution=7 tasks=3 period=4 decision_us=12.480000
+[MPC] Control period 4	Time = 9
+Task 1 | RT=7.78266 | ET=7.78218 | Period=45.33 | RTR=0.171689 | Error=0.628311 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.21554 | ET=1.21554 | Period=21.262 | RTR=0.0571694 | Error=0.742831 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xffffffffffe0000001ffffffffffffff
+Task 3 | RT=1.39606 | ET=1.39603 | Period=22.692 | RTR=0.0615221 | Error=0.738478 | Δd=-1 | Current SMs=54 | News SMs=53 | Current Mask=0xfffffffffffffffffffffffff8000000
+[CONTROL-TIMING] solution=7 tasks=3 period=5 decision_us=11.680000
+[MPC] Control period 5	Time = 10
+Task 1 | RT=7.77926 | ET=7.77884 | Period=45.33 | RTR=0.171614 | Error=0.628386 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.21852 | ET=1.21852 | Period=21.262 | RTR=0.0573096 | Error=0.74269 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xffffffffffe0000001ffffffffffffff
+Task 3 | RT=1.40877 | ET=1.4086 | Period=22.692 | RTR=0.0620823 | Error=0.737918 | Δd=-2 | Current SMs=54 | News SMs=52 | Current Mask=0xfffffffffffffffffffffffff8000000
+[CONTROL-TIMING] solution=7 tasks=3 period=6 decision_us=11.440000
+[MPC] Control period 6	Time = 11
+Task 1 | RT=7.79792 | ET=7.79749 | Period=45.33 | RTR=0.172026 | Error=0.627974 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.21277 | ET=1.21277 | Period=21.262 | RTR=0.0570395 | Error=0.74296 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xffffffffffe0000001ffffffffffffff
+Task 3 | RT=1.41947 | ET=1.41951 | Period=22.692 | RTR=0.0625539 | Error=0.737446 | Δd=-1 | Current SMs=52 | News SMs=51 | Current Mask=0xfffffffffffffffffffffffffc000000
+[CONTROL-TIMING] solution=7 tasks=3 period=7 decision_us=12.190000
+[MPC] Control period 7	Time = 12
+Task 1 | RT=7.80904 | ET=7.8086 | Period=45.33 | RTR=0.172271 | Error=0.627729 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.21378 | ET=1.21378 | Period=21.262 | RTR=0.0570867 | Error=0.742913 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xffffffffffe0000001ffffffffffffff
+Task 3 | RT=1.44971 | ET=1.45047 | Period=22.692 | RTR=0.0638862 | Error=0.736114 | Δd=-2 | Current SMs=52 | News SMs=50 | Current Mask=0xfffffffffffffffffffffffffc000000
+[CONTROL-TIMING] solution=7 tasks=3 period=8 decision_us=10.490000
+[MPC] Control period 8	Time = 13
+Task 1 | RT=7.8019 | ET=7.80148 | Period=45.33 | RTR=0.172113 | Error=0.627887 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.21156 | ET=1.21156 | Period=21.262 | RTR=0.0569826 | Error=0.743017 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xffffffffffe0000001ffffffffffffff
+Task 3 | RT=1.47593 | ET=1.47592 | Period=22.692 | RTR=0.065042 | Error=0.734958 | Δd=-1 | Current SMs=50 | News SMs=49 | Current Mask=0xfffffffffffffffffffffffffe000000
+[CONTROL-TIMING] solution=7 tasks=3 period=9 decision_us=11.340000
+[MPC] Control period 9	Time = 14
+Task 1 | RT=7.79894 | ET=7.79849 | Period=45.33 | RTR=0.172048 | Error=0.627952 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.2114 | ET=1.2114 | Period=21.262 | RTR=0.0569751 | Error=0.743025 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xffffffffffe0000001ffffffffffffff
+Task 3 | RT=1.50085 | ET=1.50083 | Period=22.692 | RTR=0.0661398 | Error=0.73386 | Δd=-2 | Current SMs=50 | News SMs=48 | Current Mask=0xfffffffffffffffffffffffffe000000
+[CONTROL-TIMING] solution=7 tasks=3 period=10 decision_us=11.260000
+[MPC] Control period 10	Time = 15
+Task 1 | RT=7.79767 | ET=7.79723 | Period=45.33 | RTR=0.17202 | Error=0.62798 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.21126 | ET=1.21126 | Period=21.262 | RTR=0.0569682 | Error=0.743032 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xffffffffffe0000001ffffffffffffff
+Task 3 | RT=1.5234 | ET=1.52338 | Period=22.692 | RTR=0.0671339 | Error=0.732866 | Δd=-1 | Current SMs=48 | News SMs=47 | Current Mask=0xffffffffffffffffffffffffff000000
+[CONTROL-TIMING] solution=7 tasks=3 period=11 decision_us=11.220000
+[MPC] Control period 11	Time = 16
+Task 1 | RT=7.7969 | ET=7.79644 | Period=45.33 | RTR=0.172003 | Error=0.627997 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.21094 | ET=1.21094 | Period=21.262 | RTR=0.0569533 | Error=0.743047 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xffffffffffe0000001ffffffffffffff
+Task 3 | RT=1.55426 | ET=1.55482 | Period=22.692 | RTR=0.0684937 | Error=0.731506 | Δd=-2 | Current SMs=48 | News SMs=46 | Current Mask=0xffffffffffffffffffffffffff000000
+[CONTROL-TIMING] solution=7 tasks=3 period=12 decision_us=11.250000
+[MPC] Control period 12	Time = 17
+Task 1 | RT=7.79144 | ET=7.79118 | Period=45.33 | RTR=0.171883 | Error=0.628117 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.21076 | ET=1.21076 | Period=21.262 | RTR=0.0569447 | Error=0.743055 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xffffffffffe0000001ffffffffffffff
+Task 3 | RT=1.58643 | ET=1.58641 | Period=22.692 | RTR=0.0699113 | Error=0.730089 | Δd=-1 | Current SMs=46 | News SMs=45 | Current Mask=0xffffffffffffffffffffffffff800000
+[CONTROL-TIMING] solution=7 tasks=3 period=13 decision_us=11.670000
+[MPC] Control period 13	Time = 18
+Task 1 | RT=7.78284 | ET=7.78238 | Period=45.33 | RTR=0.171693 | Error=0.628307 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.21019 | ET=1.21019 | Period=21.262 | RTR=0.0569182 | Error=0.743082 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xffffffffffe0000001ffffffffffffff
+Task 3 | RT=1.61476 | ET=1.61474 | Period=22.692 | RTR=0.0711597 | Error=0.72884 | Δd=-2 | Current SMs=46 | News SMs=44 | Current Mask=0xffffffffffffffffffffffffff800000
+[CONTROL-TIMING] solution=7 tasks=3 period=14 decision_us=11.970000
+[MPC] Control period 14	Time = 19
+Task 1 | RT=7.78279 | ET=7.78233 | Period=45.33 | RTR=0.171692 | Error=0.628308 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.21033 | ET=1.21033 | Period=21.262 | RTR=0.0569244 | Error=0.743076 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xffffffffffe0000001ffffffffffffff
+Task 3 | RT=1.6548 | ET=1.65478 | Period=22.692 | RTR=0.0729242 | Error=0.727076 | Δd=-1 | Current SMs=44 | News SMs=43 | Current Mask=0xffffffffffffffffffffffffffc00000
+[CONTROL-TIMING] solution=7 tasks=3 period=15 decision_us=11.210000
+[MPC] Control period 15	Time = 20
+Task 1 | RT=7.78308 | ET=7.78264 | Period=45.33 | RTR=0.171698 | Error=0.628302 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.21013 | ET=1.21013 | Period=21.262 | RTR=0.0569149 | Error=0.743085 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xffffffffffe0000001ffffffffffffff
+Task 3 | RT=1.69247 | ET=1.6893 | Period=22.692 | RTR=0.0745844 | Error=0.725416 | Δd=-2 | Current SMs=44 | News SMs=42 | Current Mask=0xffffffffffffffffffffffffffc00000
+[CONTROL-TIMING] solution=7 tasks=3 period=16 decision_us=10.650000
+[MPC] Control period 16	Time = 21
+Task 1 | RT=7.78263 | ET=7.78221 | Period=45.33 | RTR=0.171688 | Error=0.628312 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.20988 | ET=1.20988 | Period=21.262 | RTR=0.0569034 | Error=0.743097 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xffffffffffe0000001ffffffffffffff
+Task 3 | RT=1.72958 | ET=1.72946 | Period=22.692 | RTR=0.0762197 | Error=0.72378 | Δd=-1 | Current SMs=42 | News SMs=41 | Current Mask=0xffffffffffffffffffffffffffe00000
+[CONTROL-TIMING] solution=7 tasks=3 period=17 decision_us=11.600000
+[MPC] Control period 17	Time = 22
+Task 1 | RT=7.78305 | ET=7.78262 | Period=45.33 | RTR=0.171698 | Error=0.628302 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.20986 | ET=1.20986 | Period=21.262 | RTR=0.0569025 | Error=0.743097 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xffffffffffe0000001ffffffffffffff
+Task 3 | RT=1.77287 | ET=1.77231 | Period=22.692 | RTR=0.0781275 | Error=0.721872 | Δd=-2 | Current SMs=42 | News SMs=40 | Current Mask=0xffffffffffffffffffffffffffe00000
+[CONTROL-TIMING] solution=7 tasks=3 period=18 decision_us=11.270000
+[MPC] Control period 18	Time = 23
+Task 1 | RT=7.78302 | ET=7.78257 | Period=45.33 | RTR=0.171697 | Error=0.628303 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.20974 | ET=1.20974 | Period=21.262 | RTR=0.0568966 | Error=0.743103 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xffffffffffe0000001ffffffffffffff
+Task 3 | RT=1.82256 | ET=1.82248 | Period=22.692 | RTR=0.0803173 | Error=0.719683 | Δd=-1 | Current SMs=40 | News SMs=39 | Current Mask=0xfffffffffffffffffffffffffff00000
+[CONTROL-TIMING] solution=7 tasks=3 period=19 decision_us=11.240000
+[MPC] Control period 19	Time = 24
+Task 1 | RT=7.78392 | ET=7.78346 | Period=45.33 | RTR=0.171717 | Error=0.628283 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.20977 | ET=1.20977 | Period=21.262 | RTR=0.0568982 | Error=0.743102 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xffffffffffe0000001ffffffffffffff
+Task 3 | RT=1.86779 | ET=1.86777 | Period=22.692 | RTR=0.0823104 | Error=0.71769 | Δd=-2 | Current SMs=40 | News SMs=38 | Current Mask=0xfffffffffffffffffffffffffff00000
+[CONTROL-TIMING] solution=7 tasks=3 period=20 decision_us=10.900000
+[MPC] Control period 20	Time = 25
+Task 1 | RT=7.78401 | ET=7.7833 | Period=45.33 | RTR=0.171719 | Error=0.628281 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.20998 | ET=1.20998 | Period=21.262 | RTR=0.0569082 | Error=0.743092 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xffffffffffe0000001ffffffffffffff
+Task 3 | RT=1.90448 | ET=1.90428 | Period=22.692 | RTR=0.0839273 | Error=0.716073 | Δd=-1 | Current SMs=38 | News SMs=37 | Current Mask=0xfffffffffffffffffffffffffff80000
+[CONTROL-TIMING] solution=7 tasks=3 period=21 decision_us=11.690000
+[MPC] Control period 21	Time = 26
+Task 1 | RT=7.78093 | ET=7.78048 | Period=45.33 | RTR=0.171651 | Error=0.628349 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.20954 | ET=1.20954 | Period=21.262 | RTR=0.0568875 | Error=0.743113 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xffffffffffe0000001ffffffffffffff
+Task 3 | RT=1.9587 | ET=1.96004 | Period=22.692 | RTR=0.0863168 | Error=0.713683 | Δd=-2 | Current SMs=38 | News SMs=36 | Current Mask=0xfffffffffffffffffffffffffff80000
+[CONTROL-TIMING] solution=7 tasks=3 period=22 decision_us=11.410000
+[MPC] Control period 22	Time = 27
+Task 1 | RT=7.781 | ET=7.78054 | Period=45.33 | RTR=0.171652 | Error=0.628348 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.20922 | ET=1.20922 | Period=21.262 | RTR=0.0568724 | Error=0.743128 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xffffffffffe0000001ffffffffffffff
+Task 3 | RT=2.00864 | ET=2.00861 | Period=22.692 | RTR=0.0885177 | Error=0.711482 | Δd=-1 | Current SMs=36 | News SMs=35 | Current Mask=0xfffffffffffffffffffffffffffc0000
+[CONTROL-TIMING] solution=7 tasks=3 period=23 decision_us=11.420000
+[MPC] Control period 23	Time = 28
+Task 1 | RT=7.78876 | ET=7.78831 | Period=45.33 | RTR=0.171823 | Error=0.628177 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.21153 | ET=1.21153 | Period=21.262 | RTR=0.0569809 | Error=0.743019 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xffffffffffe0000001ffffffffffffff
+Task 3 | RT=2.06932 | ET=2.06797 | Period=22.692 | RTR=0.0911916 | Error=0.708808 | Δd=-2 | Current SMs=36 | News SMs=34 | Current Mask=0xfffffffffffffffffffffffffffc0000
+[CONTROL-TIMING] solution=7 tasks=3 period=24 decision_us=11.680000
+[MPC] Control period 24	Time = 29
+Task 1 | RT=7.77999 | ET=7.77955 | Period=45.33 | RTR=0.17163 | Error=0.62837 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.20917 | ET=1.20917 | Period=21.262 | RTR=0.0568699 | Error=0.74313 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xffffffffffe0000001ffffffffffffff
+Task 3 | RT=2.12677 | ET=2.12673 | Period=22.692 | RTR=0.0937234 | Error=0.706277 | Δd=-1 | Current SMs=34 | News SMs=33 | Current Mask=0xfffffffffffffffffffffffffffe0000
+[CONTROL-TIMING] solution=7 tasks=3 period=25 decision_us=10.730000
+[MPC] Control period 25	Time = 30
+Task 1 | RT=7.78348 | ET=7.78303 | Period=45.33 | RTR=0.171707 | Error=0.628293 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.20953 | ET=1.20953 | Period=21.262 | RTR=0.0568869 | Error=0.743113 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xffffffffffe0000001ffffffffffffff
+Task 3 | RT=2.18452 | ET=2.1845 | Period=22.692 | RTR=0.0962683 | Error=0.703732 | Δd=-2 | Current SMs=34 | News SMs=32 | Current Mask=0xfffffffffffffffffffffffffffe0000
+[CONTROL-TIMING] solution=7 tasks=3 period=26 decision_us=10.960000
+[MPC] Control period 26	Time = 31
+Task 1 | RT=7.78706 | ET=7.7866 | Period=45.33 | RTR=0.171786 | Error=0.628214 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.20906 | ET=1.20906 | Period=21.262 | RTR=0.0568647 | Error=0.743135 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xffffffffffe0000001ffffffffffffff
+Task 3 | RT=2.25671 | ET=2.25669 | Period=22.692 | RTR=0.0994496 | Error=0.70055 | Δd=-1 | Current SMs=32 | News SMs=31 | Current Mask=0xffffffffffffffffffffffffffff0000
+[CONTROL-TIMING] solution=7 tasks=3 period=27 decision_us=11.639000
+[MPC] Control period 27	Time = 32
+Task 1 | RT=7.78659 | ET=7.78613 | Period=45.33 | RTR=0.171776 | Error=0.628224 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.20937 | ET=1.20937 | Period=21.262 | RTR=0.0568795 | Error=0.743121 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xffffffffffe0000001ffffffffffffff
+Task 3 | RT=2.31771 | ET=2.31769 | Period=22.692 | RTR=0.102138 | Error=0.697862 | Δd=-2 | Current SMs=32 | News SMs=30 | Current Mask=0xffffffffffffffffffffffffffff0000
+[CONTROL-TIMING] solution=7 tasks=3 period=28 decision_us=10.949000
+[MPC] Control period 28	Time = 33
+Task 1 | RT=7.78618 | ET=7.78572 | Period=45.33 | RTR=0.171767 | Error=0.628233 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.20942 | ET=1.20942 | Period=21.262 | RTR=0.056882 | Error=0.743118 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xffffffffffe0000001ffffffffffffff
+Task 3 | RT=2.39566 | ET=2.39564 | Period=22.692 | RTR=0.105573 | Error=0.694427 | Δd=-1 | Current SMs=30 | News SMs=29 | Current Mask=0xffffffffffffffffffffffffffff8000
+[CONTROL-TIMING] solution=7 tasks=3 period=29 decision_us=11.140000
+[MPC] Control period 29	Time = 34
+Task 1 | RT=7.78654 | ET=7.78609 | Period=45.33 | RTR=0.171774 | Error=0.628226 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.20924 | ET=1.20924 | Period=21.262 | RTR=0.0568731 | Error=0.743127 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xffffffffffe0000001ffffffffffffff
+Task 3 | RT=2.47699 | ET=2.47697 | Period=22.692 | RTR=0.109157 | Error=0.690843 | Δd=-2 | Current SMs=30 | News SMs=28 | Current Mask=0xffffffffffffffffffffffffffff8000
+[CONTROL-TIMING] solution=7 tasks=3 period=30 decision_us=10.970000
+[MPC] Control period 30	Time = 35
+Task 1 | RT=7.78608 | ET=7.78562 | Period=45.33 | RTR=0.171764 | Error=0.628236 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.2095 | ET=1.2095 | Period=21.262 | RTR=0.0568856 | Error=0.743114 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xffffffffffe0000001ffffffffffffff
+Task 3 | RT=2.56279 | ET=2.56278 | Period=22.692 | RTR=0.112938 | Error=0.687062 | Δd=-1 | Current SMs=28 | News SMs=27 | Current Mask=0xffffffffffffffffffffffffffffc000
+[CONTROL-TIMING] solution=7 tasks=3 period=31 decision_us=11.530000
+[MPC] Control period 31	Time = 36
+Task 1 | RT=7.78466 | ET=7.78419 | Period=45.33 | RTR=0.171733 | Error=0.628267 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.20883 | ET=1.20883 | Period=21.262 | RTR=0.056854 | Error=0.743146 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xffffffffffe0000001ffffffffffffff
+Task 3 | RT=2.66287 | ET=2.66285 | Period=22.692 | RTR=0.117348 | Error=0.682652 | Δd=-2 | Current SMs=28 | News SMs=26 | Current Mask=0xffffffffffffffffffffffffffffc000
+[CONTROL-TIMING] solution=7 tasks=3 period=32 decision_us=10.570000
+[MPC] Control period 32	Time = 37
+Task 1 | RT=7.78233 | ET=7.78185 | Period=45.33 | RTR=0.171682 | Error=0.628318 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.20863 | ET=1.20863 | Period=21.262 | RTR=0.0568447 | Error=0.743155 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xffffffffffe0000001ffffffffffffff
+Task 3 | RT=2.75015 | ET=2.75013 | Period=22.692 | RTR=0.121195 | Error=0.678805 | Δd=-1 | Current SMs=26 | News SMs=25 | Current Mask=0xffffffffffffffffffffffffffffe000
+[CONTROL-TIMING] solution=7 tasks=3 period=33 decision_us=11.010000
+[MPC] Control period 33	Time = 38
+Task 1 | RT=7.78276 | ET=7.7823 | Period=45.33 | RTR=0.171691 | Error=0.628309 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.2089 | ET=1.2089 | Period=21.262 | RTR=0.0568574 | Error=0.743143 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xffffffffffe0000001ffffffffffffff
+Task 3 | RT=2.87486 | ET=2.87484 | Period=22.692 | RTR=0.12669 | Error=0.67331 | Δd=-2 | Current SMs=26 | News SMs=24 | Current Mask=0xffffffffffffffffffffffffffffe000
+[CONTROL-TIMING] solution=7 tasks=3 period=34 decision_us=12.800000
+[MPC] Control period 34	Time = 39
+Task 1 | RT=7.78314 | ET=7.78267 | Period=45.33 | RTR=0.1717 | Error=0.6283 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.20853 | ET=1.20853 | Period=21.262 | RTR=0.05684 | Error=0.74316 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xffffffffffe0000001ffffffffffffff
+Task 3 | RT=2.97655 | ET=2.97653 | Period=22.692 | RTR=0.131172 | Error=0.668828 | Δd=-1 | Current SMs=24 | News SMs=23 | Current Mask=0xfffffffffffffffffffffffffffff000
+[CONTROL-TIMING] solution=7 tasks=3 period=35 decision_us=11.950000
+[MPC] Control period 35	Time = 40
+Task 1 | RT=7.78233 | ET=7.78189 | Period=45.33 | RTR=0.171682 | Error=0.628318 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.20782 | ET=1.20782 | Period=21.262 | RTR=0.0568063 | Error=0.743194 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xffffffffffe0000001ffffffffffffff
+Task 3 | RT=3.11752 | ET=3.11445 | Period=22.692 | RTR=0.137384 | Error=0.662616 | Δd=-2 | Current SMs=24 | News SMs=22 | Current Mask=0xfffffffffffffffffffffffffffff000
+[CONTROL-TIMING] solution=7 tasks=3 period=36 decision_us=11.860000
+[MPC] Control period 36	Time = 41
+Task 1 | RT=7.78473 | ET=7.78429 | Period=45.33 | RTR=0.171735 | Error=0.628265 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.20803 | ET=1.20803 | Period=21.262 | RTR=0.0568164 | Error=0.743184 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xffffffffffe0000001ffffffffffffff
+Task 3 | RT=3.24644 | ET=3.24642 | Period=22.692 | RTR=0.143065 | Error=0.656935 | Δd=-1 | Current SMs=22 | News SMs=21 | Current Mask=0xfffffffffffffffffffffffffffff800
+[CONTROL-TIMING] solution=7 tasks=3 period=37 decision_us=11.400000
+[MPC] Control period 37	Time = 42
+Task 1 | RT=7.78467 | ET=7.7842 | Period=45.33 | RTR=0.171733 | Error=0.628267 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.2076 | ET=1.2076 | Period=21.262 | RTR=0.0567964 | Error=0.743204 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xffffffffffe0000001ffffffffffffff
+Task 3 | RT=3.41063 | ET=3.40697 | Period=22.692 | RTR=0.150301 | Error=0.649699 | Δd=-2 | Current SMs=22 | News SMs=20 | Current Mask=0xfffffffffffffffffffffffffffff800
+[CONTROL-TIMING] solution=7 tasks=3 period=38 decision_us=11.450000
+[MPC] Control period 38	Time = 43
+Task 1 | RT=7.78299 | ET=7.78253 | Period=45.33 | RTR=0.171696 | Error=0.628304 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.2075 | ET=1.2075 | Period=21.262 | RTR=0.0567914 | Error=0.743209 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xffffffffffe0000001ffffffffffffff
+Task 3 | RT=3.56729 | ET=3.56747 | Period=22.692 | RTR=0.157205 | Error=0.642795 | Δd=-1 | Current SMs=20 | News SMs=19 | Current Mask=0xfffffffffffffffffffffffffffffc00
+[CONTROL-TIMING] solution=7 tasks=3 period=39 decision_us=11.450000
+[MPC] Control period 39	Time = 44
+Task 1 | RT=7.77873 | ET=7.77828 | Period=45.33 | RTR=0.171602 | Error=0.628398 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.20624 | ET=1.20624 | Period=21.262 | RTR=0.056732 | Error=0.743268 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xffffffffffe0000001ffffffffffffff
+Task 3 | RT=3.74467 | ET=3.74841 | Period=22.692 | RTR=0.165022 | Error=0.634978 | Δd=-2 | Current SMs=20 | News SMs=18 | Current Mask=0xfffffffffffffffffffffffffffffc00
+[CONTROL-TIMING] solution=7 tasks=3 period=40 decision_us=12.240000
+[MPC] Control period 40	Time = 45
+Task 1 | RT=7.77645 | ET=7.77601 | Period=45.33 | RTR=0.171552 | Error=0.628448 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.20489 | ET=1.20489 | Period=21.262 | RTR=0.0566687 | Error=0.743331 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xffffffffffe0000001ffffffffffffff
+Task 3 | RT=3.94953 | ET=3.94954 | Period=22.692 | RTR=0.17405 | Error=0.62595 | Δd=-1 | Current SMs=18 | News SMs=17 | Current Mask=0xfffffffffffffffffffffffffffffe00
+[CONTROL-TIMING] solution=7 tasks=3 period=41 decision_us=12.600000
+[MPC] Control period 41	Time = 46
+Task 1 | RT=7.77475 | ET=7.77429 | Period=45.33 | RTR=0.171514 | Error=0.628486 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.20521 | ET=1.20521 | Period=21.262 | RTR=0.0566839 | Error=0.743316 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xffffffffffe0000001ffffffffffffff
+Task 3 | RT=4.19252 | ET=4.1925 | Period=22.692 | RTR=0.184757 | Error=0.615243 | Δd=-2 | Current SMs=18 | News SMs=16 | Current Mask=0xfffffffffffffffffffffffffffffe00
+[CONTROL-TIMING] solution=7 tasks=3 period=42 decision_us=11.420000
+[MPC] Control period 42	Time = 47
+Task 1 | RT=7.77729 | ET=7.7768 | Period=45.33 | RTR=0.17157 | Error=0.62843 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.20503 | ET=1.20503 | Period=21.262 | RTR=0.0566754 | Error=0.743325 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xffffffffffe0000001ffffffffffffff
+Task 3 | RT=4.43732 | ET=4.43758 | Period=22.692 | RTR=0.195546 | Error=0.604454 | Δd=-1 | Current SMs=16 | News SMs=15 | Current Mask=0xffffffffffffffffffffffffffffff00
+[CONTROL-TIMING] solution=7 tasks=3 period=43 decision_us=11.580000
+[MPC] Control period 43	Time = 48
+Task 1 | RT=7.77842 | ET=7.778 | Period=45.33 | RTR=0.171595 | Error=0.628405 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.20528 | ET=1.20528 | Period=21.262 | RTR=0.056687 | Error=0.743313 | Δd=-1 | Current SMs=56 | News SMs=55 | Current Mask=0xffffffffffe0000001ffffffffffffff
+Task 3 | RT=4.74096 | ET=4.74094 | Period=22.692 | RTR=0.208926 | Error=0.591074 | Δd=-1 | Current SMs=16 | News SMs=15 | Current Mask=0xffffffffffffffffffffffffffffff00
+[CONTROL-TIMING] solution=7 tasks=3 period=44 decision_us=11.869000
+[MPC] Control period 44	Time = 49
+Task 1 | RT=7.78168 | ET=7.78123 | Period=45.33 | RTR=0.171667 | Error=0.628333 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.21465 | ET=1.21465 | Period=21.262 | RTR=0.0571277 | Error=0.742872 | Δd=-2 | Current SMs=56 | News SMs=54 | Current Mask=0xffffffffffffffff81ffffffe000007f
+Task 3 | RT=4.73991 | ET=4.74705 | Period=22.692 | RTR=0.20888 | Error=0.59112 | Δd=-1 | Current SMs=16 | News SMs=15 | Current Mask=0xffffffffffffffff7fffffffffffff80
+[CONTROL-TIMING] solution=7 tasks=3 period=45 decision_us=11.580000
+[MPC] Control period 45	Time = 50
+Task 1 | RT=7.78788 | ET=7.78738 | Period=45.33 | RTR=0.171804 | Error=0.628196 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.21914 | ET=1.21914 | Period=21.262 | RTR=0.0573389 | Error=0.742661 | Δd=-1 | Current SMs=54 | News SMs=53 | Current Mask=0xffffffffffffffffc1ffffffe000007f
+Task 3 | RT=4.77039 | ET=4.78531 | Period=22.692 | RTR=0.210224 | Error=0.589776 | Δd=-1 | Current SMs=16 | News SMs=15 | Current Mask=0xffffffffffffffffbfffffffffffff80
+[CONTROL-TIMING] solution=7 tasks=3 period=46 decision_us=12.160000
+[MPC] Control period 46	Time = 51
+Task 1 | RT=7.78592 | ET=7.78545 | Period=45.33 | RTR=0.171761 | Error=0.628239 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.27839 | ET=1.27839 | Period=21.262 | RTR=0.0601256 | Error=0.739874 | Δd=-1 | Current SMs=54 | News SMs=53 | Current Mask=0xffffffffffffffffc1ffffffe000007f
+Task 3 | RT=4.76713 | ET=4.76711 | Period=22.692 | RTR=0.21008 | Error=0.58992 | Δd=-2 | Current SMs=16 | News SMs=14 | Current Mask=0xffffffffffffffffbfffffffffffff80
+[CONTROL-TIMING] solution=7 tasks=3 period=47 decision_us=11.910000
+[MPC] Control period 47	Time = 52
+Task 1 | RT=7.78531 | ET=7.78485 | Period=45.33 | RTR=0.171747 | Error=0.628253 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.28134 | ET=1.28134 | Period=21.262 | RTR=0.0602641 | Error=0.739736 | Δd=-2 | Current SMs=54 | News SMs=52 | Current Mask=0xffffffffffffffffc1ffffffe000007f
+Task 3 | RT=5.06541 | ET=5.06539 | Period=22.692 | RTR=0.223225 | Error=0.576775 | Δd=0 | Current SMs=14 | News SMs=14 | Current Mask=0xffffffffffffffffffffffffffffff80
+[CONTROL-TIMING] solution=7 tasks=3 period=48 decision_us=10.640000
+[MPC] Control period 48	Time = 53
+Task 1 | RT=7.78531 | ET=7.78484 | Period=45.33 | RTR=0.171747 | Error=0.628253 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.35434 | ET=1.35434 | Period=21.262 | RTR=0.0636978 | Error=0.736302 | Δd=0 | Current SMs=52 | News SMs=52 | Current Mask=0xffffffffffffffffe1ffffffe000007f
+Task 3 | RT=5.07823 | ET=5.07821 | Period=22.692 | RTR=0.223789 | Error=0.576211 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xffffffffffffffffffffffffffffff80
+[CONTROL-TIMING] solution=7 tasks=3 period=49 decision_us=10.960000
+[MPC] Control period 49	Time = 54
+Task 1 | RT=7.7811 | ET=7.78063 | Period=45.33 | RTR=0.171654 | Error=0.628346 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.35192 | ET=1.35192 | Period=21.262 | RTR=0.0635837 | Error=0.736416 | Δd=-1 | Current SMs=52 | News SMs=51 | Current Mask=0xffffffffffffffffe1ffffffe000007f
+Task 3 | RT=5.46812 | ET=5.44284 | Period=22.692 | RTR=0.240971 | Error=0.559029 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xffffffffffffffffffffffffffffff80
+[CONTROL-TIMING] solution=7 tasks=3 period=50 decision_us=11.180000
+[MPC] Control period 50	Time = 55
+Task 1 | RT=7.7774 | ET=7.77694 | Period=45.33 | RTR=0.171573 | Error=0.628427 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.35562 | ET=1.35562 | Period=21.262 | RTR=0.0637581 | Error=0.736242 | Δd=-2 | Current SMs=52 | News SMs=50 | Current Mask=0xfffffffffffffffff1ffffffe000003f
+Task 3 | RT=5.52149 | ET=5.51241 | Period=22.692 | RTR=0.243323 | Error=0.556677 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xffffffffffffffffefffffffffffffc0
+[CONTROL-TIMING] solution=7 tasks=3 period=51 decision_us=10.680000
+[MPC] Control period 51	Time = 56
+Task 1 | RT=7.77634 | ET=7.77587 | Period=45.33 | RTR=0.171549 | Error=0.628451 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.36104 | ET=1.36104 | Period=21.262 | RTR=0.0640129 | Error=0.735987 | Δd=-1 | Current SMs=50 | News SMs=49 | Current Mask=0xfffffffffffffffff9ffffffe000003f
+Task 3 | RT=5.48279 | ET=5.50254 | Period=22.692 | RTR=0.241618 | Error=0.558382 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffff7ffffffffffffc0
+[CONTROL-TIMING] solution=7 tasks=3 period=52 decision_us=11.740000
+[MPC] Control period 52	Time = 57
+Task 1 | RT=7.77621 | ET=7.77583 | Period=45.33 | RTR=0.171547 | Error=0.628453 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.3635 | ET=1.3635 | Period=21.262 | RTR=0.0641285 | Error=0.735871 | Δd=-2 | Current SMs=50 | News SMs=48 | Current Mask=0xfffffffffffffffff9ffffffe000003f
+Task 3 | RT=5.4934 | ET=5.49338 | Period=22.692 | RTR=0.242085 | Error=0.557915 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffff7ffffffffffffc0
+[CONTROL-TIMING] solution=7 tasks=3 period=53 decision_us=10.830000
+[MPC] Control period 53	Time = 58
+Task 1 | RT=7.77648 | ET=7.77603 | Period=45.33 | RTR=0.171553 | Error=0.628447 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.36613 | ET=1.36613 | Period=21.262 | RTR=0.0642522 | Error=0.735748 | Δd=-1 | Current SMs=48 | News SMs=47 | Current Mask=0xfffffffffffffffffdffffffe000003f
+Task 3 | RT=5.47437 | ET=5.47338 | Period=22.692 | RTR=0.241247 | Error=0.558753 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffbffffffffffffc0
+[CONTROL-TIMING] solution=7 tasks=3 period=54 decision_us=11.030000
+[MPC] Control period 54	Time = 59
+Task 1 | RT=7.77602 | ET=7.77554 | Period=45.33 | RTR=0.171543 | Error=0.628457 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.42799 | ET=1.42799 | Period=21.262 | RTR=0.0671618 | Error=0.732838 | Δd=-2 | Current SMs=48 | News SMs=46 | Current Mask=0xfffffffffffffffffdffffffe000003f
+Task 3 | RT=5.50432 | ET=5.48474 | Period=22.692 | RTR=0.242567 | Error=0.557433 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffbffffffffffffc0
+[CONTROL-TIMING] solution=7 tasks=3 period=55 decision_us=12.360000
+[MPC] Control period 55	Time = 60
+Task 1 | RT=7.78293 | ET=7.78247 | Period=45.33 | RTR=0.171695 | Error=0.628305 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.49178 | ET=1.49178 | Period=21.262 | RTR=0.0701619 | Error=0.729838 | Δd=0 | Current SMs=46 | News SMs=46 | Current Mask=0xffffffffffffffffffffffffe000003f
+Task 3 | RT=5.4842 | ET=5.48418 | Period=22.692 | RTR=0.24168 | Error=0.55832 | Δd=-2 | Current SMs=14 | News SMs=12 | Current Mask=0xfffffffffffffffffdffffffffffffc0
+[CONTROL-TIMING] solution=7 tasks=3 period=56 decision_us=11.060000
+[MPC] Control period 56	Time = 61
+Task 1 | RT=7.77519 | ET=7.77475 | Period=45.33 | RTR=0.171524 | Error=0.628476 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.49451 | ET=1.49451 | Period=21.262 | RTR=0.0702901 | Error=0.72971 | Δd=-1 | Current SMs=46 | News SMs=45 | Current Mask=0xffffffffffffffffffffffffe000003f
+Task 3 | RT=5.90483 | ET=5.90472 | Period=22.692 | RTR=0.260217 | Error=0.539783 | Δd=0 | Current SMs=12 | News SMs=12 | Current Mask=0xffffffffffffffffffffffffffffffc0
+[CONTROL-TIMING] solution=7 tasks=3 period=57 decision_us=10.960000
+[MPC] Control period 57	Time = 62
+Task 1 | RT=7.77528 | ET=7.77484 | Period=45.33 | RTR=0.171526 | Error=0.628474 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.50398 | ET=1.50398 | Period=21.262 | RTR=0.0707356 | Error=0.729264 | Δd=-2 | Current SMs=46 | News SMs=44 | Current Mask=0xffffffffffffffffffffffffe000003f
+Task 3 | RT=5.90534 | ET=5.90516 | Period=22.692 | RTR=0.260239 | Error=0.539761 | Δd=0 | Current SMs=12 | News SMs=12 | Current Mask=0xffffffffffffffffffffffffffffffc0
+[CONTROL-TIMING] solution=7 tasks=3 period=58 decision_us=12.730000
+[MPC] Control period 58	Time = 63
+Task 1 | RT=7.77592 | ET=7.77546 | Period=45.33 | RTR=0.17154 | Error=0.62846 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.51234 | ET=1.51234 | Period=21.262 | RTR=0.0711289 | Error=0.728871 | Δd=-1 | Current SMs=44 | News SMs=43 | Current Mask=0xfffffffffffffffffffffffff000003f
+Task 3 | RT=5.90535 | ET=5.90514 | Period=22.692 | RTR=0.260239 | Error=0.539761 | Δd=0 | Current SMs=12 | News SMs=12 | Current Mask=0xffffffffffffffffffffffffffffffc0
+[CONTROL-TIMING] solution=7 tasks=3 period=59 decision_us=15.810000
+[MPC] Control period 59	Time = 64
+Task 1 | RT=7.7748 | ET=7.77436 | Period=45.33 | RTR=0.171515 | Error=0.628485 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.5175 | ET=1.5175 | Period=21.262 | RTR=0.0713714 | Error=0.728629 | Δd=-2 | Current SMs=44 | News SMs=42 | Current Mask=0xfffffffffffffffffffffffff000003f
+Task 3 | RT=5.90565 | ET=5.90557 | Period=22.692 | RTR=0.260252 | Error=0.539748 | Δd=0 | Current SMs=12 | News SMs=12 | Current Mask=0xffffffffffffffffffffffffffffffc0
+[CONTROL-TIMING] solution=7 tasks=3 period=60 decision_us=11.910000
+[MPC] Control period 60	Time = 65
+Task 1 | RT=7.77515 | ET=7.77472 | Period=45.33 | RTR=0.171523 | Error=0.628477 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.52119 | ET=1.52119 | Period=21.262 | RTR=0.0715451 | Error=0.728455 | Δd=-1 | Current SMs=42 | News SMs=41 | Current Mask=0xfffffffffffffffffffffffff800003f
+Task 3 | RT=5.9064 | ET=5.90646 | Period=22.692 | RTR=0.260286 | Error=0.539714 | Δd=0 | Current SMs=12 | News SMs=12 | Current Mask=0xffffffffffffffffffffffffffffffc0
+[CONTROL-TIMING] solution=7 tasks=3 period=61 decision_us=12.080000
+[MPC] Control period 61	Time = 66
+Task 1 | RT=7.77609 | ET=7.77567 | Period=45.33 | RTR=0.171544 | Error=0.628456 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.5986 | ET=1.5986 | Period=21.262 | RTR=0.0751857 | Error=0.724814 | Δd=-2 | Current SMs=42 | News SMs=40 | Current Mask=0xfffffffffffffffffffffffff800003f
+Task 3 | RT=5.90812 | ET=5.9081 | Period=22.692 | RTR=0.260361 | Error=0.539639 | Δd=0 | Current SMs=12 | News SMs=12 | Current Mask=0xffffffffffffffffffffffffffffffc0
+[CONTROL-TIMING] solution=7 tasks=3 period=62 decision_us=10.860000
+[MPC] Control period 62	Time = 67
+Task 1 | RT=7.77743 | ET=7.77702 | Period=45.33 | RTR=0.171574 | Error=0.628426 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.65802 | ET=1.65802 | Period=21.262 | RTR=0.0779805 | Error=0.72202 | Δd=0 | Current SMs=40 | News SMs=40 | Current Mask=0xfffffffffffffffffffffffffc00003f
+Task 3 | RT=5.9093 | ET=5.90916 | Period=22.692 | RTR=0.260413 | Error=0.539587 | Δd=-1 | Current SMs=12 | News SMs=11 | Current Mask=0xffffffffffffffffffffffffffffffc0
+[CONTROL-TIMING] solution=7 tasks=3 period=63 decision_us=11.460000
+[MPC] Control period 63	Time = 68
+Task 1 | RT=7.77868 | ET=7.77829 | Period=45.33 | RTR=0.171601 | Error=0.628399 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.66122 | ET=1.66122 | Period=21.262 | RTR=0.078131 | Error=0.721869 | Δd=-1 | Current SMs=40 | News SMs=39 | Current Mask=0xfffffffffffffffffffffffffc00003f
+Task 3 | RT=6.52166 | ET=6.52165 | Period=22.692 | RTR=0.287399 | Error=0.512601 | Δd=-1 | Current SMs=12 | News SMs=11 | Current Mask=0xffffffffffffffffffffffffffffffc0
+[CONTROL-TIMING] solution=7 tasks=3 period=64 decision_us=10.830000
+[MPC] Control period 64	Time = 69
+Task 1 | RT=7.78029 | ET=7.77988 | Period=45.33 | RTR=0.171637 | Error=0.628363 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.66797 | ET=1.66797 | Period=21.262 | RTR=0.0784484 | Error=0.721552 | Δd=-2 | Current SMs=40 | News SMs=38 | Current Mask=0xfffffffffffffffffffffffffe00001f
+Task 3 | RT=6.56905 | ET=6.56903 | Period=22.692 | RTR=0.289487 | Error=0.510513 | Δd=-1 | Current SMs=12 | News SMs=11 | Current Mask=0xfffffffffffffffffffffffffdffffe0
+[CONTROL-TIMING] solution=7 tasks=3 period=65 decision_us=11.490000
+[MPC] Control period 65	Time = 70
+Task 1 | RT=7.78175 | ET=7.78134 | Period=45.33 | RTR=0.171669 | Error=0.628331 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.67368 | ET=1.67368 | Period=21.262 | RTR=0.0787169 | Error=0.721283 | Δd=-1 | Current SMs=38 | News SMs=37 | Current Mask=0xffffffffffffffffffffffffff00001f
+Task 3 | RT=6.505 | ET=6.50498 | Period=22.692 | RTR=0.286665 | Error=0.513335 | Δd=-1 | Current SMs=12 | News SMs=11 | Current Mask=0xfffffffffffffffffffffffffeffffe0
+[CONTROL-TIMING] solution=7 tasks=3 period=66 decision_us=12.670000
+[MPC] Control period 66	Time = 71
+Task 1 | RT=7.78212 | ET=7.78172 | Period=45.33 | RTR=0.171677 | Error=0.628323 | Δd=0 | Current SMs=56 | News SMs=56 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.75125 | ET=1.75125 | Period=21.262 | RTR=0.0823654 | Error=0.717635 | Δd=-2 | Current SMs=38 | News SMs=36 | Current Mask=0xffffffffffffffffffffffffff00001f
+Task 3 | RT=6.51697 | ET=6.51695 | Period=22.692 | RTR=0.287192 | Error=0.512808 | Δd=-1 | Current SMs=12 | News SMs=11 | Current Mask=0xfffffffffffffffffffffffffeffffe0
+[CONTROL-TIMING] solution=7 tasks=3 period=67 decision_us=12.070000
+[MPC] Control period 67	Time = 72
+Task 1 | RT=7.77826 | ET=7.77787 | Period=45.33 | RTR=0.171592 | Error=0.628408 | Δd=-1 | Current SMs=56 | News SMs=55 | Current Mask=0xfffffffffffffffffe0000001fffffff
+Task 2 | RT=1.81541 | ET=1.81541 | Period=21.262 | RTR=0.085383 | Error=0.714617 | Δd=0 | Current SMs=36 | News SMs=36 | Current Mask=0xffffffffffffffffffffffffff80001f
+Task 3 | RT=6.51148 | ET=6.5255 | Period=22.692 | RTR=0.28695 | Error=0.51305 | Δd=-1 | Current SMs=12 | News SMs=11 | Current Mask=0xffffffffffffffffffffffffff7fffe0
+[CONTROL-TIMING] solution=7 tasks=3 period=68 decision_us=11.580000
+[MPC] Control period 68	Time = 73
+Task 1 | RT=7.88819 | ET=7.88777 | Period=45.33 | RTR=0.174017 | Error=0.625983 | Δd=-2 | Current SMs=56 | News SMs=54 | Current Mask=0xfffffffffffffffffff80000007fffff
+Task 2 | RT=1.81531 | ET=1.81531 | Period=21.262 | RTR=0.0853779 | Error=0.714622 | Δd=0 | Current SMs=36 | News SMs=36 | Current Mask=0xffffffffffffffffffffffffff80001f
+Task 3 | RT=6.49148 | ET=6.49146 | Period=22.692 | RTR=0.286069 | Error=0.513931 | Δd=-1 | Current SMs=12 | News SMs=11 | Current Mask=0xfffffffffffffffffff7ffffffffffe0
+[CONTROL-TIMING] solution=7 tasks=3 period=69 decision_us=11.970000
+[MPC] Control period 69	Time = 74
+Task 1 | RT=7.99492 | ET=7.99451 | Period=45.33 | RTR=0.176372 | Error=0.623628 | Δd=0 | Current SMs=54 | News SMs=54 | Current Mask=0xfffffffffffffffffffc0000007fffff
+Task 2 | RT=1.81531 | ET=1.81531 | Period=21.262 | RTR=0.0853783 | Error=0.714622 | Δd=-1 | Current SMs=36 | News SMs=35 | Current Mask=0xffffffffffffffffffffffffff80001f
+Task 3 | RT=6.4761 | ET=6.44692 | Period=22.692 | RTR=0.285391 | Error=0.514609 | Δd=-1 | Current SMs=12 | News SMs=11 | Current Mask=0xfffffffffffffffffffbffffffffffe0
+[CONTROL-TIMING] solution=7 tasks=3 period=70 decision_us=12.160000
+[MPC] Control period 70	Time = 75
+Task 1 | RT=8.00429 | ET=8.00391 | Period=45.33 | RTR=0.176578 | Error=0.623422 | Δd=0 | Current SMs=54 | News SMs=54 | Current Mask=0xfffffffffffffffffffc0000007fffff
+Task 2 | RT=1.82272 | ET=1.82272 | Period=21.262 | RTR=0.0857268 | Error=0.714273 | Δd=-1 | Current SMs=36 | News SMs=35 | Current Mask=0xffffffffffffffffffffffffff80001f
+Task 3 | RT=6.42116 | ET=6.4465 | Period=22.692 | RTR=0.28297 | Error=0.51703 | Δd=-2 | Current SMs=12 | News SMs=10 | Current Mask=0xfffffffffffffffffffbffffffffffe0
+[CONTROL-TIMING] solution=7 tasks=3 period=71 decision_us=11.400000
+[MPC] Control period 71	Time = 76
+Task 1 | RT=8.00402 | ET=8.00365 | Period=45.33 | RTR=0.176572 | Error=0.623428 | Δd=0 | Current SMs=54 | News SMs=54 | Current Mask=0xfffffffffffffffffffc0000007fffff
+Task 2 | RT=1.82239 | ET=1.82239 | Period=21.262 | RTR=0.0857109 | Error=0.714289 | Δd=-2 | Current SMs=36 | News SMs=34 | Current Mask=0xffffffffffffffffffffffffff80001f
+Task 3 | RT=7.04796 | ET=7.04718 | Period=22.692 | RTR=0.310592 | Error=0.489408 | Δd=0 | Current SMs=10 | News SMs=10 | Current Mask=0xffffffffffffffffffffffffffffffe0
+[CONTROL-TIMING] solution=7 tasks=3 period=72 decision_us=11.590000
+[MPC] Control period 72	Time = 77
+Task 1 | RT=8.00412 | ET=8.00373 | Period=45.33 | RTR=0.176574 | Error=0.623426 | Δd=-1 | Current SMs=54 | News SMs=53 | Current Mask=0xfffffffffffffffffffc0000007fffff
+Task 2 | RT=1.83036 | ET=1.83036 | Period=21.262 | RTR=0.0860861 | Error=0.713914 | Δd=0 | Current SMs=34 | News SMs=34 | Current Mask=0xffffffffffffffffffffffffffc0001f
+Task 3 | RT=7.07488 | ET=7.07464 | Period=22.692 | RTR=0.311779 | Error=0.488221 | Δd=0 | Current SMs=10 | News SMs=10 | Current Mask=0xffffffffffffffffffffffffffffffe0
+[CONTROL-TIMING] solution=7 tasks=3 period=73 decision_us=11.650000
+[MPC] Control period 73	Time = 78
+Task 1 | RT=8.13027 | ET=8.12984 | Period=45.33 | RTR=0.179357 | Error=0.620643 | Δd=-1 | Current SMs=54 | News SMs=53 | Current Mask=0xfffffffffffffffffffe0000003fffff
+Task 2 | RT=1.83062 | ET=1.83062 | Period=21.262 | RTR=0.086098 | Error=0.713902 | Δd=-1 | Current SMs=34 | News SMs=33 | Current Mask=0xffffffffffffffffffffffffffc0001f
+Task 3 | RT=7.07554 | ET=7.07512 | Period=22.692 | RTR=0.311808 | Error=0.488192 | Δd=0 | Current SMs=10 | News SMs=10 | Current Mask=0xffffffffffffffffffffffffffffffe0
+[CONTROL-TIMING] solution=7 tasks=3 period=74 decision_us=12.670000
+[MPC] Control period 74	Time = 79
+Task 1 | RT=8.149 | ET=8.14861 | Period=45.33 | RTR=0.179771 | Error=0.620229 | Δd=-2 | Current SMs=54 | News SMs=52 | Current Mask=0xffffffffffffffffffff0000001fffff
+Task 2 | RT=1.89148 | ET=1.89148 | Period=21.262 | RTR=0.0889607 | Error=0.711039 | Δd=-1 | Current SMs=34 | News SMs=33 | Current Mask=0xfffffffffffffffffffeffffffe0001f
+Task 3 | RT=7.0763 | ET=7.07635 | Period=22.692 | RTR=0.311841 | Error=0.488159 | Δd=0 | Current SMs=10 | News SMs=10 | Current Mask=0xffffffffffffffffffffffffffffffe0
+[CONTROL-TIMING] solution=7 tasks=3 period=75 decision_us=12.020000
+[MPC] Control period 75	Time = 80
+Task 1 | RT=8.28126 | ET=8.28094 | Period=45.33 | RTR=0.182688 | Error=0.617312 | Δd=0 | Current SMs=52 | News SMs=52 | Current Mask=0xffffffffffffffffffff8000001fffff
+Task 2 | RT=1.89496 | ET=1.89496 | Period=21.262 | RTR=0.0891242 | Error=0.710876 | Δd=-2 | Current SMs=34 | News SMs=32 | Current Mask=0xffffffffffffffffffff7fffffe0001f
+Task 3 | RT=7.07627 | ET=7.07633 | Period=22.692 | RTR=0.31184 | Error=0.48816 | Δd=0 | Current SMs=10 | News SMs=10 | Current Mask=0xffffffffffffffffffffffffffffffe0
+[CONTROL-TIMING] solution=7 tasks=3 period=76 decision_us=12.170000
+[MPC] Control period 76	Time = 81
+Task 1 | RT=8.28101 | ET=8.2806 | Period=45.33 | RTR=0.182683 | Error=0.617317 | Δd=-1 | Current SMs=52 | News SMs=51 | Current Mask=0xffffffffffffffffffff8000001fffff
+Task 2 | RT=1.97585 | ET=1.97585 | Period=21.262 | RTR=0.0929287 | Error=0.707071 | Δd=0 | Current SMs=32 | News SMs=32 | Current Mask=0xffffffffffffffffffffffffffe0001f
+Task 3 | RT=7.07592 | ET=7.0759 | Period=22.692 | RTR=0.311824 | Error=0.488176 | Δd=0 | Current SMs=10 | News SMs=10 | Current Mask=0xffffffffffffffffffffffffffffffe0
+[CONTROL-TIMING] solution=7 tasks=3 period=77 decision_us=11.050000
+[MPC] Control period 77	Time = 82
+Task 1 | RT=8.47382 | ET=8.47339 | Period=45.33 | RTR=0.186936 | Error=0.613064 | Δd=-2 | Current SMs=52 | News SMs=50 | Current Mask=0xffffffffffffffffffff8000001fffff
+Task 2 | RT=1.97593 | ET=1.97593 | Period=21.262 | RTR=0.0929325 | Error=0.707068 | Δd=0 | Current SMs=32 | News SMs=32 | Current Mask=0xffffffffffffffffffffffffffe0001f
+Task 3 | RT=7.08007 | ET=7.0802 | Period=22.692 | RTR=0.312007 | Error=0.487993 | Δd=0 | Current SMs=10 | News SMs=10 | Current Mask=0xffffffffffffffffffffffffffffffe0
+[CONTROL-TIMING] solution=7 tasks=3 period=78 decision_us=11.510000
+[MPC] Control period 78	Time = 83
+Task 1 | RT=8.66625 | ET=8.66586 | Period=45.33 | RTR=0.191181 | Error=0.608819 | Δd=0 | Current SMs=50 | News SMs=50 | Current Mask=0xffffffffffffffffffffc000001fffff
+Task 2 | RT=1.97586 | ET=1.97586 | Period=21.262 | RTR=0.092929 | Error=0.707071 | Δd=-1 | Current SMs=32 | News SMs=31 | Current Mask=0xffffffffffffffffffffffffffe0001f
+Task 3 | RT=7.07632 | ET=7.07631 | Period=22.692 | RTR=0.311842 | Error=0.488158 | Δd=0 | Current SMs=10 | News SMs=10 | Current Mask=0xffffffffffffffffffffffffffffffe0
+[CONTROL-TIMING] solution=7 tasks=3 period=79 decision_us=11.260000
+[MPC] Control period 79	Time = 84
+Task 1 | RT=8.68271 | ET=8.68232 | Period=45.33 | RTR=0.191544 | Error=0.608456 | Δd=-1 | Current SMs=50 | News SMs=49 | Current Mask=0xffffffffffffffffffffc000001fffff
+Task 2 | RT=2.03659 | ET=2.03659 | Period=21.262 | RTR=0.0957854 | Error=0.704215 | Δd=-1 | Current SMs=32 | News SMs=31 | Current Mask=0xffffffffffffffffffffffffffe0001f
+Task 3 | RT=7.07718 | ET=7.07709 | Period=22.692 | RTR=0.31188 | Error=0.48812 | Δd=0 | Current SMs=10 | News SMs=10 | Current Mask=0xffffffffffffffffffffffffffffffe0
+[CONTROL-TIMING] solution=7 tasks=3 period=80 decision_us=11.830000
+[MPC] Control period 80	Time = 85
+Task 1 | RT=8.83457 | ET=8.83418 | Period=45.33 | RTR=0.194895 | Error=0.605105 | Δd=-1 | Current SMs=50 | News SMs=49 | Current Mask=0xffffffffffffffffffffe000000fffff
+Task 2 | RT=2.04209 | ET=2.04209 | Period=21.262 | RTR=0.0960443 | Error=0.703956 | Δd=-2 | Current SMs=32 | News SMs=30 | Current Mask=0xffffffffffffffffffffdffffff0001f
+Task 3 | RT=7.07864 | ET=7.07863 | Period=22.692 | RTR=0.311944 | Error=0.488056 | Δd=0 | Current SMs=10 | News SMs=10 | Current Mask=0xffffffffffffffffffffffffffffffe0
+[CONTROL-TIMING] solution=7 tasks=3 period=81 decision_us=12.910000
+[MPC] Control period 81	Time = 86
+Task 1 | RT=8.84879 | ET=8.84839 | Period=45.33 | RTR=0.195208 | Error=0.604792 | Δd=-2 | Current SMs=50 | News SMs=48 | Current Mask=0xffffffffffffffffffffe000000fffff
+Task 2 | RT=2.11871 | ET=2.11871 | Period=21.262 | RTR=0.0996477 | Error=0.700352 | Δd=0 | Current SMs=30 | News SMs=30 | Current Mask=0xfffffffffffffffffffffffffff0001f
+Task 3 | RT=7.07968 | ET=7.07966 | Period=22.692 | RTR=0.31199 | Error=0.48801 | Δd=0 | Current SMs=10 | News SMs=10 | Current Mask=0xffffffffffffffffffffffffffffffe0
+[CONTROL-TIMING] solution=7 tasks=3 period=82 decision_us=11.280000
+[MPC] Control period 82	Time = 87
+Task 1 | RT=9.00028 | ET=8.9999 | Period=45.33 | RTR=0.19855 | Error=0.60145 | Δd=0 | Current SMs=48 | News SMs=48 | Current Mask=0xfffffffffffffffffffff000000fffff
+Task 2 | RT=2.12169 | ET=2.12169 | Period=21.262 | RTR=0.0997877 | Error=0.700212 | Δd=0 | Current SMs=30 | News SMs=30 | Current Mask=0xfffffffffffffffffffffffffff0001f
+Task 3 | RT=7.08047 | ET=7.08045 | Period=22.692 | RTR=0.312025 | Error=0.487975 | Δd=-1 | Current SMs=10 | News SMs=9 | Current Mask=0xffffffffffffffffffffffffffffffe0
+[CONTROL-TIMING] solution=7 tasks=3 period=83 decision_us=11.790000
+[MPC] Control period 83	Time = 88
+Task 1 | RT=9.00064 | ET=9.00027 | Period=45.33 | RTR=0.198558 | Error=0.601442 | Δd=-1 | Current SMs=48 | News SMs=47 | Current Mask=0xfffffffffffffffffffff000000fffff
+Task 2 | RT=2.12168 | ET=2.12168 | Period=21.262 | RTR=0.0997873 | Error=0.700213 | Δd=0 | Current SMs=30 | News SMs=30 | Current Mask=0xfffffffffffffffffffffffffff0001f
+Task 3 | RT=7.90723 | ET=7.90721 | Period=22.692 | RTR=0.348459 | Error=0.451541 | Δd=-1 | Current SMs=10 | News SMs=9 | Current Mask=0xffffffffffffffffffffffffffffffe0
+[CONTROL-TIMING] solution=7 tasks=3 period=84 decision_us=11.980000
+[MPC] Control period 84	Time = 89
+Task 1 | RT=9.19452 | ET=9.19414 | Period=45.33 | RTR=0.202835 | Error=0.597165 | Δd=-1 | Current SMs=48 | News SMs=47 | Current Mask=0xfffffffffffffffffffff800000fffef
+Task 2 | RT=2.12166 | ET=2.12166 | Period=21.262 | RTR=0.0997866 | Error=0.700213 | Δd=-1 | Current SMs=30 | News SMs=29 | Current Mask=0xfffffffffffffffffffffffffff0001f
+Task 3 | RT=7.90388 | ET=7.90387 | Period=22.692 | RTR=0.348311 | Error=0.451689 | Δd=-1 | Current SMs=10 | News SMs=9 | Current Mask=0xfffffffffffffffffffff7fffffffff0
+[CONTROL-TIMING] solution=7 tasks=3 period=85 decision_us=11.870000
+[MPC] Control period 85	Time = 90
+Task 1 | RT=9.19412 | ET=9.19375 | Period=45.33 | RTR=0.202826 | Error=0.597174 | Δd=-2 | Current SMs=48 | News SMs=46 | Current Mask=0xfffffffffffffffffffffc000007ffef
+Task 2 | RT=2.19322 | ET=2.19322 | Period=21.262 | RTR=0.103152 | Error=0.696848 | Δd=-1 | Current SMs=30 | News SMs=29 | Current Mask=0xfffffffffffffffffffffbfffff8001f
+Task 3 | RT=7.917 | ET=7.91699 | Period=22.692 | RTR=0.34889 | Error=0.45111 | Δd=-1 | Current SMs=10 | News SMs=9 | Current Mask=0xfffffffffffffffffffff7fffffffff0
+[CONTROL-TIMING] solution=7 tasks=3 period=86 decision_us=12.040000
+[MPC] Control period 86	Time = 91
+Task 1 | RT=9.38776 | ET=9.38737 | Period=45.33 | RTR=0.207098 | Error=0.592902 | Δd=-1 | Current SMs=46 | News SMs=45 | Current Mask=0xfffffffffffffffffffffe000007ffef
+Task 2 | RT=2.19962 | ET=2.19962 | Period=21.262 | RTR=0.103453 | Error=0.696547 | Δd=-1 | Current SMs=30 | News SMs=29 | Current Mask=0xfffffffffffffffffffffdfffff8001f
+Task 3 | RT=7.95619 | ET=7.95618 | Period=22.692 | RTR=0.350617 | Error=0.449383 | Δd=-1 | Current SMs=10 | News SMs=9 | Current Mask=0xfffffffffffffffffffffbfffffffff0
+[CONTROL-TIMING] solution=7 tasks=3 period=87 decision_us=10.950000
+[MPC] Control period 87	Time = 92
+Task 1 | RT=9.61711 | ET=9.61672 | Period=45.33 | RTR=0.212158 | Error=0.587842 | Δd=-1 | Current SMs=46 | News SMs=45 | Current Mask=0xfffffffffffffffffffffe000007ffef
+Task 2 | RT=2.20115 | ET=2.20115 | Period=21.262 | RTR=0.103525 | Error=0.696475 | Δd=-2 | Current SMs=30 | News SMs=28 | Current Mask=0xfffffffffffffffffffffdfffff8001f
+Task 3 | RT=7.93672 | ET=7.9367 | Period=22.692 | RTR=0.349759 | Error=0.450241 | Δd=-1 | Current SMs=10 | News SMs=9 | Current Mask=0xfffffffffffffffffffffbfffffffff0
+[CONTROL-TIMING] solution=7 tasks=3 period=88 decision_us=12.160000
+[MPC] Control period 88	Time = 93
+Task 1 | RT=9.61574 | ET=9.61553 | Period=45.33 | RTR=0.212127 | Error=0.587873 | Δd=-2 | Current SMs=46 | News SMs=44 | Current Mask=0xfffffffffffffffffffffe000007ffef
+Task 2 | RT=2.26415 | ET=2.26415 | Period=21.262 | RTR=0.106488 | Error=0.693512 | Δd=0 | Current SMs=28 | News SMs=28 | Current Mask=0xfffffffffffffffffffffffffff8001f
+Task 3 | RT=7.97418 | ET=7.95457 | Period=22.692 | RTR=0.351409 | Error=0.448591 | Δd=-1 | Current SMs=10 | News SMs=9 | Current Mask=0xfffffffffffffffffffffdfffffffff0
+[CONTROL-TIMING] solution=7 tasks=3 period=89 decision_us=10.390000
+[MPC] Control period 89	Time = 94
+Task 1 | RT=9.81254 | ET=9.81219 | Period=45.33 | RTR=0.216469 | Error=0.583531 | Δd=0 | Current SMs=44 | News SMs=44 | Current Mask=0xffffffffffffffffffffff000007ffef
+Task 2 | RT=2.26734 | ET=2.26734 | Period=21.262 | RTR=0.106638 | Error=0.693362 | Δd=-1 | Current SMs=28 | News SMs=27 | Current Mask=0xfffffffffffffffffffffffffff8001f
+Task 3 | RT=7.97541 | ET=7.99593 | Period=22.692 | RTR=0.351463 | Error=0.448537 | Δd=-1 | Current SMs=10 | News SMs=9 | Current Mask=0xfffffffffffffffffffffefffffffff0
+[CONTROL-TIMING] solution=7 tasks=3 period=90 decision_us=11.370000
+[MPC] Control period 90	Time = 95
+Task 1 | RT=9.81188 | ET=9.81152 | Period=45.33 | RTR=0.216455 | Error=0.583545 | Δd=-1 | Current SMs=44 | News SMs=43 | Current Mask=0xffffffffffffffffffffff000007ffef
+Task 2 | RT=2.3536 | ET=2.3536 | Period=21.262 | RTR=0.110695 | Error=0.689305 | Δd=-1 | Current SMs=28 | News SMs=27 | Current Mask=0xfffffffffffffffffffffffffff8001f
+Task 3 | RT=8.01147 | ET=7.99276 | Period=22.692 | RTR=0.353053 | Error=0.446947 | Δd=-1 | Current SMs=10 | News SMs=9 | Current Mask=0xfffffffffffffffffffffefffffffff0
+[CONTROL-TIMING] solution=7 tasks=3 period=91 decision_us=12.050000
+[MPC] Control period 91	Time = 96
+Task 1 | RT=10.0421 | ET=10.0417 | Period=45.33 | RTR=0.221534 | Error=0.578466 | Δd=-1 | Current SMs=44 | News SMs=43 | Current Mask=0xffffffffffffffffffffff800003ffef
+Task 2 | RT=2.35172 | ET=2.35172 | Period=21.262 | RTR=0.110607 | Error=0.689393 | Δd=-2 | Current SMs=28 | News SMs=26 | Current Mask=0xffffffffffffffffffffff7ffffc001f
+Task 3 | RT=8.03283 | ET=8.08486 | Period=22.692 | RTR=0.353994 | Error=0.446006 | Δd=-1 | Current SMs=10 | News SMs=9 | Current Mask=0xfffffffffffffffffffffefffffffff0
+[CONTROL-TIMING] solution=7 tasks=3 period=92 decision_us=11.200000
+[MPC] Control period 92	Time = 97
+Task 1 | RT=10.0427 | ET=10.0289 | Period=45.33 | RTR=0.221545 | Error=0.578455 | Δd=-2 | Current SMs=44 | News SMs=42 | Current Mask=0xffffffffffffffffffffff800003ffef
+Task 2 | RT=2.41431 | ET=2.41431 | Period=21.262 | RTR=0.11355 | Error=0.68645 | Δd=0 | Current SMs=26 | News SMs=26 | Current Mask=0xfffffffffffffffffffffffffffc001f
+Task 3 | RT=8.01528 | ET=8.01527 | Period=22.692 | RTR=0.353221 | Error=0.446779 | Δd=-1 | Current SMs=10 | News SMs=9 | Current Mask=0xffffffffffffffffffffff7ffffffff0
+[CONTROL-TIMING] solution=7 tasks=3 period=93 decision_us=12.790000
+[MPC] Control period 93	Time = 98
+Task 1 | RT=10.3157 | ET=10.3153 | Period=45.33 | RTR=0.227568 | Error=0.572432 | Δd=0 | Current SMs=42 | News SMs=42 | Current Mask=0xffffffffffffffffffffffc00003ffef
+Task 2 | RT=2.41749 | ET=2.41749 | Period=21.262 | RTR=0.1137 | Error=0.6863 | Δd=-1 | Current SMs=26 | News SMs=25 | Current Mask=0xfffffffffffffffffffffffffffc001f
+Task 3 | RT=7.97452 | ET=7.99605 | Period=22.692 | RTR=0.351424 | Error=0.448576 | Δd=-1 | Current SMs=10 | News SMs=9 | Current Mask=0xffffffffffffffffffffffbffffffff0
+[CONTROL-TIMING] solution=7 tasks=3 period=94 decision_us=12.659000
+[MPC] Control period 94	Time = 99
+Task 1 | RT=10.3381 | ET=10.3376 | Period=45.33 | RTR=0.228063 | Error=0.571937 | Δd=0 | Current SMs=42 | News SMs=42 | Current Mask=0xffffffffffffffffffffffc00003ffef
+Task 2 | RT=2.50495 | ET=2.50495 | Period=21.262 | RTR=0.117814 | Error=0.682186 | Δd=-1 | Current SMs=26 | News SMs=25 | Current Mask=0xfffffffffffffffffffffffffffc001f
+Task 3 | RT=7.93162 | ET=7.9316 | Period=22.692 | RTR=0.349534 | Error=0.450466 | Δd=-2 | Current SMs=10 | News SMs=8 | Current Mask=0xffffffffffffffffffffffbffffffff0
+[CONTROL-TIMING] solution=7 tasks=3 period=95 decision_us=11.520000
+[MPC] Control period 95	Time = 100
+Task 1 | RT=10.3362 | ET=10.3359 | Period=45.33 | RTR=0.228022 | Error=0.571978 | Δd=-1 | Current SMs=42 | News SMs=41 | Current Mask=0xffffffffffffffffffffffc00003ffef
+Task 2 | RT=2.5028 | ET=2.5028 | Period=21.262 | RTR=0.117712 | Error=0.682288 | Δd=-1 | Current SMs=26 | News SMs=25 | Current Mask=0xfffffffffffffffffffffffffffc001f
+Task 3 | RT=8.83315 | ET=8.83301 | Period=22.692 | RTR=0.389263 | Error=0.410737 | Δd=0 | Current SMs=8 | News SMs=8 | Current Mask=0xfffffffffffffffffffffffffffffff0
+[CONTROL-TIMING] solution=7 tasks=3 period=96 decision_us=12.320000
+[MPC] Control period 96	Time = 101
+Task 1 | RT=10.5575 | ET=10.5571 | Period=45.33 | RTR=0.232903 | Error=0.567097 | Δd=-1 | Current SMs=42 | News SMs=41 | Current Mask=0xffffffffffffffffffffffe00001ffef
+Task 2 | RT=2.50401 | ET=2.50401 | Period=21.262 | RTR=0.117769 | Error=0.682231 | Δd=-2 | Current SMs=26 | News SMs=24 | Current Mask=0xffffffffffffffffffffffdffffe001f
+Task 3 | RT=8.83508 | ET=8.83524 | Period=22.692 | RTR=0.389348 | Error=0.410652 | Δd=0 | Current SMs=8 | News SMs=8 | Current Mask=0xfffffffffffffffffffffffffffffff0
+[CONTROL-TIMING] solution=7 tasks=3 period=97 decision_us=11.930000
+[MPC] Control period 97	Time = 102
+Task 1 | RT=10.5561 | ET=10.5559 | Period=45.33 | RTR=0.232872 | Error=0.567128 | Δd=-2 | Current SMs=42 | News SMs=40 | Current Mask=0xffffffffffffffffffffffe00001ffef
+Task 2 | RT=2.57879 | ET=2.57879 | Period=21.262 | RTR=0.121286 | Error=0.678714 | Δd=0 | Current SMs=24 | News SMs=24 | Current Mask=0xfffffffffffffffffffffffffffe001f
+Task 3 | RT=8.83641 | ET=8.83641 | Period=22.692 | RTR=0.389406 | Error=0.410594 | Δd=0 | Current SMs=8 | News SMs=8 | Current Mask=0xfffffffffffffffffffffffffffffff0
+[CONTROL-TIMING] solution=7 tasks=3 period=98 decision_us=11.059000
+[MPC] Control period 98	Time = 103
+Task 1 | RT=10.7594 | ET=10.7593 | Period=45.33 | RTR=0.237357 | Error=0.562643 | Δd=0 | Current SMs=40 | News SMs=40 | Current Mask=0xfffffffffffffffffffffff00001ffef
+Task 2 | RT=2.58226 | ET=2.58226 | Period=21.262 | RTR=0.121449 | Error=0.678551 | Δd=-1 | Current SMs=24 | News SMs=23 | Current Mask=0xfffffffffffffffffffffffffffe001f
+Task 3 | RT=8.83706 | ET=8.83712 | Period=22.692 | RTR=0.389435 | Error=0.410565 | Δd=0 | Current SMs=8 | News SMs=8 | Current Mask=0xfffffffffffffffffffffffffffffff0
+[CONTROL-TIMING] solution=7 tasks=3 period=99 decision_us=12.080000
+[MPC] Control period 99	Time = 104
+Task 1 | RT=10.7585 | ET=10.7584 | Period=45.33 | RTR=0.237338 | Error=0.562662 | Δd=-1 | Current SMs=40 | News SMs=39 | Current Mask=0xfffffffffffffffffffffff00001ffef
+Task 2 | RT=2.65806 | ET=2.65806 | Period=21.262 | RTR=0.125015 | Error=0.674985 | Δd=-1 | Current SMs=24 | News SMs=23 | Current Mask=0xfffffffffffffffffffffffffffe001f
+Task 3 | RT=8.83589 | ET=8.83588 | Period=22.692 | RTR=0.389384 | Error=0.410616 | Δd=0 | Current SMs=8 | News SMs=8 | Current Mask=0xfffffffffffffffffffffffffffffff0
+[MAIN] Half time reached (100.003s). Interrupting tunable tasks...
+[MAIN] Task 0 is tunable but workload=mm has no interrupt hook.
+[MAIN] Task 1 is tunable but workload=hotspot has no interrupt hook.
+[MAIN] Task 2 is tunable but workload=hist has no interrupt hook.
+[CONTROL-TIMING] solution=7 tasks=3 period=100 decision_us=12.280000
+[MPC] Control period 100	Time = 105
+Task 1 | RT=11.0698 | ET=11.0696 | Period=45.33 | RTR=0.244204 | Error=0.555796 | Δd=-1 | Current SMs=40 | News SMs=39 | Current Mask=0xfffffffffffffffffffffff80000ffef
+Task 2 | RT=2.65809 | ET=2.65809 | Period=21.262 | RTR=0.125016 | Error=0.674984 | Δd=-2 | Current SMs=24 | News SMs=22 | Current Mask=0xfffffffffffffffffffffff7ffff001f
+Task 3 | RT=8.83622 | ET=8.8362 | Period=22.692 | RTR=0.389398 | Error=0.410602 | Δd=0 | Current SMs=8 | News SMs=8 | Current Mask=0xfffffffffffffffffffffffffffffff0
+[CONTROL-TIMING] solution=7 tasks=3 period=101 decision_us=12.010000
+[MPC] Control period 101	Time = 106
+Task 1 | RT=11.0716 | ET=11.0712 | Period=45.33 | RTR=0.244244 | Error=0.555756 | Δd=-2 | Current SMs=40 | News SMs=38 | Current Mask=0xfffffffffffffffffffffff80000ffef
+Task 2 | RT=2.74438 | ET=2.74438 | Period=21.262 | RTR=0.129074 | Error=0.670926 | Δd=0 | Current SMs=22 | News SMs=22 | Current Mask=0xffffffffffffffffffffffffffff001f
+Task 3 | RT=8.83755 | ET=8.83762 | Period=22.692 | RTR=0.389457 | Error=0.410543 | Δd=0 | Current SMs=8 | News SMs=8 | Current Mask=0xfffffffffffffffffffffffffffffff0
+[CONTROL-TIMING] solution=7 tasks=3 period=102 decision_us=11.290000
+[MPC] Control period 102	Time = 107
+Task 1 | RT=11.3865 | ET=11.3846 | Period=45.33 | RTR=0.251191 | Error=0.548809 | Δd=0 | Current SMs=38 | News SMs=38 | Current Mask=0xfffffffffffffffffffffffc0000ffef
+Task 2 | RT=2.74496 | ET=2.74496 | Period=21.262 | RTR=0.129102 | Error=0.670898 | Δd=-1 | Current SMs=22 | News SMs=21 | Current Mask=0xffffffffffffffffffffffffffff001f
+Task 3 | RT=8.83865 | ET=8.83863 | Period=22.692 | RTR=0.389505 | Error=0.410495 | Δd=0 | Current SMs=8 | News SMs=8 | Current Mask=0xfffffffffffffffffffffffffffffff0
+[CONTROL-TIMING] solution=7 tasks=3 period=103 decision_us=11.780000
+[MPC] Control period 103	Time = 108
+Task 1 | RT=11.4163 | ET=11.4159 | Period=45.33 | RTR=0.251848 | Error=0.548152 | Δd=-1 | Current SMs=38 | News SMs=37 | Current Mask=0xfffffffffffffffffffffffc0000ffef
+Task 2 | RT=2.87391 | ET=2.87391 | Period=21.262 | RTR=0.135167 | Error=0.664833 | Δd=-1 | Current SMs=22 | News SMs=21 | Current Mask=0xffffffffffffffffffffffffffff001f
+Task 3 | RT=8.83889 | ET=8.83887 | Period=22.692 | RTR=0.389516 | Error=0.410484 | Δd=0 | Current SMs=8 | News SMs=8 | Current Mask=0xfffffffffffffffffffffffffffffff0
+[CONTROL-TIMING] solution=7 tasks=3 period=104 decision_us=11.940000
+[MPC] Control period 104	Time = 109
+Task 1 | RT=11.6931 | ET=11.6928 | Period=45.33 | RTR=0.257956 | Error=0.542044 | Δd=-2 | Current SMs=38 | News SMs=36 | Current Mask=0xfffffffffffffffffffffffe00007fef
+Task 2 | RT=2.87959 | ET=2.87959 | Period=21.262 | RTR=0.135434 | Error=0.664566 | Δd=-1 | Current SMs=22 | News SMs=21 | Current Mask=0xfffffffffffffffffffffffdffff801f
+Task 3 | RT=8.83734 | ET=8.83732 | Period=22.692 | RTR=0.389447 | Error=0.410553 | Δd=0 | Current SMs=8 | News SMs=8 | Current Mask=0xfffffffffffffffffffffffffffffff0
+[CONTROL-TIMING] solution=7 tasks=3 period=105 decision_us=11.850000
+[MPC] Control period 105	Time = 110
+Task 1 | RT=11.9959 | ET=11.9955 | Period=45.33 | RTR=0.264635 | Error=0.535365 | Δd=0 | Current SMs=36 | News SMs=36 | Current Mask=0xffffffffffffffffffffffff00007fef
+Task 2 | RT=2.87332 | ET=2.87332 | Period=21.262 | RTR=0.135139 | Error=0.664861 | Δd=-1 | Current SMs=22 | News SMs=21 | Current Mask=0xfffffffffffffffffffffffeffff801f
+Task 3 | RT=8.83764 | ET=8.83742 | Period=22.692 | RTR=0.38946 | Error=0.41054 | Δd=-1 | Current SMs=8 | News SMs=7 | Current Mask=0xfffffffffffffffffffffffffffffff0
+[CONTROL-TIMING] solution=7 tasks=3 period=106 decision_us=12.430000
+[MPC] Control period 106	Time = 111
+Task 1 | RT=11.9972 | ET=11.9967 | Period=45.33 | RTR=0.264663 | Error=0.535337 | Δd=0 | Current SMs=36 | News SMs=36 | Current Mask=0xffffffffffffffffffffffff00007fef
+Task 2 | RT=2.87554 | ET=2.87554 | Period=21.262 | RTR=0.135243 | Error=0.664757 | Δd=-2 | Current SMs=22 | News SMs=20 | Current Mask=0xffffffffffffffffffffffffffff8017
+Task 3 | RT=10.2366 | ET=10.2366 | Period=22.692 | RTR=0.45111 | Error=0.34889 | Δd=-1 | Current SMs=8 | News SMs=7 | Current Mask=0xfffffffffffffffffffffffefffffff8
+[CONTROL-TIMING] solution=7 tasks=3 period=107 decision_us=12.150000
+[MPC] Control period 107	Time = 112
+Task 1 | RT=11.9982 | ET=11.9978 | Period=45.33 | RTR=0.264686 | Error=0.535314 | Δd=-1 | Current SMs=36 | News SMs=35 | Current Mask=0xffffffffffffffffffffffff00007fef
+Task 2 | RT=3.03278 | ET=3.03278 | Period=21.262 | RTR=0.142638 | Error=0.657362 | Δd=0 | Current SMs=20 | News SMs=20 | Current Mask=0xffffffffffffffffffffffffffffc017
+Task 3 | RT=10.4017 | ET=10.4373 | Period=22.692 | RTR=0.458386 | Error=0.341614 | Δd=-1 | Current SMs=8 | News SMs=7 | Current Mask=0xffffffffffffffffffffffffffffbff8
+[CONTROL-TIMING] solution=7 tasks=3 period=108 decision_us=11.410000
+[MPC] Control period 108	Time = 113
+Task 1 | RT=12.299 | ET=12.2986 | Period=45.33 | RTR=0.271321 | Error=0.528679 | Δd=-2 | Current SMs=36 | News SMs=34 | Current Mask=0xffffffffffffffffffffffff80003fef
+Task 2 | RT=3.03893 | ET=3.03893 | Period=21.262 | RTR=0.142928 | Error=0.657072 | Δd=0 | Current SMs=20 | News SMs=20 | Current Mask=0xffffffffffffffffffffffffffffc017
+Task 3 | RT=10.3341 | ET=10.2672 | Period=22.692 | RTR=0.455405 | Error=0.344595 | Δd=-1 | Current SMs=8 | News SMs=7 | Current Mask=0xffffffffffffffffffffffff7ffffff8
+[CONTROL-TIMING] solution=7 tasks=3 period=109 decision_us=12.710000
+[MPC] Control period 109	Time = 114
+Task 1 | RT=12.6578 | ET=12.6574 | Period=45.33 | RTR=0.279236 | Error=0.520764 | Δd=0 | Current SMs=34 | News SMs=34 | Current Mask=0xffffffffffffffffffffffffc0003fef
+Task 2 | RT=3.0391 | ET=3.0391 | Period=21.262 | RTR=0.142936 | Error=0.657064 | Δd=-1 | Current SMs=20 | News SMs=19 | Current Mask=0xffffffffffffffffffffffffffffc017
+Task 3 | RT=10.303 | ET=10.303 | Period=22.692 | RTR=0.454036 | Error=0.345964 | Δd=-1 | Current SMs=8 | News SMs=7 | Current Mask=0xffffffffffffffffffffffffbffffff8
+[CONTROL-TIMING] solution=7 tasks=3 period=110 decision_us=11.560000
+[MPC] Control period 110	Time = 115
+Task 1 | RT=12.6871 | ET=12.6867 | Period=45.33 | RTR=0.279883 | Error=0.520117 | Δd=-1 | Current SMs=34 | News SMs=33 | Current Mask=0xffffffffffffffffffffffffc0003fef
+Task 2 | RT=3.17904 | ET=3.17904 | Period=21.262 | RTR=0.149517 | Error=0.650483 | Δd=-1 | Current SMs=20 | News SMs=19 | Current Mask=0xffffffffffffffffffffffffffffc017
+Task 3 | RT=10.1927 | ET=10.1926 | Period=22.692 | RTR=0.449174 | Error=0.350826 | Δd=-1 | Current SMs=8 | News SMs=7 | Current Mask=0xffffffffffffffffffffffffbffffff8
+[CONTROL-TIMING] solution=7 tasks=3 period=111 decision_us=11.409000
+[MPC] Control period 111	Time = 116
+Task 1 | RT=13.1286 | ET=13.1098 | Period=45.33 | RTR=0.289623 | Error=0.510377 | Δd=-1 | Current SMs=34 | News SMs=33 | Current Mask=0xffffffffffffffffffffffffe0001fef
+Task 2 | RT=3.18514 | ET=3.18514 | Period=21.262 | RTR=0.149805 | Error=0.650195 | Δd=-2 | Current SMs=20 | News SMs=18 | Current Mask=0xffffffffffffffffffffffffdfffe017
+Task 3 | RT=10.1985 | ET=10.1984 | Period=22.692 | RTR=0.44943 | Error=0.35057 | Δd=-1 | Current SMs=8 | News SMs=7 | Current Mask=0xffffffffffffffffffffffffbffffff8
+[CONTROL-TIMING] solution=7 tasks=3 period=112 decision_us=11.570000
+[MPC] Control period 112	Time = 117
+Task 1 | RT=13.1713 | ET=13.1709 | Period=45.33 | RTR=0.290565 | Error=0.509435 | Δd=-2 | Current SMs=34 | News SMs=32 | Current Mask=0xffffffffffffffffffffffffe0001fef
+Task 2 | RT=3.33866 | ET=3.33866 | Period=21.262 | RTR=0.157025 | Error=0.642975 | Δd=0 | Current SMs=18 | News SMs=18 | Current Mask=0xffffffffffffffffffffffffffffe017
+Task 3 | RT=10.1978 | ET=10.1927 | Period=22.692 | RTR=0.449401 | Error=0.350599 | Δd=-1 | Current SMs=8 | News SMs=7 | Current Mask=0xffffffffffffffffffffffffdffffff8
+[CONTROL-TIMING] solution=7 tasks=3 period=113 decision_us=10.720000
+[MPC] Control period 113	Time = 118
+Task 1 | RT=13.5288 | ET=13.5284 | Period=45.33 | RTR=0.298452 | Error=0.501548 | Δd=0 | Current SMs=32 | News SMs=32 | Current Mask=0xfffffffffffffffffffffffff0001fef
+Task 2 | RT=3.34482 | ET=3.34482 | Period=21.262 | RTR=0.157314 | Error=0.642686 | Δd=-1 | Current SMs=18 | News SMs=17 | Current Mask=0xffffffffffffffffffffffffffffe017
+Task 3 | RT=10.2018 | ET=10.2018 | Period=22.692 | RTR=0.449578 | Error=0.350422 | Δd=-1 | Current SMs=8 | News SMs=7 | Current Mask=0xffffffffffffffffffffffffeffffff8
+[CONTROL-TIMING] solution=7 tasks=3 period=114 decision_us=12.140000
+[MPC] Control period 114	Time = 119
+Task 1 | RT=13.5295 | ET=13.5291 | Period=45.33 | RTR=0.298467 | Error=0.501533 | Δd=-1 | Current SMs=32 | News SMs=31 | Current Mask=0xfffffffffffffffffffffffff0001fef
+Task 2 | RT=3.56961 | ET=3.56961 | Period=21.262 | RTR=0.167887 | Error=0.632113 | Δd=-1 | Current SMs=18 | News SMs=17 | Current Mask=0xffffffffffffffffffffffffffffe017
+Task 3 | RT=10.2659 | ET=10.2641 | Period=22.692 | RTR=0.452403 | Error=0.347597 | Δd=-1 | Current SMs=8 | News SMs=7 | Current Mask=0xffffffffffffffffffffffffeffffff8
+[CONTROL-TIMING] solution=7 tasks=3 period=115 decision_us=12.130000
+[MPC] Control period 115	Time = 120
+Task 1 | RT=13.9251 | ET=13.9247 | Period=45.33 | RTR=0.307193 | Error=0.492807 | Δd=-2 | Current SMs=32 | News SMs=30 | Current Mask=0xfffffffffffffffffffffffff8000fef
+Task 2 | RT=3.56836 | ET=3.56836 | Period=21.262 | RTR=0.167828 | Error=0.632172 | Δd=-1 | Current SMs=18 | News SMs=17 | Current Mask=0xfffffffffffffffffffffffff7fff017
+Task 3 | RT=10.3336 | ET=10.3336 | Period=22.692 | RTR=0.455385 | Error=0.344615 | Δd=-1 | Current SMs=8 | News SMs=7 | Current Mask=0xffffffffffffffffffffffffeffffff8
+[CONTROL-TIMING] solution=7 tasks=3 period=116 decision_us=12.150000
+[MPC] Control period 116	Time = 121
+Task 1 | RT=14.4032 | ET=14.4028 | Period=45.33 | RTR=0.317741 | Error=0.482259 | Δd=0 | Current SMs=30 | News SMs=30 | Current Mask=0xfffffffffffffffffffffffffc000fef
+Task 2 | RT=3.57731 | ET=3.57731 | Period=21.262 | RTR=0.168249 | Error=0.631751 | Δd=-2 | Current SMs=18 | News SMs=16 | Current Mask=0xfffffffffffffffffffffffffbfff017
+Task 3 | RT=10.3351 | ET=10.3025 | Period=22.692 | RTR=0.455451 | Error=0.344549 | Δd=-1 | Current SMs=8 | News SMs=7 | Current Mask=0xfffffffffffffffffffffffff7fffff8
+[CONTROL-TIMING] solution=7 tasks=3 period=117 decision_us=11.760000
+[MPC] Control period 117	Time = 122
+Task 1 | RT=14.4432 | ET=14.4428 | Period=45.33 | RTR=0.318623 | Error=0.481377 | Δd=0 | Current SMs=30 | News SMs=30 | Current Mask=0xfffffffffffffffffffffffffc000fef
+Task 2 | RT=3.77612 | ET=3.77612 | Period=21.262 | RTR=0.177599 | Error=0.622401 | Δd=0 | Current SMs=16 | News SMs=16 | Current Mask=0xfffffffffffffffffffffffffffff017
+Task 3 | RT=10.335 | ET=10.335 | Period=22.692 | RTR=0.455448 | Error=0.344552 | Δd=-2 | Current SMs=8 | News SMs=6 | Current Mask=0xfffffffffffffffffffffffffbfffff8
+[CONTROL-TIMING] solution=7 tasks=3 period=118 decision_us=11.500000
+[MPC] Control period 118	Time = 123
+Task 1 | RT=14.4419 | ET=14.4414 | Period=45.33 | RTR=0.318594 | Error=0.481406 | Δd=-1 | Current SMs=30 | News SMs=29 | Current Mask=0xfffffffffffffffffffffffffc000fef
+Task 2 | RT=3.77633 | ET=3.77633 | Period=21.262 | RTR=0.177609 | Error=0.622391 | Δd=0 | Current SMs=16 | News SMs=16 | Current Mask=0xfffffffffffffffffffffffffffff017
+Task 3 | RT=11.6339 | ET=11.6339 | Period=22.692 | RTR=0.512688 | Error=0.287312 | Δd=0 | Current SMs=6 | News SMs=6 | Current Mask=0xfffffffffffffffffffffffffffffff8
+[CONTROL-TIMING] solution=7 tasks=3 period=119 decision_us=11.100000
+[MPC] Control period 119	Time = 124
+Task 1 | RT=14.9674 | ET=14.9669 | Period=45.33 | RTR=0.330187 | Error=0.469813 | Δd=-1 | Current SMs=30 | News SMs=29 | Current Mask=0xfffffffffffffffffffffffffc000fef
+Task 2 | RT=3.77599 | ET=3.77599 | Period=21.262 | RTR=0.177593 | Error=0.622407 | Δd=-1 | Current SMs=16 | News SMs=15 | Current Mask=0xfffffffffffffffffffffffffffff017
+Task 3 | RT=11.7691 | ET=11.7691 | Period=22.692 | RTR=0.518647 | Error=0.281353 | Δd=0 | Current SMs=6 | News SMs=6 | Current Mask=0xfffffffffffffffffffffffffffffff8
+[CONTROL-TIMING] solution=7 tasks=3 period=120 decision_us=11.590000
+[MPC] Control period 120	Time = 125
+Task 1 | RT=14.9717 | ET=14.9713 | Period=45.33 | RTR=0.330282 | Error=0.469718 | Δd=-2 | Current SMs=30 | News SMs=28 | Current Mask=0xfffffffffffffffffffffffffe0007ef
+Task 2 | RT=4.0474 | ET=4.0474 | Period=21.262 | RTR=0.190359 | Error=0.609641 | Δd=-1 | Current SMs=16 | News SMs=15 | Current Mask=0xfffffffffffffffffffffffffdfff817
+Task 3 | RT=11.7708 | ET=11.7709 | Period=22.692 | RTR=0.51872 | Error=0.28128 | Δd=0 | Current SMs=6 | News SMs=6 | Current Mask=0xfffffffffffffffffffffffffffffff8
+[CONTROL-TIMING] solution=7 tasks=3 period=121 decision_us=12.510000
+[MPC] Control period 121	Time = 126
+Task 1 | RT=15.4466 | ET=15.4462 | Period=45.33 | RTR=0.340758 | Error=0.459242 | Δd=-1 | Current SMs=28 | News SMs=27 | Current Mask=0xffffffffffffffffffffffffff0007ef
+Task 2 | RT=4.03124 | ET=4.03124 | Period=21.262 | RTR=0.189598 | Error=0.610402 | Δd=-1 | Current SMs=16 | News SMs=15 | Current Mask=0xfffffffffffffffffffffffffefff817
+Task 3 | RT=11.7704 | ET=11.7702 | Period=22.692 | RTR=0.518702 | Error=0.281298 | Δd=0 | Current SMs=6 | News SMs=6 | Current Mask=0xfffffffffffffffffffffffffffffff8
+[CONTROL-TIMING] solution=7 tasks=3 period=122 decision_us=11.520000
+[MPC] Control period 122	Time = 127
+Task 1 | RT=15.9859 | ET=15.9855 | Period=45.33 | RTR=0.352656 | Error=0.447344 | Δd=-1 | Current SMs=28 | News SMs=27 | Current Mask=0xffffffffffffffffffffffffff0007ef
+Task 2 | RT=4.02103 | ET=4.02103 | Period=21.262 | RTR=0.189118 | Error=0.610882 | Δd=-2 | Current SMs=16 | News SMs=14 | Current Mask=0xfffffffffffffffffffffffffefff817
+Task 3 | RT=11.7713 | ET=11.7711 | Period=22.692 | RTR=0.518741 | Error=0.281259 | Δd=0 | Current SMs=6 | News SMs=6 | Current Mask=0xfffffffffffffffffffffffffffffff8
+[CONTROL-TIMING] solution=7 tasks=3 period=123 decision_us=10.970000
+[MPC] Control period 123	Time = 128
+Task 1 | RT=16.0405 | ET=16.0401 | Period=45.33 | RTR=0.35386 | Error=0.44614 | Δd=-2 | Current SMs=28 | News SMs=26 | Current Mask=0xffffffffffffffffffffffffff0007ef
+Task 2 | RT=4.25026 | ET=4.25026 | Period=21.262 | RTR=0.199899 | Error=0.600101 | Δd=0 | Current SMs=14 | News SMs=14 | Current Mask=0xfffffffffffffffffffffffffffff817
+Task 3 | RT=11.7701 | ET=11.7703 | Period=22.692 | RTR=0.518688 | Error=0.281312 | Δd=0 | Current SMs=6 | News SMs=6 | Current Mask=0xfffffffffffffffffffffffffffffff8
+[CONTROL-TIMING] solution=7 tasks=3 period=124 decision_us=12.500000
+[MPC] Control period 124	Time = 129
+Task 1 | RT=16.6333 | ET=16.633 | Period=45.33 | RTR=0.366939 | Error=0.433061 | Δd=0 | Current SMs=26 | News SMs=26 | Current Mask=0xffffffffffffffffffffffffff8007ef
+Task 2 | RT=4.25058 | ET=4.25058 | Period=21.262 | RTR=0.199915 | Error=0.600085 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff817
+Task 3 | RT=11.7697 | ET=11.7695 | Period=22.692 | RTR=0.51867 | Error=0.28133 | Δd=0 | Current SMs=6 | News SMs=6 | Current Mask=0xfffffffffffffffffffffffffffffff8
+[CONTROL-TIMING] solution=7 tasks=3 period=125 decision_us=12.070000
+[MPC] Control period 125	Time = 130
+Task 1 | RT=16.687 | ET=16.6867 | Period=45.33 | RTR=0.368124 | Error=0.431876 | Δd=-1 | Current SMs=26 | News SMs=25 | Current Mask=0xffffffffffffffffffffffffff8007ef
+Task 2 | RT=4.56325 | ET=4.56325 | Period=21.262 | RTR=0.21462 | Error=0.58538 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff817
+Task 3 | RT=11.7714 | ET=11.7715 | Period=22.692 | RTR=0.518745 | Error=0.281255 | Δd=0 | Current SMs=6 | News SMs=6 | Current Mask=0xfffffffffffffffffffffffffffffff8
+[CONTROL-TIMING] solution=7 tasks=3 period=126 decision_us=12.470000
+[MPC] Control period 126	Time = 131
+Task 1 | RT=17.3926 | ET=17.3922 | Period=45.33 | RTR=0.38369 | Error=0.41631 | Δd=-1 | Current SMs=26 | News SMs=25 | Current Mask=0xffffffffffffffffffffffffffc003ef
+Task 2 | RT=4.58209 | ET=4.58209 | Period=21.262 | RTR=0.215506 | Error=0.584494 | Δd=-2 | Current SMs=14 | News SMs=12 | Current Mask=0xffffffffffffffffffffffffffbffc17
+Task 3 | RT=11.771 | ET=11.7709 | Period=22.692 | RTR=0.518727 | Error=0.281273 | Δd=0 | Current SMs=6 | News SMs=6 | Current Mask=0xfffffffffffffffffffffffffffffff8
+[CONTROL-TIMING] solution=7 tasks=3 period=127 decision_us=11.960000
+[MPC] Control period 127	Time = 132
+Task 1 | RT=17.457 | ET=17.4568 | Period=45.33 | RTR=0.385109 | Error=0.414891 | Δd=-1 | Current SMs=26 | News SMs=25 | Current Mask=0xffffffffffffffffffffffffffc003ef
+Task 2 | RT=4.88997 | ET=4.88997 | Period=21.262 | RTR=0.229986 | Error=0.570014 | Δd=0 | Current SMs=12 | News SMs=12 | Current Mask=0xfffffffffffffffffffffffffffffc17
+Task 3 | RT=11.7744 | ET=11.7748 | Period=22.692 | RTR=0.518879 | Error=0.281121 | Δd=-1 | Current SMs=6 | News SMs=5 | Current Mask=0xfffffffffffffffffffffffffffffff8
+[CONTROL-TIMING] solution=7 tasks=3 period=128 decision_us=11.380000
+[MPC] Control period 128	Time = 133
+Task 1 | RT=17.5102 | ET=17.51 | Period=45.33 | RTR=0.386282 | Error=0.413718 | Δd=-2 | Current SMs=26 | News SMs=24 | Current Mask=0xffffffffffffffffffffffffffe003eb
+Task 2 | RT=4.88896 | ET=4.88896 | Period=21.262 | RTR=0.229939 | Error=0.570061 | Δd=0 | Current SMs=12 | News SMs=12 | Current Mask=0xfffffffffffffffffffffffffffffc17
+Task 3 | RT=14.4906 | ET=14.4159 | Period=22.692 | RTR=0.638579 | Error=0.161421 | Δd=-1 | Current SMs=6 | News SMs=5 | Current Mask=0xffffffffffffffffffffffffffdffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=129 decision_us=12.239000
+[MPC] Control period 129	Time = 134
+Task 1 | RT=18.1373 | ET=18.1371 | Period=45.33 | RTR=0.400118 | Error=0.399882 | Δd=0 | Current SMs=24 | News SMs=24 | Current Mask=0xfffffffffffffffffffffffffff003eb
+Task 2 | RT=4.88922 | ET=4.88922 | Period=21.262 | RTR=0.229951 | Error=0.570049 | Δd=-1 | Current SMs=12 | News SMs=11 | Current Mask=0xfffffffffffffffffffffffffffffc17
+Task 3 | RT=14.5652 | ET=14.5652 | Period=22.692 | RTR=0.641864 | Error=0.158136 | Δd=-1 | Current SMs=6 | News SMs=5 | Current Mask=0xffffffffffffffffffffffffffeffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=130 decision_us=11.790000
+[MPC] Control period 130	Time = 135
+Task 1 | RT=18.14 | ET=18.1396 | Period=45.33 | RTR=0.400176 | Error=0.399824 | Δd=-1 | Current SMs=24 | News SMs=23 | Current Mask=0xfffffffffffffffffffffffffff003eb
+Task 2 | RT=5.29168 | ET=5.29168 | Period=21.262 | RTR=0.24888 | Error=0.55112 | Δd=-1 | Current SMs=12 | News SMs=11 | Current Mask=0xfffffffffffffffffffffffffffffc17
+Task 3 | RT=14.6991 | ET=14.6991 | Period=22.692 | RTR=0.647766 | Error=0.152234 | Δd=-1 | Current SMs=6 | News SMs=5 | Current Mask=0xffffffffffffffffffffffffffeffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=131 decision_us=11.440000
+[MPC] Control period 131	Time = 136
+Task 1 | RT=18.7928 | ET=18.7924 | Period=45.33 | RTR=0.414578 | Error=0.385422 | Δd=-2 | Current SMs=24 | News SMs=22 | Current Mask=0xfffffffffffffffffffffffffff801eb
+Task 2 | RT=5.30768 | ET=5.30768 | Period=21.262 | RTR=0.249632 | Error=0.550368 | Δd=-1 | Current SMs=12 | News SMs=11 | Current Mask=0xfffffffffffffffffffffffffff7fe17
+Task 3 | RT=15.0396 | ET=14.978 | Period=22.692 | RTR=0.66277 | Error=0.13723 | Δd=-1 | Current SMs=6 | News SMs=5 | Current Mask=0xffffffffffffffffffffffffffeffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=132 decision_us=12.590000
+[MPC] Control period 132	Time = 137
+Task 1 | RT=19.5829 | ET=19.5825 | Period=45.33 | RTR=0.432008 | Error=0.367992 | Δd=0 | Current SMs=22 | News SMs=22 | Current Mask=0xfffffffffffffffffffffffffffc01eb
+Task 2 | RT=5.28745 | ET=5.28745 | Period=21.262 | RTR=0.248681 | Error=0.551319 | Δd=-2 | Current SMs=12 | News SMs=10 | Current Mask=0xfffffffffffffffffffffffffffbfe17
+Task 3 | RT=14.8311 | ET=14.8311 | Period=22.692 | RTR=0.653583 | Error=0.146417 | Δd=-1 | Current SMs=6 | News SMs=5 | Current Mask=0xfffffffffffffffffffffffffff7fffc
+[CONTROL-TIMING] solution=7 tasks=3 period=133 decision_us=11.760000
+[MPC] Control period 133	Time = 138
+Task 1 | RT=19.6492 | ET=19.6487 | Period=45.33 | RTR=0.433469 | Error=0.366531 | Δd=-1 | Current SMs=22 | News SMs=21 | Current Mask=0xfffffffffffffffffffffffffffc01eb
+Task 2 | RT=5.80801 | ET=5.80801 | Period=21.262 | RTR=0.273164 | Error=0.526836 | Δd=0 | Current SMs=10 | News SMs=10 | Current Mask=0xfffffffffffffffffffffffffffffe17
+Task 3 | RT=14.981 | ET=14.981 | Period=22.692 | RTR=0.660188 | Error=0.139812 | Δd=-1 | Current SMs=6 | News SMs=5 | Current Mask=0xfffffffffffffffffffffffffffbfffc
+[CONTROL-TIMING] solution=7 tasks=3 period=134 decision_us=12.119000
+[MPC] Control period 134	Time = 139
+Task 1 | RT=20.7192 | ET=20.7189 | Period=45.33 | RTR=0.457075 | Error=0.342925 | Δd=-1 | Current SMs=22 | News SMs=21 | Current Mask=0xfffffffffffffffffffffffffffc01eb
+Task 2 | RT=5.80846 | ET=5.80846 | Period=21.262 | RTR=0.273185 | Error=0.526815 | Δd=-1 | Current SMs=10 | News SMs=9 | Current Mask=0xfffffffffffffffffffffffffffffe17
+Task 3 | RT=14.7746 | ET=14.7065 | Period=22.692 | RTR=0.651091 | Error=0.148909 | Δd=-1 | Current SMs=6 | News SMs=5 | Current Mask=0xfffffffffffffffffffffffffffbfffc
+[CONTROL-TIMING] solution=7 tasks=3 period=135 decision_us=12.130000
+[MPC] Control period 135	Time = 140
+Task 1 | RT=20.8723 | ET=20.8719 | Period=45.33 | RTR=0.460451 | Error=0.339549 | Δd=-2 | Current SMs=22 | News SMs=20 | Current Mask=0xfffffffffffffffffffffffffffe00eb
+Task 2 | RT=6.45838 | ET=6.45838 | Period=21.262 | RTR=0.303752 | Error=0.496248 | Δd=-1 | Current SMs=10 | News SMs=9 | Current Mask=0xfffffffffffffffffffffffffffdff17
+Task 3 | RT=14.9176 | ET=14.7783 | Period=22.692 | RTR=0.657394 | Error=0.142606 | Δd=-1 | Current SMs=6 | News SMs=5 | Current Mask=0xfffffffffffffffffffffffffffbfffc
+[CONTROL-TIMING] solution=7 tasks=3 period=136 decision_us=11.970000
+[MPC] Control period 136	Time = 141
+Task 1 | RT=21.6214 | ET=21.621 | Period=45.33 | RTR=0.476979 | Error=0.323021 | Δd=-1 | Current SMs=20 | News SMs=19 | Current Mask=0xffffffffffffffffffffffffffff00eb
+Task 2 | RT=6.45786 | ET=6.45786 | Period=21.262 | RTR=0.303728 | Error=0.496272 | Δd=-1 | Current SMs=10 | News SMs=9 | Current Mask=0xfffffffffffffffffffffffffffeff17
+Task 3 | RT=14.6991 | ET=14.699 | Period=22.692 | RTR=0.647764 | Error=0.152236 | Δd=-1 | Current SMs=6 | News SMs=5 | Current Mask=0xfffffffffffffffffffffffffffdfffc
+[CONTROL-TIMING] solution=7 tasks=3 period=137 decision_us=11.100000
+[MPC] Control period 137	Time = 142
+Task 1 | RT=22.8941 | ET=22.8937 | Period=45.33 | RTR=0.505054 | Error=0.294946 | Δd=-1 | Current SMs=20 | News SMs=19 | Current Mask=0xffffffffffffffffffffffffffff00eb
+Task 2 | RT=6.523 | ET=6.523 | Period=21.262 | RTR=0.306792 | Error=0.493208 | Δd=-2 | Current SMs=10 | News SMs=8 | Current Mask=0xfffffffffffffffffffffffffffeff17
+Task 3 | RT=14.837 | ET=14.837 | Period=22.692 | RTR=0.653842 | Error=0.146158 | Δd=-1 | Current SMs=6 | News SMs=5 | Current Mask=0xfffffffffffffffffffffffffffdfffc
+[CONTROL-TIMING] solution=7 tasks=3 period=138 decision_us=10.910000
+[MPC] Control period 138	Time = 143
+Task 1 | RT=23.0026 | ET=23.0022 | Period=45.33 | RTR=0.507448 | Error=0.292552 | Δd=-2 | Current SMs=20 | News SMs=18 | Current Mask=0xffffffffffffffffffffffffffff00eb
+Task 2 | RT=7.34471 | ET=7.34471 | Period=21.262 | RTR=0.345438 | Error=0.454562 | Δd=0 | Current SMs=8 | News SMs=8 | Current Mask=0xffffffffffffffffffffffffffffff17
+Task 3 | RT=14.6346 | ET=14.4949 | Period=22.692 | RTR=0.644922 | Error=0.155078 | Δd=-1 | Current SMs=6 | News SMs=5 | Current Mask=0xfffffffffffffffffffffffffffefffc
+[CONTROL-TIMING] solution=7 tasks=3 period=139 decision_us=11.870000
+[MPC] Control period 139	Time = 144
+Task 1 | RT=24.0868 | ET=24.0863 | Period=45.33 | RTR=0.531365 | Error=0.268635 | Δd=0 | Current SMs=18 | News SMs=18 | Current Mask=0xffffffffffffffffffffffffffff80eb
+Task 2 | RT=7.37693 | ET=7.37693 | Period=21.262 | RTR=0.346954 | Error=0.453046 | Δd=0 | Current SMs=8 | News SMs=8 | Current Mask=0xffffffffffffffffffffffffffffff17
+Task 3 | RT=14.4319 | ET=14.4841 | Period=22.692 | RTR=0.635991 | Error=0.164009 | Δd=-2 | Current SMs=6 | News SMs=4 | Current Mask=0xffffffffffffffffffffffffffff7ffc
+[CONTROL-TIMING] solution=7 tasks=3 period=140 decision_us=13.930000
+[MPC] Control period 140	Time = 145
+Task 1 | RT=24.1875 | ET=24.1871 | Period=45.33 | RTR=0.533587 | Error=0.266413 | Δd=0 | Current SMs=18 | News SMs=18 | Current Mask=0xffffffffffffffffffffffffffff80eb
+Task 2 | RT=7.37541 | ET=7.37541 | Period=21.262 | RTR=0.346882 | Error=0.453118 | Δd=-1 | Current SMs=8 | News SMs=7 | Current Mask=0xffffffffffffffffffffffffffffff17
+Task 3 | RT=17.4857 | ET=17.4778 | Period=22.692 | RTR=0.770568 | Error=0.0294317 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=141 decision_us=10.580000
+[MPC] Control period 141	Time = 146
+Task 1 | RT=24.19 | ET=24.1896 | Period=45.33 | RTR=0.533643 | Error=0.266357 | Δd=-1 | Current SMs=18 | News SMs=17 | Current Mask=0xffffffffffffffffffffffffffff80eb
+Task 2 | RT=8.51631 | ET=8.51631 | Period=21.262 | RTR=0.400541 | Error=0.399459 | Δd=-1 | Current SMs=8 | News SMs=7 | Current Mask=0xffffffffffffffffffffffffffffff17
+Task 3 | RT=17.6372 | ET=17.6372 | Period=22.692 | RTR=0.777245 | Error=0.0227549 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=142 decision_us=10.300000
+[MPC] Control period 142	Time = 147
+Task 1 | RT=25.5896 | ET=25.5892 | Period=45.33 | RTR=0.564518 | Error=0.235482 | Δd=-2 | Current SMs=18 | News SMs=16 | Current Mask=0xffffffffffffffffffffffffffffc06b
+Task 2 | RT=8.51593 | ET=8.51593 | Period=21.262 | RTR=0.400523 | Error=0.399477 | Δd=-1 | Current SMs=8 | News SMs=7 | Current Mask=0xffffffffffffffffffffffffffffbf97
+Task 3 | RT=17.6311 | ET=17.6312 | Period=22.692 | RTR=0.776976 | Error=0.0230241 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=143 decision_us=10.050000
+[MPC] Control period 143	Time = 148
+Task 1 | RT=27.0603 | ET=27.0572 | Period=45.33 | RTR=0.596962 | Error=0.203038 | Δd=0 | Current SMs=16 | News SMs=16 | Current Mask=0xffffffffffffffffffffffffffffe06b
+Task 2 | RT=8.63098 | ET=8.63098 | Period=21.262 | RTR=0.405935 | Error=0.394065 | Δd=-2 | Current SMs=8 | News SMs=6 | Current Mask=0xffffffffffffffffffffffffffffdf97
+Task 3 | RT=17.6697 | ET=17.6706 | Period=22.692 | RTR=0.778677 | Error=0.0213234 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=144 decision_us=10.660000
+[MPC] Control period 144	Time = 149
+Task 1 | RT=27.12 | ET=27.1196 | Period=45.33 | RTR=0.598278 | Error=0.201722 | Δd=-1 | Current SMs=16 | News SMs=15 | Current Mask=0xffffffffffffffffffffffffffffe06b
+Task 2 | RT=9.60837 | ET=9.60837 | Period=21.262 | RTR=0.451904 | Error=0.348096 | Δd=0 | Current SMs=6 | News SMs=6 | Current Mask=0xffffffffffffffffffffffffffffff97
+Task 3 | RT=17.6312 | ET=17.6312 | Period=22.692 | RTR=0.77698 | Error=0.0230203 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=145 decision_us=10.250000
+[MPC] Control period 145	Time = 150
+Task 1 | RT=28.9561 | ET=28.9557 | Period=45.33 | RTR=0.638784 | Error=0.161216 | Δd=-1 | Current SMs=16 | News SMs=15 | Current Mask=0xffffffffffffffffffffffffffffe06b
+Task 2 | RT=9.65605 | ET=9.65605 | Period=21.262 | RTR=0.454146 | Error=0.345854 | Δd=-1 | Current SMs=6 | News SMs=5 | Current Mask=0xffffffffffffffffffffffffffffff97
+Task 3 | RT=17.6335 | ET=17.6335 | Period=22.692 | RTR=0.77708 | Error=0.02292 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=146 decision_us=10.480000
+[MPC] Control period 146	Time = 151
+Task 1 | RT=29.2245 | ET=29.2241 | Period=45.33 | RTR=0.644706 | Error=0.155294 | Δd=-2 | Current SMs=16 | News SMs=14 | Current Mask=0xfffffffffffffffffffffffffffff02b
+Task 2 | RT=12.3615 | ET=12.3615 | Period=21.262 | RTR=0.581391 | Error=0.218609 | Δd=-1 | Current SMs=6 | News SMs=5 | Current Mask=0xffffffffffffffffffffffffffffefd7
+Task 3 | RT=17.6324 | ET=17.6322 | Period=22.692 | RTR=0.777032 | Error=0.022968 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=147 decision_us=11.050000
+[MPC] Control period 147	Time = 152
+Task 1 | RT=31.1642 | ET=31.1638 | Period=45.33 | RTR=0.687497 | Error=0.112503 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff82b
+Task 2 | RT=12.3543 | ET=12.3543 | Period=21.262 | RTR=0.581049 | Error=0.218951 | Δd=-1 | Current SMs=6 | News SMs=5 | Current Mask=0xfffffffffffffffffffffffffffff7d7
+Task 3 | RT=17.6352 | ET=17.6352 | Period=22.692 | RTR=0.777156 | Error=0.0228445 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=148 decision_us=10.600000
+[MPC] Control period 148	Time = 153
+Task 1 | RT=33.3952 | ET=33.3949 | Period=45.33 | RTR=0.736713 | Error=0.0632868 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff82b
+Task 2 | RT=12.2538 | ET=12.2538 | Period=21.262 | RTR=0.576325 | Error=0.223675 | Δd=-2 | Current SMs=6 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffff7d7
+Task 3 | RT=17.6391 | ET=17.6392 | Period=22.692 | RTR=0.777328 | Error=0.0226719 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=149 decision_us=8.320000
+[MPC] Control period 149	Time = 154
+Task 1 | RT=33.6145 | ET=33.6143 | Period=45.33 | RTR=0.74155 | Error=0.0584496 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff82b
+Task 2 | RT=14.2572 | ET=14.2572 | Period=21.262 | RTR=0.670548 | Error=0.129452 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xffffffffffffffffffffffffffffffd7
+Task 3 | RT=17.6366 | ET=17.6364 | Period=22.692 | RTR=0.777215 | Error=0.0227849 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=150 decision_us=9.280000
+[MPC] Control period 150	Time = 155
+Task 1 | RT=33.8351 | ET=33.835 | Period=45.33 | RTR=0.746418 | Error=0.0535821 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff82b
+Task 2 | RT=14.4564 | ET=14.4564 | Period=21.262 | RTR=0.679917 | Error=0.120083 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xffffffffffffffffffffffffffffffd7
+Task 3 | RT=17.6366 | ET=17.6366 | Period=22.692 | RTR=0.777215 | Error=0.0227848 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=151 decision_us=9.190000
+[MPC] Control period 151	Time = 156
+Task 1 | RT=33.8333 | ET=33.8331 | Period=45.33 | RTR=0.746377 | Error=0.0536225 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff82b
+Task 2 | RT=14.4564 | ET=14.4564 | Period=21.262 | RTR=0.679917 | Error=0.120083 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xffffffffffffffffffffffffffffffd7
+Task 3 | RT=17.6354 | ET=17.6353 | Period=22.692 | RTR=0.777165 | Error=0.0228348 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=152 decision_us=9.010000
+[MPC] Control period 152	Time = 157
+Task 1 | RT=33.8341 | ET=33.8339 | Period=45.33 | RTR=0.746395 | Error=0.0536049 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff82b
+Task 2 | RT=14.4573 | ET=14.4573 | Period=21.262 | RTR=0.679961 | Error=0.120039 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xffffffffffffffffffffffffffffffd7
+Task 3 | RT=17.6374 | ET=17.6374 | Period=22.692 | RTR=0.777251 | Error=0.0227492 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=153 decision_us=8.060000
+[MPC] Control period 153	Time = 158
+Task 1 | RT=34.0542 | ET=34.0541 | Period=45.33 | RTR=0.751252 | Error=0.0487481 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff82b
+Task 2 | RT=14.4559 | ET=14.4559 | Period=21.262 | RTR=0.679894 | Error=0.120106 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xffffffffffffffffffffffffffffffd7
+Task 3 | RT=17.6366 | ET=17.6366 | Period=22.692 | RTR=0.777217 | Error=0.0227834 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=154 decision_us=8.990000
+[MPC] Control period 154	Time = 159
+Task 1 | RT=33.8329 | ET=33.8327 | Period=45.33 | RTR=0.746369 | Error=0.0536312 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff82b
+Task 2 | RT=14.4566 | ET=14.4566 | Period=21.262 | RTR=0.679928 | Error=0.120072 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xffffffffffffffffffffffffffffffd7
+Task 3 | RT=17.637 | ET=17.6369 | Period=22.692 | RTR=0.777235 | Error=0.0227652 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=155 decision_us=7.950000
+[MPC] Control period 155	Time = 160
+Task 1 | RT=33.6111 | ET=33.4898 | Period=45.33 | RTR=0.741477 | Error=0.0585232 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff82b
+Task 2 | RT=14.4612 | ET=14.4612 | Period=21.262 | RTR=0.680144 | Error=0.119856 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xffffffffffffffffffffffffffffffd7
+Task 3 | RT=17.6387 | ET=17.6386 | Period=22.692 | RTR=0.777309 | Error=0.0226909 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=156 decision_us=8.740000
+[MPC] Control period 156	Time = 161
+Task 1 | RT=33.6105 | ET=33.6101 | Period=45.33 | RTR=0.741463 | Error=0.0585365 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff82b
+Task 2 | RT=14.4569 | ET=14.4569 | Period=21.262 | RTR=0.679939 | Error=0.120061 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xffffffffffffffffffffffffffffffd7
+Task 3 | RT=17.6375 | ET=17.6375 | Period=22.692 | RTR=0.777258 | Error=0.022742 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=157 decision_us=8.980000
+[MPC] Control period 157	Time = 162
+Task 1 | RT=33.3869 | ET=33.4875 | Period=45.33 | RTR=0.736529 | Error=0.0634705 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff82b
+Task 2 | RT=14.4573 | ET=14.4573 | Period=21.262 | RTR=0.679959 | Error=0.120041 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xffffffffffffffffffffffffffffffd7
+Task 3 | RT=17.637 | ET=17.6369 | Period=22.692 | RTR=0.777232 | Error=0.0227679 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=158 decision_us=9.440000
+[MPC] Control period 158	Time = 163
+Task 1 | RT=33.6081 | ET=33.6077 | Period=45.33 | RTR=0.74141 | Error=0.0585903 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff82b
+Task 2 | RT=14.4564 | ET=14.4564 | Period=21.262 | RTR=0.679918 | Error=0.120082 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xffffffffffffffffffffffffffffffd7
+Task 3 | RT=17.6378 | ET=17.6381 | Period=22.692 | RTR=0.77727 | Error=0.02273 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=159 decision_us=8.760000
+[MPC] Control period 159	Time = 164
+Task 1 | RT=34.0587 | ET=34.0582 | Period=45.33 | RTR=0.75135 | Error=0.0486501 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff82b
+Task 2 | RT=14.4578 | ET=14.4578 | Period=21.262 | RTR=0.679981 | Error=0.120019 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xffffffffffffffffffffffffffffffd7
+Task 3 | RT=17.6388 | ET=17.6386 | Period=22.692 | RTR=0.777315 | Error=0.0226848 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=160 decision_us=8.970000
+[MPC] Control period 160	Time = 165
+Task 1 | RT=33.8365 | ET=33.8361 | Period=45.33 | RTR=0.746448 | Error=0.0535517 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff82b
+Task 2 | RT=14.4574 | ET=14.4574 | Period=21.262 | RTR=0.679962 | Error=0.120038 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xffffffffffffffffffffffffffffffd7
+Task 3 | RT=17.6361 | ET=17.636 | Period=22.692 | RTR=0.777195 | Error=0.0228054 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=161 decision_us=8.370000
+[MPC] Control period 161	Time = 166
+Task 1 | RT=33.8368 | ET=33.8363 | Period=45.33 | RTR=0.746454 | Error=0.0535458 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff82b
+Task 2 | RT=14.457 | ET=14.457 | Period=21.262 | RTR=0.679945 | Error=0.120055 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xffffffffffffffffffffffffffffffd7
+Task 3 | RT=17.6359 | ET=17.6359 | Period=22.692 | RTR=0.777188 | Error=0.0228124 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=162 decision_us=7.990000
+[MPC] Control period 162	Time = 167
+Task 1 | RT=33.6143 | ET=33.6139 | Period=45.33 | RTR=0.741547 | Error=0.0584528 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff82b
+Task 2 | RT=14.4569 | ET=14.4569 | Period=21.262 | RTR=0.679939 | Error=0.120061 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xffffffffffffffffffffffffffffffd7
+Task 3 | RT=17.6356 | ET=17.6356 | Period=22.692 | RTR=0.777172 | Error=0.0228276 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=163 decision_us=8.540000
+[MPC] Control period 163	Time = 168
+Task 1 | RT=33.5188 | ET=33.5183 | Period=45.33 | RTR=0.739439 | Error=0.0605608 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff82b
+Task 2 | RT=14.4598 | ET=14.4598 | Period=21.262 | RTR=0.680077 | Error=0.119923 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xffffffffffffffffffffffffffffffd7
+Task 3 | RT=17.635 | ET=17.635 | Period=22.692 | RTR=0.777148 | Error=0.0228522 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=164 decision_us=8.500000
+[MPC] Control period 164	Time = 169
+Task 1 | RT=33.3909 | ET=33.3905 | Period=45.33 | RTR=0.736619 | Error=0.0633814 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff82b
+Task 2 | RT=14.4561 | ET=14.4561 | Period=21.262 | RTR=0.679901 | Error=0.120099 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xffffffffffffffffffffffffffffffd7
+Task 3 | RT=17.6357 | ET=17.6357 | Period=22.692 | RTR=0.777178 | Error=0.0228224 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=165 decision_us=8.250000
+[MPC] Control period 165	Time = 170
+Task 1 | RT=33.6118 | ET=33.6114 | Period=45.33 | RTR=0.741491 | Error=0.0585085 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff82b
+Task 2 | RT=14.4547 | ET=14.4547 | Period=21.262 | RTR=0.679835 | Error=0.120165 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xffffffffffffffffffffffffffffffd7
+Task 3 | RT=17.6361 | ET=17.6361 | Period=22.692 | RTR=0.777193 | Error=0.0228066 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=166 decision_us=8.240000
+[MPC] Control period 166	Time = 171
+Task 1 | RT=33.6144 | ET=33.6139 | Period=45.33 | RTR=0.741548 | Error=0.0584519 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff82b
+Task 2 | RT=14.4562 | ET=14.4562 | Period=21.262 | RTR=0.679906 | Error=0.120094 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xffffffffffffffffffffffffffffffd7
+Task 3 | RT=17.6359 | ET=17.6361 | Period=22.692 | RTR=0.777185 | Error=0.0228151 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=167 decision_us=8.850000
+[MPC] Control period 167	Time = 172
+Task 1 | RT=33.8336 | ET=33.8332 | Period=45.33 | RTR=0.746385 | Error=0.0536155 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff82b
+Task 2 | RT=14.4545 | ET=14.4545 | Period=21.262 | RTR=0.67983 | Error=0.12017 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xffffffffffffffffffffffffffffffd7
+Task 3 | RT=17.6335 | ET=17.6337 | Period=22.692 | RTR=0.777081 | Error=0.0229189 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=168 decision_us=8.140000
+[MPC] Control period 168	Time = 173
+Task 1 | RT=34.0549 | ET=34.0544 | Period=45.33 | RTR=0.751266 | Error=0.0487342 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff82b
+Task 2 | RT=14.4552 | ET=14.4552 | Period=21.262 | RTR=0.679862 | Error=0.120138 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xffffffffffffffffffffffffffffffd7
+Task 3 | RT=17.6333 | ET=17.6332 | Period=22.692 | RTR=0.77707 | Error=0.0229301 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=169 decision_us=8.280000
+[MPC] Control period 169	Time = 174
+Task 1 | RT=33.8319 | ET=33.8314 | Period=45.33 | RTR=0.746346 | Error=0.0536542 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff82b
+Task 2 | RT=14.4552 | ET=14.4552 | Period=21.262 | RTR=0.679859 | Error=0.120141 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xffffffffffffffffffffffffffffffd7
+Task 3 | RT=17.6351 | ET=17.635 | Period=22.692 | RTR=0.777149 | Error=0.0228512 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=170 decision_us=8.630000
+[MPC] Control period 170	Time = 175
+Task 1 | RT=33.8395 | ET=33.8391 | Period=45.33 | RTR=0.746515 | Error=0.0534853 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff82b
+Task 2 | RT=14.4588 | ET=14.4588 | Period=21.262 | RTR=0.680029 | Error=0.119971 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xffffffffffffffffffffffffffffffd7
+Task 3 | RT=17.6391 | ET=17.6391 | Period=22.692 | RTR=0.777327 | Error=0.0226731 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=171 decision_us=7.970000
+[MPC] Control period 171	Time = 176
+Task 1 | RT=33.607 | ET=33.6066 | Period=45.33 | RTR=0.741386 | Error=0.0586141 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff82b
+Task 2 | RT=14.4549 | ET=14.4549 | Period=21.262 | RTR=0.679846 | Error=0.120154 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xffffffffffffffffffffffffffffffd7
+Task 3 | RT=17.6334 | ET=17.6334 | Period=22.692 | RTR=0.777074 | Error=0.0229257 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=172 decision_us=8.730000
+[MPC] Control period 172	Time = 177
+Task 1 | RT=33.6056 | ET=33.6052 | Period=45.33 | RTR=0.741355 | Error=0.0586446 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff82b
+Task 2 | RT=14.4536 | ET=14.4536 | Period=21.262 | RTR=0.679786 | Error=0.120214 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xffffffffffffffffffffffffffffffd7
+Task 3 | RT=17.6338 | ET=17.6338 | Period=22.692 | RTR=0.777093 | Error=0.0229074 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=173 decision_us=7.260000
+[MPC] Control period 173	Time = 178
+Task 1 | RT=33.3805 | ET=33.3801 | Period=45.33 | RTR=0.736389 | Error=0.0636107 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff82b
+Task 2 | RT=14.4532 | ET=14.4532 | Period=21.262 | RTR=0.679769 | Error=0.120231 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xffffffffffffffffffffffffffffffd7
+Task 3 | RT=17.6335 | ET=17.6335 | Period=22.692 | RTR=0.777082 | Error=0.022918 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=174 decision_us=8.709000
+[MPC] Control period 174	Time = 179
+Task 1 | RT=33.6045 | ET=33.604 | Period=45.33 | RTR=0.74133 | Error=0.05867 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff82b
+Task 2 | RT=14.4542 | ET=14.4542 | Period=21.262 | RTR=0.679816 | Error=0.120184 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xffffffffffffffffffffffffffffffd7
+Task 3 | RT=17.6347 | ET=17.6347 | Period=22.692 | RTR=0.777133 | Error=0.0228668 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=175 decision_us=8.880000
+[MPC] Control period 175	Time = 180
+Task 1 | RT=33.8272 | ET=33.8267 | Period=45.33 | RTR=0.746243 | Error=0.0537571 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff82b
+Task 2 | RT=14.4536 | ET=14.4536 | Period=21.262 | RTR=0.679785 | Error=0.120215 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xffffffffffffffffffffffffffffffd7
+Task 3 | RT=17.6324 | ET=17.6327 | Period=22.692 | RTR=0.777033 | Error=0.0229666 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=176 decision_us=8.160000
+[MPC] Control period 176	Time = 181
+Task 1 | RT=33.8288 | ET=33.8283 | Period=45.33 | RTR=0.746278 | Error=0.0537217 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff82b
+Task 2 | RT=14.4548 | ET=14.4548 | Period=21.262 | RTR=0.679843 | Error=0.120157 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xffffffffffffffffffffffffffffffd7
+Task 3 | RT=17.6337 | ET=17.6337 | Period=22.692 | RTR=0.77709 | Error=0.0229096 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=177 decision_us=8.120000
+[MPC] Control period 177	Time = 182
+Task 1 | RT=34.0603 | ET=34.0598 | Period=45.33 | RTR=0.751386 | Error=0.0486145 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff82b
+Task 2 | RT=14.4588 | ET=14.4588 | Period=21.262 | RTR=0.680028 | Error=0.119972 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xffffffffffffffffffffffffffffffd7
+Task 3 | RT=17.6392 | ET=17.6393 | Period=22.692 | RTR=0.777332 | Error=0.0226682 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=178 decision_us=8.240000
+[MPC] Control period 178	Time = 183
+Task 1 | RT=33.8316 | ET=33.8312 | Period=45.33 | RTR=0.74634 | Error=0.0536599 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff82b
+Task 2 | RT=14.4551 | ET=14.4551 | Period=21.262 | RTR=0.679854 | Error=0.120146 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xffffffffffffffffffffffffffffffd7
+Task 3 | RT=17.6368 | ET=17.6368 | Period=22.692 | RTR=0.777226 | Error=0.0227742 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=179 decision_us=8.030000
+[MPC] Control period 179	Time = 184
+Task 1 | RT=33.6125 | ET=33.6121 | Period=45.33 | RTR=0.741508 | Error=0.0584922 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff82b
+Task 2 | RT=14.4569 | ET=14.4569 | Period=21.262 | RTR=0.679942 | Error=0.120058 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xffffffffffffffffffffffffffffffd7
+Task 3 | RT=17.6359 | ET=17.636 | Period=22.692 | RTR=0.777188 | Error=0.0228125 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=180 decision_us=8.240000
+[MPC] Control period 180	Time = 185
+Task 1 | RT=33.3882 | ET=33.3878 | Period=45.33 | RTR=0.73656 | Error=0.0634405 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff82b
+Task 2 | RT=14.4565 | ET=14.4565 | Period=21.262 | RTR=0.679923 | Error=0.120077 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xffffffffffffffffffffffffffffffd7
+Task 3 | RT=17.6373 | ET=17.6374 | Period=22.692 | RTR=0.777248 | Error=0.0227516 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=181 decision_us=9.600000
+[MPC] Control period 181	Time = 186
+Task 1 | RT=33.6071 | ET=33.6066 | Period=45.33 | RTR=0.741387 | Error=0.0586128 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff82b
+Task 2 | RT=14.4547 | ET=14.4547 | Period=21.262 | RTR=0.679839 | Error=0.120161 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xffffffffffffffffffffffffffffffd7
+Task 3 | RT=17.6331 | ET=17.633 | Period=22.692 | RTR=0.777061 | Error=0.0229394 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=182 decision_us=7.980000
+[MPC] Control period 182	Time = 187
+Task 1 | RT=33.6059 | ET=33.6054 | Period=45.33 | RTR=0.741361 | Error=0.0586392 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff82b
+Task 2 | RT=14.4539 | ET=14.4539 | Period=21.262 | RTR=0.679801 | Error=0.120199 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xffffffffffffffffffffffffffffffd7
+Task 3 | RT=17.6331 | ET=17.6331 | Period=22.692 | RTR=0.777062 | Error=0.0229385 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=183 decision_us=8.340000
+[MPC] Control period 183	Time = 188
+Task 1 | RT=33.8288 | ET=33.8283 | Period=45.33 | RTR=0.746278 | Error=0.0537224 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff82b
+Task 2 | RT=14.454 | ET=14.454 | Period=21.262 | RTR=0.679805 | Error=0.120195 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xffffffffffffffffffffffffffffffd7
+Task 3 | RT=17.6322 | ET=17.6319 | Period=22.692 | RTR=0.777023 | Error=0.0229774 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=184 decision_us=8.890000
+[MPC] Control period 184	Time = 189
+Task 1 | RT=34.0598 | ET=34.0594 | Period=45.33 | RTR=0.751375 | Error=0.0486246 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff82b
+Task 2 | RT=14.4541 | ET=14.4541 | Period=21.262 | RTR=0.67981 | Error=0.12019 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xffffffffffffffffffffffffffffffd7
+Task 3 | RT=17.637 | ET=17.6373 | Period=22.692 | RTR=0.777234 | Error=0.0227658 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=185 decision_us=8.400000
+[MPC] Control period 185	Time = 190
+Task 1 | RT=33.8315 | ET=33.8311 | Period=45.33 | RTR=0.746338 | Error=0.0536618 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff82b
+Task 2 | RT=14.4538 | ET=14.4538 | Period=21.262 | RTR=0.679796 | Error=0.120204 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xffffffffffffffffffffffffffffffd7
+Task 3 | RT=17.6339 | ET=17.6339 | Period=22.692 | RTR=0.777099 | Error=0.0229008 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=186 decision_us=8.050000
+[MPC] Control period 186	Time = 191
+Task 1 | RT=34.0529 | ET=34.0525 | Period=45.33 | RTR=0.751223 | Error=0.048777 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff82b
+Task 2 | RT=14.4536 | ET=14.4536 | Period=21.262 | RTR=0.679787 | Error=0.120213 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xffffffffffffffffffffffffffffffd7
+Task 3 | RT=17.6336 | ET=17.6335 | Period=22.692 | RTR=0.777083 | Error=0.022917 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=187 decision_us=8.190000
+[MPC] Control period 187	Time = 192
+Task 1 | RT=33.8295 | ET=33.8291 | Period=45.33 | RTR=0.746294 | Error=0.0537062 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff82b
+Task 2 | RT=14.4542 | ET=14.4542 | Period=21.262 | RTR=0.679813 | Error=0.120187 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xffffffffffffffffffffffffffffffd7
+Task 3 | RT=17.6342 | ET=17.6343 | Period=22.692 | RTR=0.777111 | Error=0.0228891 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=188 decision_us=8.340000
+[MPC] Control period 188	Time = 193
+Task 1 | RT=33.6087 | ET=33.6083 | Period=45.33 | RTR=0.741424 | Error=0.0585763 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff82b
+Task 2 | RT=14.4545 | ET=14.4545 | Period=21.262 | RTR=0.679828 | Error=0.120172 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xffffffffffffffffffffffffffffffd7
+Task 3 | RT=17.6335 | ET=17.6335 | Period=22.692 | RTR=0.777081 | Error=0.0229192 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=189 decision_us=7.820000
+[MPC] Control period 189	Time = 194
+Task 1 | RT=33.3857 | ET=33.4863 | Period=45.33 | RTR=0.736503 | Error=0.0634969 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff82b
+Task 2 | RT=14.454 | ET=14.454 | Period=21.262 | RTR=0.679804 | Error=0.120196 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xffffffffffffffffffffffffffffffd7
+Task 3 | RT=17.6336 | ET=17.6336 | Period=22.692 | RTR=0.777083 | Error=0.0229168 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=190 decision_us=8.100000
+[MPC] Control period 190	Time = 195
+Task 1 | RT=33.6084 | ET=33.6079 | Period=45.33 | RTR=0.741416 | Error=0.0585841 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff82b
+Task 2 | RT=14.4539 | ET=14.4539 | Period=21.262 | RTR=0.679799 | Error=0.120201 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xffffffffffffffffffffffffffffffd7
+Task 3 | RT=17.6347 | ET=17.6346 | Period=22.692 | RTR=0.777133 | Error=0.0228668 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=191 decision_us=7.210000
+[MPC] Control period 191	Time = 196
+Task 1 | RT=33.836 | ET=33.8355 | Period=45.33 | RTR=0.746436 | Error=0.0535636 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff82b
+Task 2 | RT=14.4536 | ET=14.4536 | Period=21.262 | RTR=0.679785 | Error=0.120215 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xffffffffffffffffffffffffffffffd7
+Task 3 | RT=17.6373 | ET=17.6373 | Period=22.692 | RTR=0.777246 | Error=0.0227539 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=192 decision_us=7.910000
+[MPC] Control period 192	Time = 197
+Task 1 | RT=33.8292 | ET=33.8288 | Period=45.33 | RTR=0.746288 | Error=0.0537121 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff82b
+Task 2 | RT=14.4543 | ET=14.4543 | Period=21.262 | RTR=0.67982 | Error=0.12018 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xffffffffffffffffffffffffffffffd7
+Task 3 | RT=17.6329 | ET=17.6329 | Period=22.692 | RTR=0.777055 | Error=0.0229453 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=193 decision_us=7.169000
+[MPC] Control period 193	Time = 198
+Task 1 | RT=34.0518 | ET=34.0513 | Period=45.33 | RTR=0.751198 | Error=0.0488022 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff82b
+Task 2 | RT=14.4551 | ET=14.4551 | Period=21.262 | RTR=0.679857 | Error=0.120143 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xffffffffffffffffffffffffffffffd7
+Task 3 | RT=17.6335 | ET=17.6335 | Period=22.692 | RTR=0.777081 | Error=0.0229195 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=194 decision_us=8.460000
+[MPC] Control period 194	Time = 199
+Task 1 | RT=33.8268 | ET=33.8264 | Period=45.33 | RTR=0.746235 | Error=0.0537654 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff82b
+Task 2 | RT=14.454 | ET=14.454 | Period=21.262 | RTR=0.679806 | Error=0.120194 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xffffffffffffffffffffffffffffffd7
+Task 3 | RT=17.6341 | ET=17.6345 | Period=22.692 | RTR=0.777108 | Error=0.0228917 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=195 decision_us=8.290000
+[MPC] Control period 195	Time = 200
+Task 1 | RT=33.383 | ET=33.3825 | Period=45.33 | RTR=0.736444 | Error=0.0635561 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff82b
+Task 2 | RT=14.4542 | ET=14.4542 | Period=21.262 | RTR=0.679814 | Error=0.120186 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xffffffffffffffffffffffffffffffd7
+Task 3 | RT=17.634 | ET=17.6339 | Period=22.692 | RTR=0.7771 | Error=0.0228997 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=196 decision_us=7.949000
+[MPC] Control period 196	Time = 201
+Task 1 | RT=33.5039 | ET=33.5035 | Period=45.33 | RTR=0.739112 | Error=0.0608881 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff82b
+Task 2 | RT=14.4545 | ET=14.4545 | Period=21.262 | RTR=0.679829 | Error=0.120171 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xffffffffffffffffffffffffffffffd7
+Task 3 | RT=17.6358 | ET=17.6358 | Period=22.692 | RTR=0.77718 | Error=0.0228205 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=197 decision_us=7.930000
+[MPC] Control period 197	Time = 202
+Task 1 | RT=33.6077 | ET=33.6073 | Period=45.33 | RTR=0.741402 | Error=0.0585983 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff82b
+Task 2 | RT=14.4551 | ET=14.4551 | Period=21.262 | RTR=0.679858 | Error=0.120142 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xffffffffffffffffffffffffffffffd7
+Task 3 | RT=17.6363 | ET=17.6361 | Period=22.692 | RTR=0.777203 | Error=0.022797 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=198 decision_us=8.400000
+[MPC] Control period 198	Time = 203
+Task 1 | RT=33.6167 | ET=33.6162 | Period=45.33 | RTR=0.741599 | Error=0.0584015 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff82b
+Task 2 | RT=14.455 | ET=14.455 | Period=21.262 | RTR=0.679851 | Error=0.120149 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xffffffffffffffffffffffffffffffd7
+Task 3 | RT=17.6391 | ET=17.6391 | Period=22.692 | RTR=0.777327 | Error=0.0226734 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[CONTROL-TIMING] solution=7 tasks=3 period=199 decision_us=8.850000
+[MPC] Control period 199	Time = 204
+Task 1 | RT=33.8334 | ET=33.8329 | Period=45.33 | RTR=0.74638 | Error=0.0536198 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff82b
+Task 2 | RT=14.455 | ET=14.455 | Period=21.262 | RTR=0.67985 | Error=0.12015 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xffffffffffffffffffffffffffffffd7
+Task 3 | RT=17.6362 | ET=17.6361 | Period=22.692 | RTR=0.777197 | Error=0.022803 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[MAIN] Time limit reached (200.008s). Exiting...
+[CONTROL-TIMING] solution=7 tasks=3 period=200 decision_us=8.120000
+[MPC] Control period 200	Time = 205
+Task 1 | RT=34.0548 | ET=34.0544 | Period=45.33 | RTR=0.751265 | Error=0.048735 | Δd=-1 | Current SMs=14 | News SMs=13 | Current Mask=0xfffffffffffffffffffffffffffff82b
+Task 2 | RT=14.4545 | ET=14.4545 | Period=21.262 | RTR=0.67983 | Error=0.12017 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xffffffffffffffffffffffffffffffd7
+Task 3 | RT=17.6345 | ET=17.6347 | Period=22.692 | RTR=0.777124 | Error=0.0228764 | Δd=0 | Current SMs=4 | News SMs=4 | Current Mask=0xfffffffffffffffffffffffffffffffc
+[Hotspot] Task 1 stopped cleanly.
+[Hotspot] Cleaning Task 1
+[Histogram] Task 2 stopped cleanly.
+[Histogram] Cleaning Task 2
+[MatrixMul] Task 0 runContinuous() exit.
+[MatrixMul] Cleaning Task 0
+[GPU] Hotspot workload stopped for task 1.
+[GPU] Histogram workload stopped for task 2.
+[GPU] MatrixMul workload stopped for task 0.
+[MAIN] All threads stopped. Experiment complete.
+[parameters] Dumped metrics for task 0 → /home/yuanyang/ECRTS_original_20261017/ECRTS_25/experiment/6.9/logs/n3/sol_7//task_0
+[parameters] Dumped metrics for task 1 → /home/yuanyang/ECRTS_original_20261017/ECRTS_25/experiment/6.9/logs/n3/sol_7//task_1
+[parameters] Dumped metrics for task 2 → /home/yuanyang/ECRTS_original_20261017/ECRTS_25/experiment/6.9/logs/n3/sol_7//task_2
+[INFO] Intermediate logs written to /home/yuanyang/ECRTS_original_20261017/ECRTS_25/experiment/6.9/logs/n3/sol_7/
+[parameters] Dumped wallclocktime → /home/yuanyang/ECRTS_original_20261017/ECRTS_25/experiment/6.9/logs/n3/sol_7//wallclocktime

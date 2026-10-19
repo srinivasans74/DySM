@@ -4,7 +4,7 @@
 #include <vector>
 #include <cstdint>
 #include <fstream>
-#include "libsmctrl.h"  // Header for TPC mask control
+#include "tpc_control.h"
 
 using namespace std;
 
@@ -34,30 +34,32 @@ int main()
     const int BLOCK_SIZE = 32;        // Threads per block
     int device = 0; // Assuming device 0
     cudaDeviceProp prop;
-    cudaGetDeviceProperties(&prop, device);
+    benchmark_cuda_check(cudaGetDeviceProperties(&prop, device));
     int num_sms = prop.multiProcessorCount;
-    int MAX_TPC = num_sms / 2;
+    const int MAX_TPC = benchmark_tpc_count(device);
+    std::cout << "GPU: " << prop.name << " (" << num_sms << " SMs, "
+              << MAX_TPC << " TPCs)\n";
 
     cout << "[CUDA Benchmark] Matrix Multiply (" << N << "x" << N << ")\n";
-    cout << "Running with libsmctrl TPC masks (0–" << MAX_TPC << ")\n";
+    cout << "Running with libsmctrl TPC masks (1–" << MAX_TPC << ")\n";
     cout << fixed << setprecision(3);
 
     size_t size = N * N * sizeof(float);
 
     // Enable mapping of host memory for zero-copy access
-    cudaSetDeviceFlags(cudaDeviceMapHost);
+    benchmark_cuda_check(cudaSetDeviceFlags(cudaDeviceMapHost));
 
     // Allocate pinned, mapped host memory
     float *h_A, *h_B, *h_C;
-    cudaHostAlloc(&h_A, size, cudaHostAllocMapped);
-    cudaHostAlloc(&h_B, size, cudaHostAllocMapped);
-    cudaHostAlloc(&h_C, size, cudaHostAllocMapped);
+    benchmark_cuda_check(cudaHostAlloc(&h_A, size, cudaHostAllocMapped));
+    benchmark_cuda_check(cudaHostAlloc(&h_B, size, cudaHostAllocMapped));
+    benchmark_cuda_check(cudaHostAlloc(&h_C, size, cudaHostAllocMapped));
 
     // Obtain device pointers that map to the same host memory
     float *d_A, *d_B, *d_C;
-    cudaHostGetDevicePointer((void**)&d_A, h_A, 0);
-    cudaHostGetDevicePointer((void**)&d_B, h_B, 0);
-    cudaHostGetDevicePointer((void**)&d_C, h_C, 0);
+    benchmark_cuda_check(cudaHostGetDevicePointer((void**)&d_A, h_A, 0));
+    benchmark_cuda_check(cudaHostGetDevicePointer((void**)&d_B, h_B, 0));
+    benchmark_cuda_check(cudaHostGetDevicePointer((void**)&d_C, h_C, 0));
 
     // Initialize host data
     for (int i = 0; i < N * N; ++i) {
@@ -77,18 +79,16 @@ int main()
     // ======================================================
     // Sweep through masks
     // ======================================================
-    for (int tpc_active = 0; tpc_active <= MAX_TPC; ++tpc_active)
-    {
-        // Build disable mask: 1 = disabled, 0 = enabled
-        uint64_t mask = 0xFFFFFFFFFFFFFFFEULL;  // all disabled by default
-        if (tpc_active > 0 && tpc_active < 64)
-            mask = ~((1ULL << tpc_active) - 1ULL);
+    cudaStream_t stream;
+    benchmark_cuda_check(cudaStreamCreate(&stream));
 
-        // Apply global TPC disable mask via libsmctrl
-        libsmctrl_set_global_mask(mask);
+    for (int tpc_active = 1; tpc_active <= MAX_TPC; ++tpc_active)
+    {
+        const uint128_t mask = benchmark_tpc_mask(tpc_active);
+        libsmctrl_set_stream_mask_ext(stream, mask);
 
         cout << "\n[Active TPCs: " << setw(2) << tpc_active
-             << "] Mask = 0x" << hex << mask << dec << '\n';
+             << "]" << std::endl;
 
         vector<float> timings;
         timings.reserve(RUNS);
@@ -96,24 +96,25 @@ int main()
         for (int run = 0; run < RUNS; ++run)
         {
             cudaEvent_t start, stop;
-            cudaEventCreate(&start);
-            cudaEventCreate(&stop);
+            benchmark_cuda_check(cudaEventCreate(&start));
+            benchmark_cuda_check(cudaEventCreate(&stop));
 
-            cudaEventRecord(start);
+            benchmark_cuda_check(cudaEventRecord(start, stream));
 
             // Launch kernel
-            matMulKernel<<<grid, block,0>>>(d_A, d_B, d_C, N);
-            cudaDeviceSynchronize();
+            matMulKernel<<<grid, block, 0, stream>>>(d_A, d_B, d_C, N);
 
-            cudaEventRecord(stop);
-            cudaEventSynchronize(stop);
+            benchmark_cuda_check(cudaGetLastError());
+
+            benchmark_cuda_check(cudaEventRecord(stop, stream));
+            benchmark_cuda_check(cudaEventSynchronize(stop));
 
             float ms = 0.0f;
-            cudaEventElapsedTime(&ms, start, stop);
+            benchmark_cuda_check(cudaEventElapsedTime(&ms, start, stop));
             timings.push_back(ms);
 
-            cudaEventDestroy(start);
-            cudaEventDestroy(stop);
+            benchmark_cuda_check(cudaEventDestroy(start));
+            benchmark_cuda_check(cudaEventDestroy(stop));
         }
 
         // Average over runs
@@ -131,8 +132,8 @@ int main()
     // ======================================================
     // Save JSON output
     // ======================================================
-    ofstream jsonFile("logs/tpc_results_mm");
-    jsonFile << "{\n  \"results\": [\n";
+    ofstream jsonFile(benchmark_log_path("tpc_results_mm"));
+    jsonFile << "{\n  \"total_tpcs\": " << MAX_TPC << ",\n  \"results\": [\n";
 
     for (size_t i = 0; i < results.size(); ++i) {
         jsonFile << "    {\"TPC\": " << results[i].first
@@ -144,15 +145,16 @@ int main()
     jsonFile << "  ]\n}\n";
     jsonFile.close();
 
-    cout << "\n[CUDA Benchmark] Results saved to 'tpc_results.json'.\n";
+    std::cout << "[DONE] " << benchmark_log_path("tpc_results_mm") << std::endl;
 
     // ======================================================
     // Cleanup
     // ======================================================
-    cudaFreeHost(h_A);
-    cudaFreeHost(h_B);
-    cudaFreeHost(h_C);
+    benchmark_cuda_check(cudaFreeHost(h_A));
+    benchmark_cuda_check(cudaFreeHost(h_B));
+    benchmark_cuda_check(cudaFreeHost(h_C));
 
     cout << "[CUDA Benchmark] All masks completed.\n";
+    benchmark_cuda_check(cudaStreamDestroy(stream));
     return 0;
 }

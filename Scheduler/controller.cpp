@@ -1,5 +1,7 @@
 #include "controller.h"
 #include <limits>
+#include <cstdio>
+#include <cstdlib>
 #include <atomic>
 #include <iostream>
 #include <thread>
@@ -152,8 +154,292 @@ static inline int sm_to_tpc(int sms)
 //     std::cout<<endl;
 // }
 
+void assign_overlap(parameters* p)
+{
+    const int N          = p->tasks;
+    const int TOTAL_SMS  = p->maxsms;
+    const int TOTAL_TPCS = sm_to_tpc(TOTAL_SMS);
 
+    if (N <= 0 || TOTAL_SMS <= 0 || TOTAL_TPCS <= 0) return;
 
+    // One scheduler process owns one parameters object for the experiment.
+    static parameters* initialized = nullptr;
+    const bool initial = (initialized != p);
+
+    const uint128_t all_bits =
+        (TOTAL_TPCS >= 128)
+            ? ~uint128_t(0)
+            : ((uint128_t(1) << TOTAL_TPCS) - 1);
+
+    auto popcount128 = [](uint128_t x) -> int {
+#if defined(__GNUG__) || defined(__clang__)
+        return __builtin_popcountll(static_cast<uint64_t>(x))
+             + __builtin_popcountll(static_cast<uint64_t>(x >> 64));
+#else
+        int c = 0;
+        while (x) {
+            x &= (x - 1);
+            ++c;
+        }
+        return c;
+#endif
+    };
+
+    auto build_ring_mask = [&](int start, int len) -> uint128_t {
+        uint128_t m = 0ULL;
+        if (len <= 0) return 0ULL;
+
+        len   = std::min(len, TOTAL_TPCS);
+        start = ((start % TOTAL_TPCS) + TOTAL_TPCS) % TOTAL_TPCS;
+
+        for (int k = 0; k < len; ++k) {
+            int idx = (start + k) % TOTAL_TPCS;
+            m |= (uint128_t(1) << idx);
+        }
+        return m;
+    };
+
+    auto find_free_run = [&](uint128_t free_mask, int len) -> int {
+        if (len <= 0) return -1;
+        len = std::min(len, TOTAL_TPCS);
+        if (popcount128(free_mask) < len) return -1;
+
+        for (int start = 0; start < TOTAL_TPCS; ++start) {
+            bool ok = true;
+            for (int k = 0; k < len; ++k) {
+                int idx = (start + k) % TOTAL_TPCS;
+                if (((free_mask >> idx) & 1ULL) == 0ULL) {
+                    ok = false;
+                    break;
+                }
+            }
+            if (ok) return start;
+        }
+        return -1;
+    };
+
+    auto pick_any_free = [&](uint128_t free_mask, int need) -> uint128_t {
+        uint128_t sel = 0ULL;
+        for (int i = 0; i < TOTAL_TPCS && need > 0; ++i) {
+            if ((free_mask >> i) & 1ULL) {
+                sel |= (uint128_t(1) << i);
+                --need;
+            }
+        }
+        return sel;
+    };
+
+    // ----------------------------
+    // 1) Quantize sms -> tpc_req
+    // ----------------------------
+    struct Req {
+        int idx;
+        int tpc_req;
+        double priority;
+    };
+
+    std::vector<Req> reqs;
+    reqs.reserve(N);
+
+    for (int i = 0; i < N; ++i) {
+        int sm = std::clamp((int)p->sms[i], p->minsms, TOTAL_SMS);
+
+        // Quantize to whole TPCs: one TPC contains two SMs.
+        sm = (sm / SMS_PER_TPC) * SMS_PER_TPC;
+        if (sm < SMS_PER_TPC) sm = SMS_PER_TPC;
+
+        int tpc = sm / SMS_PER_TPC;
+        tpc = std::clamp(tpc, 1, TOTAL_TPCS);
+
+        p->sms[i] = tpc * SMS_PER_TPC;
+
+        // Preserve the original priority rule for initial placement.
+        double pr = 0.0;
+        if (p->outererror) pr = (double)p->outererror[i];
+        pr = std::max(0.0, pr);
+
+        reqs.push_back({i, tpc, pr});
+    }
+
+    // Preserve the original sharing limits.
+    const int MAX_BORROW_PER_TASK = TOTAL_TPCS;
+    const int MAX_OVERLAP_PER_TPC = N;
+
+    // ----------------------------
+    // 2) Sort only for initial placement.
+    //    Later requests remain in task order.
+    // ----------------------------
+    if (initial) {
+        std::sort(reqs.begin(), reqs.end(),
+                  [&](const Req& a, const Req& b) {
+                      if (a.priority != b.priority)
+                          return a.priority > b.priority;
+                      return a.tpc_req > b.tpc_req;
+                  });
+    }
+
+    std::vector<uint128_t> enabled_masks(N, 0ULL);
+    std::vector<int> tpc_share(TOTAL_TPCS, 0);
+
+    auto compute_free_mask = [&]() -> uint128_t {
+        uint128_t m = 0ULL;
+        for (int t = 0; t < TOTAL_TPCS; ++t) {
+            if (tpc_share[t] == 0)
+                m |= (uint128_t(1) << t);
+        }
+        return m & all_bits;
+    };
+
+    auto add_tpc = [&](int task_idx, int tpc_idx) {
+        enabled_masks[task_idx] |= (uint128_t(1) << tpc_idx);
+        ++tpc_share[tpc_idx];
+    };
+
+    auto can_use_tpc = [&](int tpc_idx) -> bool {
+        return tpc_share[tpc_idx] < MAX_OVERLAP_PER_TPC;
+    };
+
+    if (initial) {
+        // ----------------------------
+        // 3) Initial placement: allocate free TPCs first.
+        // ----------------------------
+        for (const auto& r : reqs) {
+            int i    = r.idx;
+            int need = r.tpc_req;
+
+            uint128_t free_mask = compute_free_mask();
+            int start = find_free_run(free_mask, need);
+            uint128_t enabled = 0ULL;
+
+            if (start >= 0) {
+                enabled = build_ring_mask(start, need) & free_mask;
+            } else {
+                enabled = pick_any_free(free_mask, need);
+            }
+
+            for (int t = 0; t < TOTAL_TPCS; ++t) {
+                if ((enabled >> t) & 1ULL)
+                    add_tpc(i, t);
+            }
+        }
+
+        // ----------------------------
+        // 4) Initial placement: share if free TPCs were insufficient.
+        // ----------------------------
+        for (const auto& r : reqs) {
+            int i      = r.idx;
+            int need   = r.tpc_req;
+            int got    = popcount128(enabled_masks[i]);
+            int shortf = need - got;
+            if (shortf <= 0) continue;
+
+            int borrowed = 0;
+
+            // Preserve the original ring scan from each task's base.
+            int base = (i * TOTAL_TPCS) / std::max(1, N);
+
+            for (int k = 0;
+                 k < 2 * TOTAL_TPCS &&
+                 shortf > 0 &&
+                 borrowed < MAX_BORROW_PER_TASK;
+                 ++k) {
+                int t = (base + k) % TOTAL_TPCS;
+
+                if ((enabled_masks[i] >> t) & 1ULL) continue;
+                if (!can_use_tpc(t)) continue;
+
+                add_tpc(i, t);
+                --shortf;
+                ++borrowed;
+            }
+
+            for (int t = 0;
+                 t < TOTAL_TPCS &&
+                 shortf > 0 &&
+                 borrowed < MAX_BORROW_PER_TASK;
+                 ++t) {
+                if ((enabled_masks[i] >> t) & 1ULL) continue;
+                if (!can_use_tpc(t)) continue;
+
+                add_tpc(i, t);
+                --shortf;
+                ++borrowed;
+            }
+        }
+    } else {
+        // ----------------------------
+        // 3) Keep old positions and release excess TPCs for ALL tasks.
+        // ----------------------------
+        for (const auto& r : reqs) {
+            const int i = r.idx;
+            enabled_masks[i] = (~p->masks[i]) & all_bits;
+
+            int got = popcount128(enabled_masks[i]);
+
+            // Shrink from the highest TPC index; retain all other positions.
+            for (int t = TOTAL_TPCS - 1;
+                 t >= 0 && got > r.tpc_req;
+                 --t) {
+                const uint128_t bit = uint128_t(1) << t;
+                if (enabled_masks[i] & bit) {
+                    enabled_masks[i] &= ~bit;
+                    --got;
+                }
+            }
+
+            // Count sharing after all retained positions are identified.
+            for (int t = 0; t < TOTAL_TPCS; ++t) {
+                if ((enabled_masks[i] >> t) & 1ULL)
+                    ++tpc_share[t];
+            }
+        }
+
+        // ----------------------------
+        // 4) Grow into free TPCs, then least-shared TPCs.
+        //    Existing positions are retained.
+        // ----------------------------
+        for (const auto& r : reqs) {
+            const int i = r.idx;
+            int shortf = r.tpc_req - popcount128(enabled_masks[i]);
+
+            while (shortf > 0) {
+                int best = -1;
+
+                for (int t = 0; t < TOTAL_TPCS; ++t) {
+                    if ((enabled_masks[i] >> t) & 1ULL) continue;
+                    if (!can_use_tpc(t)) continue;
+
+                    // Free TPCs have sharing count zero and are chosen first.
+                    // Equal counts are resolved by the lowest TPC index.
+                    if (best < 0 || tpc_share[t] < tpc_share[best])
+                        best = t;
+                }
+
+                if (best < 0) break;
+
+                add_tpc(i, best);
+                --shortf;
+            }
+        }
+    }
+
+    // ----------------------------
+    // 5) Write disable masks and actual SM counts.
+    // ----------------------------
+    for (int i = 0; i < N; ++i) {
+        std::lock_guard<std::mutex> lock(p->task_mutexes[i]);
+
+        uint128_t enabled = enabled_masks[i] & all_bits;
+        p->masks[i] = ~enabled;
+
+        int tpcs_enabled = popcount128(enabled);
+        p->sms[i] = tpcs_enabled * SMS_PER_TPC;
+    }
+
+    initialized = p;
+}
+
+/*
 void assign_overlap(parameters* p)
 {
     const int N          = p->tasks;
@@ -374,6 +660,8 @@ void assign_overlap(parameters* p)
         p->sms[i] = tpcs_enabled * SMS_PER_TPC;
     }
 }
+*/
+
 
 /*
 void assign_overlap(parameters* p)
@@ -768,6 +1056,9 @@ void dysm_mpc(parameters* p)
     const int N = p->getTasks();
     const double control_seconds = outer_loop_duration;
     int control_period = 0;
+    // Enabled only by the 6.9 runner; ordinary experiments do not record timing.
+    const char* timing_env = std::getenv("DYSM_MEASURE_DECISION");
+    const bool measure_decision = timing_env && std::string(timing_env) == "1";
     // H=1, frozen model from the SAME gain.py invocation as P's gain.
     // model_B is RRT/SM, from the same model used to generate P's gain.
     std::vector<int> command_sms;
@@ -813,6 +1104,10 @@ void dysm_mpc(parameters* p)
             std::this_thread::sleep_for(std::chrono::duration<double>(control_seconds));
             continue;
         }
+
+        // Time the complete decision, excluding monitoring, logging and actuation.
+        const auto decision_start = measure_decision
+            ? steady_clock::now() : steady_clock::time_point{};
 
         // 2) Previous MEAN command -> next MEAN command. Never use the last
         // lower/upper hardware pulse as the model's previous mean input.
@@ -901,7 +1196,7 @@ void dysm_mpc(parameters* p)
                 move_tpc += std::abs(v[i] - command_sms[i]) / 2.0;
             }
             // Original H=1 weights, including the terminal tracking term.
-            const double cost = 8.0 * tracking + 120.0 * deadline + 0.000 * move_tpc
+            const double cost = 8.0 * tracking + 120.0 * deadline + 0.004 * move_tpc
                               + 0.90 * 2.0 * (8.0 * tracking);
             if (cost + 1e-12 < best_cost) {
                 best_cost = cost;
@@ -910,6 +1205,12 @@ void dysm_mpc(parameters* p)
         }
         command_sms = best_sms;
         const auto& target_sms = command_sms;
+        if (measure_decision) {
+            const double decision_us = duration<double, std::micro>(
+                steady_clock::now() - decision_start).count();
+            std::printf("[CONTROL-TIMING] solution=7 tasks=%d period=%d decision_us=%.6f\n",
+                        N, control_period, decision_us);
+        }
 
         // 3) Preserve the existing log fields. The measurements belong to the
         // PREVIOUS allocation, not to the new target selected above.

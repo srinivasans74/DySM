@@ -1,5 +1,5 @@
 // mttkrp_smctrl_sweep_projection_style.cu
-// Benchmark sparse MTTKRP (mode-0) with TPC mask sweep (1..41) — projection-style
+// Benchmark sparse MTTKRP (mode-0) with TPC mask sweep (all detected TPCs) — projection-style
 
 #include <cuda_runtime.h>
 #include <iostream>
@@ -9,7 +9,7 @@
 #include <cmath>
 #include <cstdint>
 #include <cstdlib>
-#include "libsmctrl.h"
+#include "tpc_control.h"
 #include <sys/stat.h>
 #include <sys/types.h>
 // -------------------------------
@@ -36,18 +36,6 @@ inline void check(cudaError_t result, const char *const func, const char *const 
                   << "\"" << func << "\"" << std::endl;
         std::exit(EXIT_FAILURE);
     }
-}
-
-// -------------------------------
-// Build TPC disable mask
-// active_tpc = number of TPCs enabled from LSB side
-// mask bit=1 means "disabled" (per your original style)
-// -------------------------------
-static inline uint64_t build_mask_from_active_tpc(int active_tpc) {
-    if (active_tpc <= 0)  return ~0ULL;
-    if (active_tpc >= 64) return 0ULL;
-    const uint64_t allowed = (1ULL << active_tpc) - 1ULL;
-    return ~allowed;
 }
 
 // -------------------------------
@@ -100,20 +88,16 @@ int main()
     int num_sms = 0;
     checkCudaErrors(cudaDeviceGetAttribute(&num_sms, cudaDevAttrMultiProcessorCount, 0));
 
-    uint32_t num_tpcs = 0;
-    if (libsmctrl_get_tpc_info_cuda(&num_tpcs, 0) != 0 || num_tpcs == 0) {
-        std::cerr << "libsmctrl_get_tpc_info_cuda failed.\n";
-        return 1;
-    }
+    const int num_tpcs = benchmark_tpc_count();
 
     int sms_per_tpc = (num_tpcs > 0) ? (num_sms / (int)num_tpcs) : 0;
     std::cout << "GPU: " << num_sms << " SMs, " << num_tpcs << " TPCs ("
               << sms_per_tpc << " SMs/TPC)\n";
 
-    const int sweep_max = std::min<int>(41, (int)num_tpcs);
+    const int sweep_max = num_tpcs;
     std::cout << "[MTTKRP Benchmark] Sweep active TPC = 1.." << sweep_max << "\n";
     std::cout << std::fixed << std::setprecision(3);
-    mkdir("logs", 0755);   // safe if directory already exists
+
     // -------------------------------
     // Host data init
     // -------------------------------
@@ -171,11 +155,11 @@ int main()
     // Sweep active TPC count
     // -------------------------------
     for (int tpc_active = 1; tpc_active <= sweep_max; ++tpc_active) {
-        uint64_t mask = build_mask_from_active_tpc(tpc_active);
-        libsmctrl_set_global_mask(mask);
+        const uint128_t mask = benchmark_tpc_mask(tpc_active);
+        libsmctrl_set_stream_mask_ext(stream, mask);
 
         std::cout << "\n[Active TPCs: " << std::setw(2) << tpc_active
-                  << "] Mask = 0x" << std::hex << mask << std::dec << "\n";
+                  << "]" << std::endl;
 
         std::vector<float> timings;
         timings.reserve(RUNS);
@@ -194,6 +178,8 @@ int main()
             mttkrp_mode0_coo<<<grid, block, 0, stream>>>(
                 d_i, d_j, d_k, d_v, d_B, d_C, d_M, NNZ, RANK
             );
+
+            benchmark_cuda_check(cudaGetLastError());
 
             checkCudaErrors(cudaEventRecord(stop, stream));
             checkCudaErrors(cudaEventSynchronize(stop));
@@ -217,9 +203,9 @@ int main()
     // -------------------------------
     // Write results to JSON
     // -------------------------------
-    const std::string outpath = "logs/tpc_results_mttkrp";
+    const std::string outpath = benchmark_log_path("tpc_results_mttkrp");
     std::ofstream jsonFile(outpath);
-    jsonFile << "{\n"
+    jsonFile << "{\n  \"total_tpcs\": " << num_tpcs << ",\n"
              << "  \"kernel\": \"mttkrp_mode0_coo\",\n"
              << "  \"I\": " << I_DIM << ", \"J\": " << J_DIM << ", \"K\": " << K_DIM << ",\n"
              << "  \"R\": " << RANK << ", \"NNZ\": " << NNZ << ", \"RUNS\": " << RUNS << ",\n"

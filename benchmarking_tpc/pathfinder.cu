@@ -1,5 +1,5 @@
 // dp_smctrl_sweep_projection_style.cu
-// Dynamic Programming 1D (pathfinder) benchmark with TPC mask sweep (1..41)
+// Dynamic Programming 1D (pathfinder) benchmark with TPC mask sweep (all detected TPCs)
 
 #include <cuda_runtime.h>
 #include <iostream>
@@ -8,7 +8,7 @@
 #include <fstream>
 #include <cstdint>
 #include <cstdlib>
-#include "libsmctrl.h"
+#include "tpc_control.h"
 
 #define BLOCK_SIZE 256
 #define HALO 1
@@ -95,16 +95,6 @@ __global__ void dynproc_kernel(int iteration,
 }
 
 // -----------------------------
-// Mask builder (bit=1 disabled, bit=0 enabled)
-// -----------------------------
-static inline uint64_t build_mask_from_active_tpc(int active_tpc) {
-    if (active_tpc <= 0)  return ~0ULL;  // disable all (no TPC)
-    if (active_tpc >= 64) return 0ULL;   // enable all
-    const uint64_t allowed = (1ULL << active_tpc) - 1ULL;
-    return ~allowed;
-}
-
-// -----------------------------
 // Run full DP computation
 // -----------------------------
 static int run_dp_pass(const int* d_wall,
@@ -136,7 +126,6 @@ int main()
     const int cols = 4096;
     const int rows = 4096;
     const int pyramid_height = 16;  // smaller than rows to keep iterations valid
-    cudaDeviceProp prop;
     if (cols <= 0 || rows <= 1 || pyramid_height <= 0) {
         std::cerr << "Invalid parameters: cols>0, rows>1, pyramid_height>0 required.\n";
         return 1;
@@ -160,29 +149,25 @@ int main()
 
     int num_sms = 0;
     checkCudaErrors(cudaDeviceGetAttribute(&num_sms, cudaDevAttrMultiProcessorCount, 0));
-    uint32_t num_tpcs = 0;
-    if (libsmctrl_get_tpc_info_cuda(&num_tpcs, 0) != 0 || num_tpcs == 0) {
-        std::cerr << "libsmctrl_get_tpc_info_cuda failed.\n";
-        return 1;
-    }
+    const int num_tpcs = benchmark_tpc_count();
 
     std::cout << "GPU: " << num_sms << " SMs, " << num_tpcs << " TPCs\n";
-    std::cout << "[DP Benchmark] Sweep TPC active = 1..41\n";
+    std::cout << "[DP Benchmark] Sweep TPC active = 1.." << num_tpcs << "\n";
     std::cout << std::fixed << std::setprecision(3);
 
     cudaStream_t stream;
     checkCudaErrors(cudaStreamCreate(&stream));
 
     std::vector<std::pair<int, float>> results;
-    results.reserve(41);
+    results.reserve(num_tpcs);
 
-    // Sweep 1–41 TPCs
+    // Sweep all detected TPCs
     for (int tpc_active = 1; tpc_active <= num_tpcs; ++tpc_active) {
-        const uint64_t mask = build_mask_from_active_tpc(tpc_active);
-        libsmctrl_set_global_mask(mask);
+        const uint128_t mask = benchmark_tpc_mask(tpc_active);
+        libsmctrl_set_stream_mask_ext(stream, mask);
 
         std::cout << "\n[Active TPCs: " << std::setw(2) << tpc_active
-                  << "] Mask = 0x" << std::hex << mask << std::dec << "\n";
+                  << "]" << std::endl;
 
         std::vector<float> timings;
         timings.reserve(RUNS);
@@ -197,6 +182,7 @@ int main()
 
             checkCudaErrors(cudaEventRecord(start, stream));
             (void)run_dp_pass(d_wall, d_result, rows, cols, pyramid_height, blockCols, borderCols, stream);
+            benchmark_cuda_check(cudaGetLastError());
             checkCudaErrors(cudaEventRecord(stop, stream));
             checkCudaErrors(cudaEventSynchronize(stop));
 
@@ -217,8 +203,8 @@ int main()
     }
 
     // Save JSON
-    std::ofstream jsonFile("logs/tpc_results_pathfinder");
-    jsonFile << "{\n  \"results\": [\n";
+    std::ofstream jsonFile(benchmark_log_path("tpc_results_pathfinder"));
+    jsonFile << "{\n  \"total_tpcs\": " << num_tpcs << ",\n  \"results\": [\n";
     for (size_t i = 0; i < results.size(); ++i) {
         jsonFile << "    {\"TPC\": " << results[i].first
                  << ", \"ExecTime_ms\": " << results[i].second << "}";
@@ -228,7 +214,7 @@ int main()
     jsonFile << "  ]\n}\n";
     jsonFile.close();
 
-    std::cout << "\n[DP Benchmark] Results saved to logs/tpc_results_pathfinder.json\n";
+    std::cout << "[DONE] " << benchmark_log_path("tpc_results_pathfinder") << std::endl;
 
     checkCudaErrors(cudaStreamDestroy(stream));
     checkCudaErrors(cudaFree(d_wall));
